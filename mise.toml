@@ -1,0 +1,59 @@
+[env]
+EQUALEASE_XCODE_PROJECT = "EqualEase/EqualEase.xcodeproj"
+EQUALEASE_XCODE_SCHEME = "EqualEase"
+EQUALEASE_ARCHIVE_PATH = "build/EqualEase.xcarchive"
+
+[tasks.build]
+description = "Build EqualEase without code signing"
+run = '''
+xcodebuild \
+  -project "$EQUALEASE_XCODE_PROJECT" \
+  -scheme "$EQUALEASE_XCODE_SCHEME" \
+  -configuration Debug \
+  build \
+  CODE_SIGNING_ALLOWED=NO
+'''
+
+[tasks.test]
+description = "Run EqualEase tests without code signing"
+run = '''
+xcodebuild \
+  -project "$EQUALEASE_XCODE_PROJECT" \
+  -scheme "$EQUALEASE_XCODE_SCHEME" \
+  -configuration Debug \
+  test \
+  CODE_SIGNING_ALLOWED=NO
+'''
+
+[tasks.build-signed]
+description = "Build EqualEase with the local Apple development team from mise.local.toml"
+run = '''
+if [ -z "${EQUALEASE_DEVELOPMENT_TEAM:-}" ]; then
+  echo "EQUALEASE_DEVELOPMENT_TEAM is not set. Copy mise.local.example.toml to mise.local.toml and set your Apple Development Team ID." >&2
+  exit 1
+fi
+
+xcodebuild \
+  -project "$EQUALEASE_XCODE_PROJECT" \
+  -scheme "$EQUALEASE_XCODE_SCHEME" \
+  -configuration Debug \
+  build \
+  DEVELOPMENT_TEAM="$EQUALEASE_DEVELOPMENT_TEAM"
+'''
+
+[tasks.archive-app-store]
+description = "Create a Release archive for App Store export/upload using the local Apple development team"
+run = '''
+if [ -z "${EQUALEASE_DEVELOPMENT_TEAM:-}" ]; then
+  echo "EQUALEASE_DEVELOPMENT_TEAM is not set. Copy mise.local.example.toml to mise.local.toml and set your Apple Development Team ID." >&2
+  exit 1
+fi
+
+xcodebuild \
+  -project "$EQUALEASE_XCODE_PROJECT" \
+  -scheme "$EQUALEASE_XCODE_SCHEME" \
+  -configuration Release \
+  -archivePath "$EQUALEASE_ARCHIVE_PATH" \
+  archive \
+  DEVELOPMENT_TEAM="$EQUALEASE_DEVELOPMENT_TEAM"
+'''

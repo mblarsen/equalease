@@ -1,0 +1,105 @@
+# EqualEase
+
+The equalizer your Mac is missing.
+
+EqualEase gives you one simple place to adjust everyday Mac audio. Tune your laptop speakers, headphones, external speakers, or sound system for better music, clearer calls, and fewer “why does this sound bad?” moments.
+
+It lives in the menu bar, works across your Mac, and keeps the controls easy to understand.
+
+![EqualEase Presets workbench](https://github.com/user-attachments/assets/8758cace-1981-4288-8703-2ee2e77b00ea)
+
+## Highlights
+
+- **One menu bar control for everyday Mac audio.** Quickly adjust output volume, input volume, presets, EQ, and routing from one place.
+- **System-wide EQ.** Shape audio from calls, music, videos, games, browsers, and system sound instead of being tied to one player app.
+- **Presets that make sense.** Start with built-in presets, then save custom presets for your own speakers, headphones, or listening setup.
+- **Mic volume guard.** Get warned when input volume drops, with optional protection to bring it back up before people cannot hear you.
+- **Remote control.** Adjust volume, preamp, and presets from a phone on your local network when your Mac is across the room or connected to speakers.
+- **Native Mac feel.** EqualEase stays out of the way until you need it, with a focused menu bar panel and a native Settings window.
+
+## Features
+
+- System-wide macOS audio EQ using Core Audio routing.
+- Menu bar quick panel with active state, preset selection, output volume, input volume, preamp, and routing controls.
+- Native Settings window for General, Presets, Rules, and Diagnostics.
+- 10-band graphic EQ workbench with draggable band knobs.
+- Built-in presets plus custom preset save, rename, delete, and revert flows.
+- Optional active-app preset rules learned from user choices.
+- Low microphone volume notifications and optional input-volume capping.
+- Opt-in local-network remote control with pairing.
+- Local install script for running EqualEase from `/Applications` while developing or building from source.
+
+## Requirements
+
+- macOS with support for Core Audio process taps.
+- Xcode with command line tools installed.
+- [mise](https://mise.jdx.dev/) for the documented build tasks.
+- An Apple Developer Team ID only if you want signed local builds or App Store archives.
+
+## Build
+
+From the repository root:
+
+```sh
+mise run build
+```
+
+This performs an unsigned Debug build, so you do not need the maintainer's Apple Developer Team ID to check out and build the app.
+
+Run tests:
+
+```sh
+mise run test
+```
+
+For signed local builds or App Store archive creation, copy the local config example and set your own Apple Developer Team ID:
+
+```sh
+cp mise.local.example.toml mise.local.toml
+```
+
+```toml
+[env]
+EQUALEASE_DEVELOPMENT_TEAM = "YOUR_TEAM_ID"
+```
+
+Then run:
+
+```sh
+mise run build-signed
+mise run archive-app-store
+```
+
+`archive-app-store` creates a Release `.xcarchive` at `build/EqualEase.xcarchive`. It does not upload the archive to App Store Connect.
+
+## Install locally
+
+To build from source and install the app into `/Applications`:
+
+```sh
+scripts/install-local.sh
+```
+
+The install script builds EqualEase in Release configuration, quits any running instance, replaces `/Applications/EqualEase.app`, registers it with Launch Services, and launches it.
+
+Useful options:
+
+```sh
+scripts/install-local.sh --debug
+scripts/install-local.sh --no-launch
+scripts/install-local.sh --destination /path/to/EqualEase.app
+```
+
+After installing, open EqualEase from `/Applications` and grant any macOS audio/system permissions it requests.
+
+## License
+
+EqualEase is source-available for free personal and non-commercial use under the [PolyForm Noncommercial License 1.0.0](LICENSE).
+
+You may build it yourself from source for personal use. Commercial use, including selling copies or paid redistribution of modified versions, is not allowed under the public license. Commercial rights are reserved by the copyright holder.
+
+This is not an OSI open-source license. It is intended to keep EqualEase free to self-build while preventing someone else from copying it and selling it.
+
+## Roadmap notes
+
+EqualEase aims to be a real, focused Mac app: simple by design, not limited by ambition. Packaging, signing, updates, and App Store distribution are productization work around that core promise.

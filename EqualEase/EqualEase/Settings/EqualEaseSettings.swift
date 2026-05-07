@@ -1,0 +1,83 @@
+//
+//  EqualEaseSettings.swift
+//  EqualEase
+//
+
+import Foundation
+
+enum EqualEaseSettings {
+    static let allowsExternalAutomationWritesKey = "allowsExternalAutomationWrites"
+    static let localNetworkRemoteEnabledKey = "localNetworkRemoteEnabled"
+    static let hasCompletedRoutingOnboardingKey = "hasCompletedRoutingOnboarding"
+    static let startAudioRoutingAtLaunchKey = "startAudioRoutingAtLaunch"
+    static let showsQuickPanelInputVolumeKey = "showsQuickPanelInputVolume"
+    static let showsQuickPanelRoutingKey = "showsQuickPanelRouting"
+
+    static var allowsExternalAutomationWrites: Bool {
+        get {
+            guard UserDefaults.standard.object(forKey: allowsExternalAutomationWritesKey) != nil else {
+                return false
+            }
+            return UserDefaults.standard.bool(forKey: allowsExternalAutomationWritesKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: allowsExternalAutomationWritesKey)
+        }
+    }
+
+    static var localNetworkRemoteEnabled: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: localNetworkRemoteEnabledKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: localNetworkRemoteEnabledKey)
+        }
+    }
+
+    static var hasCompletedRoutingOnboarding: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: hasCompletedRoutingOnboardingKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: hasCompletedRoutingOnboardingKey)
+        }
+    }
+
+    static var startAudioRoutingAtLaunch: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: startAudioRoutingAtLaunchKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: startAudioRoutingAtLaunchKey)
+        }
+    }
+
+    static var shouldPresentRoutingOnboarding: Bool {
+        !hasCompletedRoutingOnboarding
+    }
+
+    static var showsQuickPanelInputVolume: Bool {
+        get {
+            defaultTrueBool(forKey: showsQuickPanelInputVolumeKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: showsQuickPanelInputVolumeKey)
+        }
+    }
+
+    static var showsQuickPanelRouting: Bool {
+        get {
+            defaultTrueBool(forKey: showsQuickPanelRoutingKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: showsQuickPanelRoutingKey)
+        }
+    }
+
+    private static func defaultTrueBool(forKey key: String) -> Bool {
+        guard UserDefaults.standard.object(forKey: key) != nil else {
+            return true
+        }
+        return UserDefaults.standard.bool(forKey: key)
+    }
+}

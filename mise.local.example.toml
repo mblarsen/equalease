@@ -1,0 +1,5 @@
+# Copy this file to mise.local.toml and set your local Apple Development Team ID.
+# mise.local.toml is ignored by git.
+
+[env]
+EQUALEASE_DEVELOPMENT_TEAM = "YOUR_TEAM_ID"

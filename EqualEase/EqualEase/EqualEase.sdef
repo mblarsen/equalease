@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="EqualEase Terminology">
+    <suite name="EqualEase Suite" code="EEqs" description="Commands for controlling EqualEase.">
+        <command name="list presets" code="EEqsLPst" description="Return the names of all available EqualEase presets.">
+            <access-group identifier="*"/>
+            <result type="text" list="yes" description="The available preset names."/>
+        </command>
+
+        <command name="select preset" code="EEqsSPst" description="Select an EqualEase preset by name.">
+            <access-group identifier="*"/>
+            <direct-parameter type="text" description="The preset name."/>
+            <result type="text" description="The selected preset name."/>
+        </command>
+
+        <command name="current preset name" code="EEqsGPre" description="Return the currently selected EqualEase preset name.">
+            <access-group identifier="*"/>
+            <result type="text" description="The current preset name."/>
+        </command>
+
+        <command name="set preamp level" code="EEqsSPre" description="Set the EqualEase preamp level. Accepts 0.0 to 2.0, 0 to 200, or a percent string such as 90%. Returns the level as a percentage.">
+            <access-group identifier="*"/>
+            <direct-parameter description="The preamp level.">
+                <type type="real"/>
+                <type type="integer"/>
+                <type type="text"/>
+            </direct-parameter>
+            <result type="real" description="The new preamp percentage."/>
+        </command>
+
+        <command name="current preamp level" code="EEqsGPlv" description="Return the current EqualEase preamp level as a percentage.">
+            <access-group identifier="*"/>
+            <result type="real" description="The current preamp percentage."/>
+        </command>
+
+        <command name="set output volume" code="EEqsSVol" description="Set the selected output device volume. Accepts 0.0 to 1.0, 0 to 100, or a percent string such as 45%. Returns the level as a percentage.">
+            <access-group identifier="*"/>
+            <direct-parameter description="The output volume level.">
+                <type type="real"/>
+                <type type="integer"/>
+                <type type="text"/>
+            </direct-parameter>
+            <result type="real" description="The new output volume percentage."/>
+        </command>
+
+        <command name="current output volume" code="EEqsGVol" description="Return the selected output device volume as a percentage.">
+            <access-group identifier="*"/>
+            <result type="real" description="The current output volume percentage."/>
+        </command>
+
+        <command name="set bypass" code="EEqsSByp" description="Set whether EqualEase processing is bypassed. Accepts yes, no, or toggle. Returns the new bypass state.">
+            <access-group identifier="*"/>
+            <direct-parameter type="text" description="The bypass state."/>
+            <result type="boolean" description="The new bypass state."/>
+        </command>
+
+        <command name="bypass state" code="EEqsGByp" description="Return whether EqualEase processing is bypassed.">
+            <access-group identifier="*"/>
+            <result type="boolean" description="The current bypass state."/>
+        </command>
+
+        <command name="toggle bypass" code="EEqsTByp" description="Toggle EqualEase processing bypass.">
+            <access-group identifier="*"/>
+            <result type="boolean" description="The new bypass state."/>
+        </command>
+    </suite>
+</dictionary>
