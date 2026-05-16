@@ -8,10 +8,6 @@ It lives in the menu bar, works across your Mac, and keeps the controls easy to 
 
 ![EqualEase menu bar quick panel](assets/demo.png)
 
-## AI disclaimer
-
-EqualEase was built with substantial AI assistance, but not by blindly shipping generated code. The app was developed with continuous human direction, review, and testing throughout by an experienced software developer, including product decisions, architecture, implementation checks, privacy review, and App Store preparation.
-
 ## Highlights
 
 - **One menu bar control for everyday Mac audio.** Quickly adjust output volume, input volume, presets, EQ, and routing from one place.
@@ -107,3 +103,7 @@ This is not an OSI open-source license. It is intended to keep EqualEase free to
 ## Roadmap notes
 
 EqualEase aims to be a real, focused Mac app: simple by design, not limited by ambition. Packaging, signing, updates, and App Store distribution are productization work around that core promise.
+
+## AI disclaimer
+
+EqualEase was built with substantial AI assistance, but not by blindly shipping generated code. The app was developed with continuous human direction, review, and testing throughout by an experienced software developer, including product decisions, architecture, implementation checks, privacy review, and App Store preparation.
