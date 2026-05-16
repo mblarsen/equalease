@@ -6,7 +6,7 @@ EqualEase gives you one simple place to adjust everyday Mac audio. Tune your lap
 
 It lives in the menu bar, works across your Mac, and keeps the controls easy to understand.
 
-![EqualEase Presets workbench](https://github.com/user-attachments/assets/8758cace-1981-4288-8703-2ee2e77b00ea)
+![EqualEase menu bar quick panel](assets/demo.png)
 
 ## AI disclaimer
 
