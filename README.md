@@ -8,6 +8,10 @@ It lives in the menu bar, works across your Mac, and keeps the controls easy to 
 
 ![EqualEase Presets workbench](https://github.com/user-attachments/assets/8758cace-1981-4288-8703-2ee2e77b00ea)
 
+## AI disclaimer
+
+EqualEase was built with substantial AI assistance, but not by blindly shipping generated code. The app was developed with continuous human direction, review, and testing throughout by an experienced software developer, including product decisions, architecture, implementation checks, privacy review, and App Store preparation.
+
 ## Highlights
 
 - **One menu bar control for everyday Mac audio.** Quickly adjust output volume, input volume, presets, EQ, and routing from one place.
