@@ -28,10 +28,6 @@ It lives in the menu bar, works across your Mac, and keeps the controls easy to 
 - Low microphone volume notifications and optional input-volume capping.
 - Opt-in local-network remote control with pairing.
 
-## Roadmap
-
-EqualEase aims to be a real, focused Mac app: simple by design, not limited by ambition. Packaging, signing, updates, and App Store distribution are productization work around that core promise.
-
 ## AI-assisted development
 
 EqualEase was built with substantial AI assistance, but not by blindly shipping generated code. The app was developed with continuous human direction, review, and testing throughout by an experienced software developer, including product decisions, architecture, implementation checks, privacy review, and App Store preparation.
