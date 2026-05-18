@@ -8,6 +8,14 @@ It lives in the menu bar, works across your Mac, and keeps the controls easy to 
 
 ![EqualEase menu bar quick panel](assets/demo.png)
 
+## Get EqualEase
+
+[Download EqualEase on the Mac App Store](https://apps.apple.com/app/equalease/id6767109153?mt=12)
+
+EqualEase is available as a signed, packaged Mac App Store app with updates through Apple. This repository remains source-available: if you are comfortable building it yourself, you can use it for free for personal and non-commercial use under the license below.
+
+The App Store version is for the easiest install and updates; it does not unlock a separate feature set.
+
 ## Highlights
 
 - **One menu bar control for everyday Mac audio.** Quickly adjust output volume, input volume, presets, EQ, and routing from one place.
