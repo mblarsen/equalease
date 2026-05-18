@@ -27,16 +27,33 @@ It lives in the menu bar, works across your Mac, and keeps the controls easy to 
 - Optional active-app preset rules learned from user choices.
 - Low microphone volume notifications and optional input-volume capping.
 - Opt-in local-network remote control with pairing.
-- Local install script for running EqualEase from `/Applications` while developing or building from source.
 
-## Requirements
+## Roadmap
+
+EqualEase aims to be a real, focused Mac app: simple by design, not limited by ambition. Packaging, signing, updates, and App Store distribution are productization work around that core promise.
+
+## AI-assisted development
+
+EqualEase was built with substantial AI assistance, but not by blindly shipping generated code. The app was developed with continuous human direction, review, and testing throughout by an experienced software developer, including product decisions, architecture, implementation checks, privacy review, and App Store preparation.
+
+## License
+
+EqualEase is source-available for free personal and non-commercial use under the [PolyForm Noncommercial License 1.0.0](LICENSE).
+
+You may build it yourself from source for personal use. Commercial use, including selling copies or paid redistribution of modified versions, is not allowed under the public license. Commercial rights are reserved by the copyright holder.
+
+This is not an OSI open-source license. It is intended to keep EqualEase free to self-build while preventing someone else from copying it and selling it.
+
+## Build from source
+
+### Requirements
 
 - macOS with support for Core Audio process taps.
 - Xcode with command line tools installed.
 - [mise](https://mise.jdx.dev/) for the documented build tasks.
 - An Apple Developer Team ID only if you want signed local builds or App Store archives.
 
-## Build
+### Build and test
 
 From the repository root:
 
@@ -72,7 +89,7 @@ mise run archive-app-store
 
 `archive-app-store` creates a Release `.xcarchive` at `build/EqualEase.xcarchive`. It does not upload the archive to App Store Connect.
 
-## Install locally
+### Install locally
 
 To build from source and install the app into `/Applications`:
 
@@ -91,19 +108,3 @@ scripts/install-local.sh --destination /path/to/EqualEase.app
 ```
 
 After installing, open EqualEase from `/Applications` and grant any macOS audio/system permissions it requests.
-
-## License
-
-EqualEase is source-available for free personal and non-commercial use under the [PolyForm Noncommercial License 1.0.0](LICENSE).
-
-You may build it yourself from source for personal use. Commercial use, including selling copies or paid redistribution of modified versions, is not allowed under the public license. Commercial rights are reserved by the copyright holder.
-
-This is not an OSI open-source license. It is intended to keep EqualEase free to self-build while preventing someone else from copying it and selling it.
-
-## Roadmap notes
-
-EqualEase aims to be a real, focused Mac app: simple by design, not limited by ambition. Packaging, signing, updates, and App Store distribution are productization work around that core promise.
-
-## AI disclaimer
-
-EqualEase was built with substantial AI assistance, but not by blindly shipping generated code. The app was developed with continuous human direction, review, and testing throughout by an experienced software developer, including product decisions, architecture, implementation checks, privacy review, and App Store preparation.
