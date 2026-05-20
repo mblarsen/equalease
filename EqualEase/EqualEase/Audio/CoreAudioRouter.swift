@@ -77,7 +77,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
     init(
         host: CoreAudioRoutingHost,
         restartDebounce: Duration = .milliseconds(200),
-        cleanupOnLaunch: Bool = true
+        cleanupOnLaunch: Bool = false
     ) {
         self.host = host
         self.restartDebounce = restartDebounce
@@ -85,7 +85,12 @@ final class CoreAudioRouter: AudioRoutingBackend {
         refreshOutputDevice()
         startOutputDeviceObservation()
         if cleanupOnLaunch {
-            cleanupOwnedAudioStateOnLaunch()
+            do {
+                try cleanupOwnedAudioStateBeforeExplicitRouting()
+            } catch {
+                state = .failed(error.localizedDescription)
+                statusText = error.localizedDescription
+            }
         }
     }
 
@@ -125,7 +130,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
         statusText = "Starting audio routing…"
 
         do {
-            _ = try host.cleanupOwnedAudioState(includeDevelopmentObjects: false)
+            _ = try cleanupOwnedAudioStateBeforeExplicitRouting()
             let result = try host.startRoute(configuration: startConfiguration)
             applyStartedOutputDevice(result.outputDevice)
             state = .running
@@ -288,15 +293,12 @@ final class CoreAudioRouter: AudioRoutingBackend {
         }
     }
 
-    private func cleanupOwnedAudioStateOnLaunch() {
-        do {
-            let result = try host.cleanupOwnedAudioState(includeDevelopmentObjects: false)
-            if result.destroyedTaps > 0 || result.destroyedAggregates > 0 {
-                statusText = result.summary
-            }
-        } catch {
-            state = .failed(error.localizedDescription)
-            statusText = error.localizedDescription
+    @discardableResult
+    private func cleanupOwnedAudioStateBeforeExplicitRouting() throws -> AudioRoutingCleanupResult {
+        let result = try host.cleanupOwnedAudioState(includeDevelopmentObjects: false)
+        if result.destroyedTaps > 0 || result.destroyedAggregates > 0 {
+            statusText = result.summary
         }
+        return result
     }
 }

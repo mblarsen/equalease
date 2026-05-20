@@ -8,6 +8,15 @@ import XCTest
 
 @MainActor
 final class CoreAudioRouterLifecycleTests: XCTestCase {
+    func testDefaultInitializationDoesNotCleanUpAudioStateBeforeUserStartsRouting() {
+        let host = TestRoutingHost()
+        _ = CoreAudioRouter(host: host)
+
+        XCTAssertEqual(host.cleanupRequests, [])
+        XCTAssertEqual(host.startConfigurations.count, 0)
+        XCTAssertEqual(host.stopCount, 0)
+    }
+
     func testStartSuccessRoutesToSelectedOutput() {
         let host = TestRoutingHost()
         let router = CoreAudioRouter(host: host, restartDebounce: .milliseconds(10), cleanupOnLaunch: false)
