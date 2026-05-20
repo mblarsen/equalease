@@ -20,6 +20,7 @@ Use this checklist before calling a local MVP build ready. Prefer testing with r
 - [ ] On a fresh install, the native macOS audio capture permission dialog does not appear before EqualEase shows its own first-run explanation.
 - [ ] Menu bar extra appears.
 - [ ] Menu bar icon opens a compact draggable quick-control panel with the first-run “Turn On EqualEase” explanation before any native macOS audio capture permission prompt.
+- [ ] The first-run “Start audio routing automatically on future launches” checkbox is checked by default.
 - [ ] After clicking Turn On EqualEase, macOS may show the native audio capture permission dialog.
 - [ ] After first-run setup, the menu bar icon opens a compact draggable quick-control panel with Active, routing, output, preset, and a gear menu that hides Manage/About/Quit.
 - [ ] Quick-control panel closes when clicking outside EqualEase.

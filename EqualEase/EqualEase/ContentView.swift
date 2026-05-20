@@ -11,7 +11,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
     @ObservedObject var model: QuickPanelModel<Router>
 
     @Environment(\.colorScheme) private var colorScheme
-    @State private var restoreRoutingAtLaunch = false
+    @State private var restoreRoutingAtLaunch = true
 
     private var router: Router { model.router }
     private var inputDeviceController: InputDeviceController { model.inputDeviceController }
