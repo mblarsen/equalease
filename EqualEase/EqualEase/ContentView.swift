@@ -192,6 +192,22 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 .accessibilityLabel("Manage presets")
                 .help("Open Presets settings")
             }
+
+            Toggle("Pause app preset switching", isOn: Binding(
+                get: { model.isPresetLocked },
+                set: { isLocked in
+                    model.setPresetLock(isLocked)
+                }
+            ))
+            .toggleStyle(.checkbox)
+            .controlSize(.small)
+            .font(.caption)
+            .help(model.presetLockHelpText)
+
+            Text(model.presetLockHelpText)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 

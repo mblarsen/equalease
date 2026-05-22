@@ -79,6 +79,8 @@ Use this checklist before calling a local MVP build ready. Prefer testing with r
 - [ ] Switching Safari ↔ Spotify changes the effective preset while the EqualEase popover is open.
 - [ ] Switching Safari ↔ Spotify changes the effective preset while the EqualEase popover is closed.
 - [ ] Switching away from an app with a rule returns to the selected default preset instead of leaving the app preset active.
+- [ ] Pause app preset switching keeps the current preset active while switching to an app with a different remembered preset.
+- [ ] Turning Pause app preset switching off resumes normal active-app rule switching.
 - [ ] Opening EqualEase does not replace the target active app with EqualEase itself.
 - [ ] Clear Active-App Rule removes the current app mapping.
 
@@ -87,7 +89,7 @@ Use this checklist before calling a local MVP build ready. Prefer testing with r
 - [ ] Menu bar > Settings… opens a native settings window.
 - [ ] Settings opens with a General tab containing Launch at Login, Local Network Remote, External Automation, and Version; it does not contain runtime routing controls.
 - [ ] Launch at Login can be enabled and disabled from the installed `/Applications/EqualEase.app`.
-- [ ] External automation safety can be disabled; with it off, AppleScript/URL reads and built-in preset selection still work, while Volume, Preamp, Bypass, and custom-preset writes are rejected.
+- [ ] External automation safety can be disabled; with it off, AppleScript/URL reads and built-in preset selection still work, while Volume, Preamp, Bypass, app-preset-switching pause, and custom-preset writes are rejected.
 - [ ] Presets tab lists built-in and custom presets.
 - [ ] Presets tab provides the detailed custom preset editor while the menu bar remains a quick selector.
 - [ ] Rules tab creates active-app rules, lists them with friendly names and icons after app restart, and can clear them.

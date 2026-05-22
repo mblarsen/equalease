@@ -230,7 +230,7 @@ struct GeneralSettingsView: View {
             Section("External Automation") {
                 Toggle("Allow automation to change sound settings", isOn: $allowsExternalAutomationWrites)
 
-                Text("When this is off, equalease:// links and AppleScript can still read EqualEase state and select built-in presets, but they cannot change Volume, Preamp, Bypass, or custom presets.")
+                Text("When this is off, equalease:// links and AppleScript can still read EqualEase state and select built-in presets, but they cannot change Volume, Preamp, Bypass, whether app preset switching is paused, or custom presets.")
                     .foregroundStyle(.secondary)
             }
 

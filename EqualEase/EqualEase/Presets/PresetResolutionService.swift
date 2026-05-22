@@ -6,6 +6,7 @@
 import Foundation
 
 enum PresetResolutionSource: Equatable {
+    case lockedPreset
     case activeApp(bundleIdentifier: String, displayName: String)
     case selectedPreset
 }
@@ -22,9 +23,15 @@ struct PresetResolutionService {
         activeApp: ForegroundAppIdentity?,
         presets: [EQPreset],
         devicePresetIDs: [String: String],
-        appPresetIDs: [String: String]
+        appPresetIDs: [String: String],
+        lockedPresetID: String? = nil
     ) -> PresetResolution? {
         let presetsByID = Dictionary(uniqueKeysWithValues: presets.map { ($0.id, $0) })
+
+        if let lockedPresetID,
+           let preset = presetsByID[lockedPresetID] {
+            return PresetResolution(preset: preset, source: .lockedPreset)
+        }
 
         // Device preset rules are intentionally paused for the first release.
         // Keep the persisted data/code paths around, but do not let them affect

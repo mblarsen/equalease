@@ -28,6 +28,22 @@ final class EqualEaseAutomationTests: XCTestCase {
             try harness.module.command(for: url("equalease:///bypass/toggle")),
             .setBypass(rawValue: "toggle")
         )
+        XCTAssertEqual(
+            try harness.module.command(for: url("equalease:///lock/on/Warm")),
+            .lockPreset(name: "Warm")
+        )
+        XCTAssertEqual(
+            try harness.module.command(for: url("equalease:///lock/on")),
+            .lockPreset(name: nil)
+        )
+        XCTAssertEqual(
+            try harness.module.command(for: url("equalease:///lock/off")),
+            .unlockPreset
+        )
+        XCTAssertEqual(
+            try harness.module.command(for: url("equalease:///lock/toggle")),
+            .togglePresetLock
+        )
     }
 
     func testURLCommandExecutionSupportsPresetPreampVolumeAndBypass() throws {
@@ -58,6 +74,29 @@ final class EqualEaseAutomationTests: XCTestCase {
         XCTAssertTrue(harness.target.automationIsBypassed)
     }
 
+    func testURLCommandExecutionSupportsPresetLock() throws {
+        let harness = AutomationHarness()
+
+        XCTAssertEqual(
+            try harness.module.execute(try harness.module.command(for: url("equalease:///lock/on/Warm"))),
+            .boolean(true)
+        )
+        XCTAssertEqual(harness.target.lockedPresetID, "built-in-warm")
+
+        XCTAssertEqual(
+            try harness.module.execute(try harness.module.command(for: url("equalease:///lock/off"))),
+            .boolean(false)
+        )
+        XCTAssertNil(harness.target.lockedPresetID)
+
+        harness.target.selectedPresetID = "built-in-voice-boost"
+        XCTAssertEqual(
+            try harness.module.execute(try harness.module.command(for: url("equalease:///lock/on"))),
+            .boolean(true)
+        )
+        XCTAssertEqual(harness.target.lockedPresetID, "built-in-voice-boost")
+    }
+
     func testAppleScriptAdapterMapsCommandValuesToSharedCommands() throws {
         XCTAssertEqual(
             try EqualEaseAppleScriptAdapter.automationCommand(
@@ -86,6 +125,20 @@ final class EqualEaseAutomationTests: XCTestCase {
                 event: appleEvent(directObject: NSAppleEventDescriptor(string: "no"))
             ),
             .setBypass(rawValue: "no")
+        )
+        XCTAssertEqual(
+            try EqualEaseAppleScriptAdapter.automationCommand(
+                for: .lockPreset,
+                event: appleEvent(directObject: NSAppleEventDescriptor(string: "Warm"))
+            ),
+            .lockPreset(name: "Warm")
+        )
+        XCTAssertEqual(
+            try EqualEaseAppleScriptAdapter.automationCommand(
+                for: .lockPreset,
+                event: appleEvent()
+            ),
+            .lockPreset(name: nil)
         )
     }
 
@@ -124,6 +177,7 @@ final class EqualEaseAutomationTests: XCTestCase {
         XCTAssertEqual(try harness.module.execute(.currentPreamp), .number(80))
         XCTAssertEqual(try harness.module.execute(.currentOutputVolume), .number(40))
         XCTAssertEqual(try harness.module.execute(.bypassState), .boolean(true))
+        XCTAssertEqual(try harness.module.execute(.presetLockState), .boolean(false))
 
         XCTAssertEqual(try harness.module.execute(.selectPreset(name: "Warm")), .string("Warm"))
         XCTAssertEqual(harness.target.selectedPresetID, "built-in-warm")
@@ -151,6 +205,14 @@ final class EqualEaseAutomationTests: XCTestCase {
         assertThrowsAutomationError(
             try harness.module.execute(.selectPreset(name: "Custom Speech")),
             equals: .customPresetWritesDisabled("Custom Speech")
+        )
+        assertThrowsAutomationError(
+            try harness.module.execute(.lockPreset(name: nil)),
+            equals: .externalAutomationWritesDisabled("Preset Lock")
+        )
+        assertThrowsAutomationError(
+            try harness.module.execute(.togglePresetLock),
+            equals: .externalAutomationWritesDisabled("Preset Lock")
         )
     }
 
@@ -284,12 +346,34 @@ private final class TestAutomationTarget: EqualEaseAutomationCommandTarget {
     var automationPreamp = 1.0
     var automationOutputVolume = 1.0
     var automationIsBypassed = false
+    var lockedPresetID: String?
 
     var automationCurrentPresetName: String {
         automationPresets.first { $0.id == selectedPresetID }?.name ?? ""
     }
 
+    var automationIsPresetLocked: Bool {
+        lockedPresetID != nil
+    }
+
     func selectAutomationPreset(_ preset: EQPreset) {
         selectedPresetID = preset.id
+    }
+
+    func lockAutomationPreset(_ preset: EQPreset?) {
+        lockedPresetID = preset?.id ?? selectedPresetID
+    }
+
+    func unlockAutomationPreset() {
+        lockedPresetID = nil
+    }
+
+    func toggleAutomationPresetLock() -> Bool {
+        if automationIsPresetLocked {
+            unlockAutomationPreset()
+        } else {
+            lockAutomationPreset(nil)
+        }
+        return automationIsPresetLocked
     }
 }

@@ -12,6 +12,7 @@ final class EqualEaseSettingsTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.localNetworkRemoteEnabledKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.hasCompletedRoutingOnboardingKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.startAudioRoutingAtLaunchKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.lockedPresetIDKey)
         super.tearDown()
     }
 
@@ -50,6 +51,23 @@ final class EqualEaseSettingsTests: XCTestCase {
         XCTAssertTrue(EqualEaseSettings.shouldPresentRoutingOnboarding)
         XCTAssertFalse(EqualEaseSettings.hasCompletedRoutingOnboarding)
         XCTAssertFalse(EqualEaseSettings.startAudioRoutingAtLaunch)
+    }
+
+    func testPresetLockDefaultsOffAndPersistsPresetID() {
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.lockedPresetIDKey)
+
+        XCTAssertFalse(EqualEaseSettings.isPresetLocked)
+        XCTAssertNil(EqualEaseSettings.lockedPresetID)
+
+        EqualEaseSettings.lockedPresetID = "built-in-warm"
+
+        XCTAssertTrue(EqualEaseSettings.isPresetLocked)
+        XCTAssertEqual(EqualEaseSettings.lockedPresetID, "built-in-warm")
+
+        EqualEaseSettings.lockedPresetID = nil
+
+        XCTAssertFalse(EqualEaseSettings.isPresetLocked)
+        XCTAssertNil(EqualEaseSettings.lockedPresetID)
     }
 
     func testRoutingOnboardingAndLaunchRestorePersistExplicitChoices() {

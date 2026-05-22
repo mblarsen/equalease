@@ -70,6 +70,12 @@ final class EqualEaseAppModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
+            .sink { [weak self] _ in
+                self?.applyEffectivePreset()
+            }
+            .store(in: &cancellables)
+
         NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)
             .sink { [weak self] _ in
                 self?.shutdown()
@@ -113,8 +119,52 @@ final class EqualEaseAppModel: ObservableObject {
         defer { isSelectingPresetManually = false }
 
         guard let preset = presetStore.selectPreset(id: presetID) else { return }
+        if EqualEaseSettings.isPresetLocked {
+            EqualEaseSettings.lockedPresetID = preset.id
+            applyEffectivePreset()
+            return
+        }
+
         let context = activeContextResolver.recordManualPresetSelection(preset, input: activeContextInput)
         apply(context?.preset ?? preset)
+    }
+
+    func setPresetLock(_ isLocked: Bool) {
+        if isLocked {
+            lockCurrentPreset()
+        } else {
+            unlockPreset()
+        }
+    }
+
+    func lockCurrentPreset() {
+        let presetID = activeContextResolver.context?.preset.id
+            ?? presetStore.preset(id: presetStore.selectedPresetID)?.id
+            ?? presetStore.presets.first?.id
+        guard let presetID else { return }
+        lockPreset(id: presetID)
+    }
+
+    func lockPreset(id presetID: String) {
+        guard presetStore.preset(id: presetID) != nil else { return }
+        EqualEaseSettings.lockedPresetID = presetID
+        applyEffectivePreset()
+    }
+
+    func unlockPreset() {
+        EqualEaseSettings.lockedPresetID = nil
+        applyEffectivePreset()
+    }
+
+    @discardableResult
+    func togglePresetLock() -> Bool {
+        if EqualEaseSettings.isPresetLocked {
+            unlockPreset()
+            return false
+        }
+
+        lockCurrentPreset()
+        return EqualEaseSettings.isPresetLocked
     }
 
     func acceptAppPresetSuggestion() {
@@ -136,6 +186,11 @@ final class EqualEaseAppModel: ObservableObject {
     }
 
     func applyEffectivePreset() {
+        if let lockedPresetID = EqualEaseSettings.lockedPresetID,
+           presetStore.preset(id: lockedPresetID) == nil {
+            EqualEaseSettings.lockedPresetID = nil
+        }
+
         guard let context = activeContextResolver.resolve(input: activeContextInput) else { return }
         apply(context.preset)
     }
@@ -157,6 +212,7 @@ final class EqualEaseAppModel: ObservableObject {
             presets: presetStore.presets,
             devicePresetIDs: presetStore.devicePresetIDs,
             appPresetIDs: presetStore.appPresetIDs,
+            lockedPresetID: EqualEaseSettings.lockedPresetID,
             foregroundActivationGeneration: foregroundAppObserver.activationGeneration
         )
     }
@@ -181,6 +237,7 @@ final class EqualEaseAppModel: ObservableObject {
         let presetPublishers: [AnyPublisher<Void, Never>] = [
             presetStore.$selectedPresetID.map { _ in () }.eraseToAnyPublisher(),
             presetStore.$customPresets.map { _ in () }.eraseToAnyPublisher(),
+            NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification).map { _ in () }.eraseToAnyPublisher(),
         ]
 
         Publishers.MergeMany(routerPublishers + contextPublishers + presetPublishers)

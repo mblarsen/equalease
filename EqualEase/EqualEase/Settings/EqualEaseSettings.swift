@@ -10,6 +10,7 @@ enum EqualEaseSettings {
     static let localNetworkRemoteEnabledKey = "localNetworkRemoteEnabled"
     static let hasCompletedRoutingOnboardingKey = "hasCompletedRoutingOnboarding"
     static let startAudioRoutingAtLaunchKey = "startAudioRoutingAtLaunch"
+    static let lockedPresetIDKey = "lockedPresetID"
     static let showsQuickPanelInputVolumeKey = "showsQuickPanelInputVolume"
     static let showsQuickPanelRoutingKey = "showsQuickPanelRouting"
 
@@ -54,6 +55,23 @@ enum EqualEaseSettings {
 
     static var shouldPresentRoutingOnboarding: Bool {
         !hasCompletedRoutingOnboarding
+    }
+
+    static var lockedPresetID: String? {
+        get {
+            UserDefaults.standard.string(forKey: lockedPresetIDKey)
+        }
+        set {
+            if let newValue {
+                UserDefaults.standard.set(newValue, forKey: lockedPresetIDKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: lockedPresetIDKey)
+            }
+        }
+    }
+
+    static var isPresetLocked: Bool {
+        lockedPresetID != nil
     }
 
     static var showsQuickPanelInputVolume: Bool {

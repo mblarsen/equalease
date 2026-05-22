@@ -7,6 +7,21 @@ import XCTest
 @testable import EqualEase
 
 final class PresetResolutionServiceTests: XCTestCase {
+    func testPresetLockWinsOverActiveAppRuleAndSelectedPreset() {
+        let resolution = PresetResolutionService.resolve(
+            selectedPresetID: flat.id,
+            outputDeviceUID: "speaker",
+            activeApp: safari,
+            presets: presets,
+            devicePresetIDs: ["speaker": treble.id],
+            appPresetIDs: [safari.bundleIdentifier: bass.id],
+            lockedPresetID: warm.id
+        )
+
+        XCTAssertEqual(resolution?.preset, warm)
+        XCTAssertEqual(resolution?.source, .lockedPreset)
+    }
+
     func testDeviceRuleIsIgnoredWhileDeviceRulesArePaused() {
         let resolution = PresetResolutionService.resolve(
             selectedPresetID: flat.id,

@@ -13,6 +13,7 @@ struct ActiveContextPresetInput {
     var presets: [EQPreset]
     var devicePresetIDs: [String: String]
     var appPresetIDs: [String: String]
+    var lockedPresetID: String? = nil
     var foregroundActivationGeneration: Int = 0
 }
 
@@ -24,6 +25,8 @@ struct ActivePresetContext: Equatable {
 
     var sourceSummary: String {
         switch source {
+        case .lockedPreset:
+            "\(preset.name) · paused"
         case let .activeApp(_, displayName):
             "\(preset.name) for \(displayName)"
         case .selectedPreset:
@@ -33,6 +36,8 @@ struct ActivePresetContext: Equatable {
 
     var sourceExplanation: String {
         switch source {
+        case .lockedPreset:
+            "App-specific preset rules are paused. EqualEase stays on \(preset.name) until app preset switching resumes."
         case let .activeApp(bundleIdentifier, displayName):
             "Active app \(displayName) (\(bundleIdentifier)) remembers \(preset.name)."
         case .selectedPreset:
@@ -57,7 +62,12 @@ final class ActiveContextPresetResolver: ObservableObject {
         let resolvedPreset: EQPreset
         let resolvedSource: PresetResolutionSource
 
-        if let override = validManualOverride(input: input) {
+        if input.lockedPresetID != nil {
+            appLearningPrompt = nil
+            clearManualOverride()
+        }
+
+        if input.lockedPresetID == nil, let override = validManualOverride(input: input) {
             resolvedPreset = override.preset
             resolvedSource = .selectedPreset
         } else {
@@ -67,7 +77,8 @@ final class ActiveContextPresetResolver: ObservableObject {
                 activeApp: input.foregroundApp,
                 presets: input.presets,
                 devicePresetIDs: input.devicePresetIDs,
-                appPresetIDs: input.appPresetIDs
+                appPresetIDs: input.appPresetIDs,
+                lockedPresetID: input.lockedPresetID
             ) else {
                 context = nil
                 return nil
@@ -91,8 +102,8 @@ final class ActiveContextPresetResolver: ObservableObject {
         _ preset: EQPreset,
         input: ActiveContextPresetInput
     ) -> ActivePresetContext? {
-        appLearningPrompt = promptCandidate(forManualPreset: preset, input: input)
-        manualPresetOverride = manualOverride(forManualPreset: preset, input: input)
+        appLearningPrompt = input.lockedPresetID == nil ? promptCandidate(forManualPreset: preset, input: input) : nil
+        manualPresetOverride = input.lockedPresetID == nil ? manualOverride(forManualPreset: preset, input: input) : nil
         manualPresetOverrideActivationGeneration = input.foregroundActivationGeneration
         return resolve(input: input)
     }

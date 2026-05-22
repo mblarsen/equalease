@@ -63,5 +63,26 @@
             <access-group identifier="*"/>
             <result type="boolean" description="The new bypass state."/>
         </command>
+
+        <command name="lock preset" code="EEqsLPrs" description="Lock EqualEase to the current preset or to a named preset, temporarily ignoring app preset rules.">
+            <access-group identifier="*"/>
+            <direct-parameter type="text" optional="yes" description="The preset name. Omit to lock the current preset."/>
+            <result type="boolean" description="Whether the preset lock is enabled."/>
+        </command>
+
+        <command name="unlock preset" code="EEqsUPrs" description="Turn off the preset lock and resume normal app preset rules.">
+            <access-group identifier="*"/>
+            <result type="boolean" description="Whether the preset lock is enabled."/>
+        </command>
+
+        <command name="preset lock state" code="EEqsGPlk" description="Return whether EqualEase is currently locked to a preset.">
+            <access-group identifier="*"/>
+            <result type="boolean" description="Whether the preset lock is enabled."/>
+        </command>
+
+        <command name="toggle preset lock" code="EEqsTPlk" description="Toggle the preset lock. When turning on, locks the current preset.">
+            <access-group identifier="*"/>
+            <result type="boolean" description="Whether the preset lock is enabled."/>
+        </command>
     </suite>
 </dictionary>

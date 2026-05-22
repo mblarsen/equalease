@@ -122,6 +122,9 @@ final class MenuBarQuickPanelAdapter: NSObject, NSWindowDelegate {
             selectPreset: { [weak appModel] presetID in
                 appModel?.selectPreset(id: presetID)
             },
+            setPresetLock: { [weak appModel] isLocked in
+                appModel?.setPresetLock(isLocked)
+            },
             acceptAppPresetSuggestion: { [weak appModel] in
                 appModel?.acceptAppPresetSuggestion()
             },

@@ -13,6 +13,7 @@ enum EqualEaseAutomationError: LocalizedError, Equatable {
     case unknownPreset(String)
     case invalidLevel(String)
     case invalidBypassValue(String)
+    case invalidPresetLockValue(String)
     case externalAutomationWritesDisabled(String)
     case customPresetWritesDisabled(String)
 
@@ -32,6 +33,8 @@ enum EqualEaseAutomationError: LocalizedError, Equatable {
             "Invalid EqualEase level: \(level)"
         case let .invalidBypassValue(value):
             "Invalid EqualEase bypass value: \(value)"
+        case let .invalidPresetLockValue(value):
+            "Invalid EqualEase preset lock value: \(value)"
         case let .externalAutomationWritesDisabled(action):
             "External automation is not allowed to change EqualEase \(action). Enable it in Settings > General."
         case let .customPresetWritesDisabled(name):
@@ -51,6 +54,10 @@ enum EqualEaseAutomationCommand: Equatable {
     case setBypass(rawValue: String)
     case bypassState
     case toggleBypass
+    case lockPreset(name: String?)
+    case unlockPreset
+    case presetLockState
+    case togglePresetLock
 }
 
 enum EqualEaseAutomationResult: Equatable {
@@ -67,8 +74,12 @@ protocol EqualEaseAutomationCommandTarget: AnyObject {
     var automationPreamp: Double { get set }
     var automationOutputVolume: Double { get set }
     var automationIsBypassed: Bool { get set }
+    var automationIsPresetLocked: Bool { get }
 
     func selectAutomationPreset(_ preset: EQPreset)
+    func lockAutomationPreset(_ preset: EQPreset?)
+    func unlockAutomationPreset()
+    func toggleAutomationPresetLock() -> Bool
 }
 
 @MainActor
@@ -108,6 +119,20 @@ final class EqualEaseAutomationCommandModule {
         case "bypass":
             guard !value.isEmpty else { throw EqualEaseAutomationError.missingValue(action) }
             return .setBypass(rawValue: value)
+        case "lock":
+            guard segments.count >= 2 else { throw EqualEaseAutomationError.missingValue(action) }
+            let lockValue = segments[1].localizedLowercase
+            let presetName = segments.dropFirst(2).joined(separator: "/")
+            switch lockValue {
+            case "on", "yes":
+                return .lockPreset(name: presetName.isEmpty ? nil : presetName)
+            case "off", "no":
+                return .unlockPreset
+            case "toggle":
+                return .togglePresetLock
+            default:
+                throw EqualEaseAutomationError.invalidPresetLockValue(segments[1])
+            }
         default:
             throw EqualEaseAutomationError.unsupportedURLAction(action)
         }
@@ -155,6 +180,19 @@ final class EqualEaseAutomationCommandModule {
             try ensureSoundSettingWriteAllowed("Bypass")
             target.automationIsBypassed.toggle()
             return .boolean(target.automationIsBypassed)
+        case let .lockPreset(name):
+            try ensureSoundSettingWriteAllowed("Preset Lock")
+            target.lockAutomationPreset(try optionalPreset(named: name))
+            return .boolean(target.automationIsPresetLocked)
+        case .unlockPreset:
+            try ensureSoundSettingWriteAllowed("Preset Lock")
+            target.unlockAutomationPreset()
+            return .boolean(target.automationIsPresetLocked)
+        case .presetLockState:
+            return .boolean(target.automationIsPresetLocked)
+        case .togglePresetLock:
+            try ensureSoundSettingWriteAllowed("Preset Lock")
+            return .boolean(target.toggleAutomationPresetLock())
         }
     }
 
@@ -174,6 +212,11 @@ final class EqualEaseAutomationCommandModule {
         guard allowsExternalAutomationWrites() || preset.source == .builtIn else {
             throw EqualEaseAutomationError.customPresetWritesDisabled(preset.name)
         }
+    }
+
+    private func optionalPreset(named name: String?) throws -> EQPreset? {
+        guard let name else { return nil }
+        return try preset(named: name)
     }
 
     private func preset(named name: String) throws -> EQPreset {
@@ -299,6 +342,26 @@ final class EqualEaseAutomation {
         try execute(.toggleBypass).booleanValue
     }
 
+    var isPresetLocked: Bool {
+        get { (try? execute(.presetLockState).booleanValue) ?? false }
+        set { _ = try? execute(newValue ? .lockPreset(name: nil) : .unlockPreset) }
+    }
+
+    @discardableResult
+    func lockPreset(named name: String? = nil) throws -> Bool {
+        try execute(.lockPreset(name: name)).booleanValue
+    }
+
+    @discardableResult
+    func unlockPreset() throws -> Bool {
+        try execute(.unlockPreset).booleanValue
+    }
+
+    @discardableResult
+    func togglePresetLock() throws -> Bool {
+        try execute(.togglePresetLock).booleanValue
+    }
+
     func handle(url: URL) throws {
         try execute(command(for: url))
     }
@@ -334,8 +397,28 @@ extension EqualEaseAppModel: EqualEaseAutomationCommandTarget {
         set { router.isBypassed = newValue }
     }
 
+    var automationIsPresetLocked: Bool {
+        EqualEaseSettings.isPresetLocked
+    }
+
     func selectAutomationPreset(_ preset: EQPreset) {
         selectPreset(id: preset.id)
+    }
+
+    func lockAutomationPreset(_ preset: EQPreset?) {
+        if let preset {
+            lockPreset(id: preset.id)
+        } else {
+            lockCurrentPreset()
+        }
+    }
+
+    func unlockAutomationPreset() {
+        unlockPreset()
+    }
+
+    func toggleAutomationPresetLock() -> Bool {
+        togglePresetLock()
     }
 }
 

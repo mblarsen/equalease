@@ -16,6 +16,7 @@ final class QuickPanelPresentationState: ObservableObject {
 struct QuickPanelActions {
     var applyEffectivePreset: () -> Void
     var selectPreset: (String) -> Void
+    var setPresetLock: (Bool) -> Void
     var acceptAppPresetSuggestion: () -> Void
     var dismissAppPresetSuggestion: () -> Void
     var resetAppPresetSuggestionDismissals: () -> Void
@@ -28,6 +29,7 @@ struct QuickPanelActions {
         QuickPanelActions(
             applyEffectivePreset: {},
             selectPreset: { _ in },
+            setPresetLock: { _ in },
             acceptAppPresetSuggestion: {},
             dismissAppPresetSuggestion: {},
             resetAppPresetSuggestionDismissals: {},
@@ -96,6 +98,11 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         actions.selectPreset(presetID)
     }
 
+    func setPresetLock(_ isLocked: Bool) {
+        actions.setPresetLock(isLocked)
+        objectWillChange.send()
+    }
+
     func acceptAppPresetSuggestion() {
         actions.acceptAppPresetSuggestion()
     }
@@ -158,6 +165,17 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
             ?? "Preset"
     }
 
+    var isPresetLocked: Bool {
+        EqualEaseSettings.isPresetLocked
+    }
+
+    var presetLockHelpText: String {
+        if let context = activeContextResolver.context, context.source == .lockedPreset {
+            return "App-specific rules are paused; \(context.preset.name) stays active while you switch apps."
+        }
+        return "Ignores app-specific preset rules and keeps the current preset while you switch apps."
+    }
+
     var currentInputDeviceName: String {
         inputDeviceController.inputDeviceName
     }
@@ -183,7 +201,7 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
             return 436
         }
 
-        let baseHeightWithoutInputOrRouting: CGFloat = 318
+        let baseHeightWithoutInputOrRouting: CGFloat = 376
         let inputSectionHeight: CGFloat = showsInputSection ? 92 : 0
         let routingSectionHeight: CGFloat = showsRoutingSection ? 108 : 0
         let promptHeight: CGFloat = appLearningPrompt == nil ? 0 : 72

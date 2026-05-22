@@ -7,7 +7,7 @@ EqualEase exposes two local automation surfaces for development and personal wor
 
 These controls operate on the running app model. If EqualEase is not running, macOS launches it before delivering the URL or Apple event.
 
-External writes are controlled by **Settings > General > Allow automation to change sound settings**. The setting is off by default. When it is off, automation can still read state and select built-in presets, but it cannot change Volume, Preamp, Bypass, or custom presets.
+External writes are controlled by **Settings > General > Allow automation to change sound settings**. The setting is off by default. When it is off, automation can still read state and select built-in presets, but it cannot change Volume, Preamp, Bypass, whether app preset switching is paused, or custom presets.
 
 ## Deep links
 
@@ -20,6 +20,8 @@ equalease:///preset/<name>
 equalease:///preamp/<level>
 equalease:///volume/<level>
 equalease:///bypass/<yes|no|toggle>
+equalease:///lock/<on|off|toggle>
+equalease:///lock/on/<name>
 ```
 
 Examples:
@@ -35,6 +37,10 @@ open 'equalease:///volume/33%25'
 open 'equalease:///bypass/yes'    # bypass processing
 open 'equalease:///bypass/no'     # process audio normally
 open 'equalease:///bypass/toggle'
+open 'equalease:///lock/on'       # lock the current effective preset
+open 'equalease:///lock/on/Warm'  # lock Warm and pause app preset rules
+open 'equalease:///lock/off'      # resume normal app preset rules
+open 'equalease:///lock/toggle'
 ```
 
 Preset names are URL-decoded and matched case-insensitively. Preset IDs also work. If automation writes are disabled in Settings > General, preset links can only select built-in presets.
@@ -45,7 +51,13 @@ Level parsing is intentionally forgiving:
 - Volume accepts `0...1`, `0...100`, or percent strings such as `45%`.
 - Values are clamped to the supported range.
 
-Preamp, volume, and bypass links require automation writes to be enabled in Settings > General.
+Preamp, volume, bypass, and preset-lock links require automation writes to be enabled in Settings > General.
+
+Preset lock values answer the question “lock the current preset?”:
+
+- `on` means lock the named preset, or the current effective preset when no name is provided.
+- `off` means unlock and resume normal app preset rules.
+- `toggle` flips the current lock state. When toggling on, EqualEase locks the current effective preset.
 
 Bypass values answer the question “bypass processing?”:
 
@@ -78,6 +90,12 @@ tell application "EqualEase"
     set bypass "no" -- process audio normally
     set bypass "toggle"
     toggle bypass
+
+    preset lock state
+    lock preset -- lock the current effective preset
+    lock preset "Warm"
+    unlock preset
+    toggle preset lock
 end tell
 ```
 
@@ -95,6 +113,11 @@ osascript -e 'tell application "EqualEase" to set bypass "yes"'
 osascript -e 'tell application "EqualEase" to set bypass "no"'
 osascript -e 'tell application "EqualEase" to bypass state'
 osascript -e 'tell application "EqualEase" to toggle bypass'
+osascript -e 'tell application "EqualEase" to lock preset'
+osascript -e 'tell application "EqualEase" to lock preset "Warm"'
+osascript -e 'tell application "EqualEase" to preset lock state'
+osascript -e 'tell application "EqualEase" to unlock preset'
+osascript -e 'tell application "EqualEase" to toggle preset lock'
 ```
 
 `list presets` returns an AppleScript list of preset names. In shell output, `osascript` prints it as a comma-separated line.
@@ -103,7 +126,7 @@ When automation writes are disabled in Settings > General:
 
 - Read commands still work.
 - `select preset` only works for built-in presets.
-- `set preamp level`, `set output volume`, `set bypass`, and `toggle bypass` return an AppleScript error.
+- `set preamp level`, `set output volume`, `set bypass`, `toggle bypass`, `lock preset`, `unlock preset`, and `toggle preset lock` return an AppleScript error.
 
 ## Notes
 

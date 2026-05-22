@@ -17,6 +17,10 @@ enum EqualEaseAppleScriptCommand {
     case setBypass
     case bypassState
     case toggleBypass
+    case lockPreset
+    case unlockPreset
+    case presetLockState
+    case togglePresetLock
 }
 
 enum EqualEaseAppleScriptAdapter {
@@ -45,6 +49,14 @@ enum EqualEaseAppleScriptAdapter {
             return .bypassState
         case .toggleBypass:
             return .toggleBypass
+        case .lockPreset:
+            return .lockPreset(name: directParameterStringIfPresent(from: event))
+        case .unlockPreset:
+            return .unlockPreset
+        case .presetLockState:
+            return .presetLockState
+        case .togglePresetLock:
+            return .togglePresetLock
         }
     }
 
@@ -71,6 +83,18 @@ enum EqualEaseAppleScriptAdapter {
         // "missing value" results for later custom commands in the same app.
         replyEvent.setParam(NSAppleEventDescriptor(int32: -10000), forKeyword: keyErrorNumber)
         replyEvent.setParam(NSAppleEventDescriptor(string: error.localizedDescription), forKeyword: keyErrorString)
+    }
+
+    private static func directParameterStringIfPresent(from event: NSAppleEventDescriptor) -> String? {
+        guard let descriptor = event.paramDescriptor(forKeyword: keyDirectObject) else {
+            return nil
+        }
+
+        if let stringValue = descriptor.stringValue, !stringValue.isEmpty {
+            return stringValue
+        }
+
+        return descriptor.description
     }
 
     private static func directParameterString(

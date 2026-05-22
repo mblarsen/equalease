@@ -14,6 +14,7 @@ final class QuickPanelModelTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelRoutingKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.hasCompletedRoutingOnboardingKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.startAudioRoutingAtLaunchKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.lockedPresetIDKey)
     }
 
     override func tearDown() {
@@ -21,6 +22,7 @@ final class QuickPanelModelTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelRoutingKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.hasCompletedRoutingOnboardingKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.startAudioRoutingAtLaunchKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.lockedPresetIDKey)
         super.tearDown()
     }
 
@@ -115,6 +117,7 @@ final class QuickPanelModelTests: XCTestCase {
         let actions = QuickPanelActions(
             applyEffectivePreset: { didApplyEffectivePreset = true },
             selectPreset: { _ in },
+            setPresetLock: { _ in },
             acceptAppPresetSuggestion: {},
             dismissAppPresetSuggestion: {},
             resetAppPresetSuggestionDismissals: { didResetPromptDismissals = true },
@@ -157,11 +160,11 @@ final class QuickPanelModelTests: XCTestCase {
         model.hideInputVolumeControls()
 
         XCTAssertLessThan(model.preferredPanelHeight, visibleHeight)
-        XCTAssertEqual(model.preferredPanelHeight, 426)
+        XCTAssertEqual(model.preferredPanelHeight, 484)
 
         model.hideRoutingControls()
 
-        XCTAssertEqual(model.preferredPanelHeight, 318)
+        XCTAssertEqual(model.preferredPanelHeight, 376)
     }
 
     func testRoutingSectionHidesWithRoutingPreference() {
@@ -190,6 +193,50 @@ final class QuickPanelModelTests: XCTestCase {
         XCTAssertFalse(model.showsInputVolumeControls)
     }
 
+    func testPresetLockHelpTextExplainsAppSpecificRules() throws {
+        let presetStore = PresetStore(persistenceURL: temporaryPresetURL())
+        let flat = try XCTUnwrap(presetStore.presets.first { $0.name == "Flat" })
+        EqualEaseSettings.lockedPresetID = flat.id
+
+        let resolver = ActiveContextPresetResolver()
+        _ = resolver.resolve(input: ActiveContextPresetInput(
+            selectedPresetID: presetStore.selectedPresetID,
+            outputDeviceUID: nil,
+            foregroundApp: nil,
+            presets: presetStore.presets,
+            devicePresetIDs: [:],
+            appPresetIDs: [:],
+            lockedPresetID: flat.id
+        ))
+        let model = makeModel(presetStore: presetStore, activeContextResolver: resolver)
+
+        XCTAssertEqual(
+            model.presetLockHelpText,
+            "App-specific rules are paused; Flat stays active while you switch apps."
+        )
+    }
+
+    func testPresetLockActionUsesFocusedActionObject() {
+        var requestedLockState: Bool?
+        let actions = QuickPanelActions(
+            applyEffectivePreset: {},
+            selectPreset: { _ in },
+            setPresetLock: { requestedLockState = $0 },
+            acceptAppPresetSuggestion: {},
+            dismissAppPresetSuggestion: {},
+            resetAppPresetSuggestionDismissals: {},
+            openSettingsWindow: {},
+            openPresetsSettings: {},
+            showAboutPanel: {},
+            quit: {}
+        )
+        let model = makeModel(actions: actions)
+
+        model.setPresetLock(true)
+
+        XCTAssertEqual(requestedLockState, true)
+    }
+
     func testGearAndPresetActionsUseFocusedActionObject() {
         var selectedPresetID: String?
         var openedSettings = false
@@ -199,6 +246,7 @@ final class QuickPanelModelTests: XCTestCase {
         let actions = QuickPanelActions(
             applyEffectivePreset: {},
             selectPreset: { selectedPresetID = $0 },
+            setPresetLock: { _ in },
             acceptAppPresetSuggestion: {},
             dismissAppPresetSuggestion: {},
             resetAppPresetSuggestionDismissals: {},

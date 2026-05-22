@@ -8,6 +8,36 @@ import XCTest
 
 @MainActor
 final class ActiveContextPresetResolverTests: XCTestCase {
+    func testPresetLockTakesPrecedenceOverAppRule() throws {
+        let resolver = ActiveContextPresetResolver()
+
+        let context = try XCTUnwrap(resolver.resolve(input: input(
+            selectedPresetID: muffled.id,
+            foregroundApp: safari,
+            appPresetIDs: [safari.bundleIdentifier: voiceBoost.id],
+            lockedPresetID: flat.id
+        )))
+
+        XCTAssertEqual(context.preset, flat)
+        XCTAssertEqual(context.source, .lockedPreset)
+        XCTAssertEqual(context.selectedDefaultPresetID, muffled.id)
+        XCTAssertEqual(context.sourceSummary, "Flat · paused")
+        XCTAssertTrue(context.sourceExplanation.contains("stays on Flat"))
+    }
+
+    func testPresetLockSuppressesManualOverrideAndPrompt() throws {
+        let resolver = ActiveContextPresetResolver()
+
+        let context = try XCTUnwrap(resolver.recordManualPresetSelection(
+            voiceBoost,
+            input: input(selectedPresetID: voiceBoost.id, foregroundApp: safari, lockedPresetID: flat.id)
+        ))
+
+        XCTAssertEqual(context.preset, flat)
+        XCTAssertEqual(context.source, .lockedPreset)
+        XCTAssertNil(context.appLearningPrompt)
+    }
+
     func testAppRuleTakesPrecedenceOverSelectedDefaultPreset() throws {
         let resolver = ActiveContextPresetResolver()
 
@@ -236,6 +266,7 @@ final class ActiveContextPresetResolverTests: XCTestCase {
         foregroundApp: ForegroundAppIdentity? = nil,
         devicePresetIDs: [String: String] = [:],
         appPresetIDs: [String: String] = [:],
+        lockedPresetID: String? = nil,
         foregroundActivationGeneration: Int = 0
     ) -> ActiveContextPresetInput {
         ActiveContextPresetInput(
@@ -245,6 +276,7 @@ final class ActiveContextPresetResolverTests: XCTestCase {
             presets: presets,
             devicePresetIDs: devicePresetIDs,
             appPresetIDs: appPresetIDs,
+            lockedPresetID: lockedPresetID,
             foregroundActivationGeneration: foregroundActivationGeneration
         )
     }
