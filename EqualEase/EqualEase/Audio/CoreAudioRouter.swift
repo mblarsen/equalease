@@ -60,6 +60,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
     private var outputVolumeObservation: AudioRoutingObservation?
     private var restartTask: Task<Void, Never>?
     private var isRefreshingOutputVolume = false
+    private var outputDeviceSnapshot = AudioOutputDeviceSnapshot(devices: [], defaultOutputDeviceUID: nil)
 
     private var selectedOutputDevice: AudioOutputDevice? {
         guard let selectedOutputDeviceUID else { return nil }
@@ -174,6 +175,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
     func refreshOutputDevice() {
         do {
             let snapshot = try host.loadOutputDevices()
+            outputDeviceSnapshot = snapshot
             outputDevices = snapshot.devices
             let selectedDeviceStillAvailable = outputDevices.contains { $0.uid == selectedOutputDeviceUID }
             if followsSystemOutput || selectedOutputDeviceUID == nil || !selectedDeviceStillAvailable {
@@ -184,6 +186,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
             }
             refreshSelectedOutputDevice()
         } catch {
+            outputDeviceSnapshot = AudioOutputDeviceSnapshot(devices: [], defaultOutputDeviceUID: nil)
             outputDevices = []
             outputDeviceName = "Unknown output device"
             outputDeviceUID = nil
@@ -268,10 +271,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
         requestedUID: String?,
         snapshot: AudioOutputDeviceSnapshot? = nil
     ) -> String? {
-        let snapshot = snapshot ?? AudioOutputDeviceSnapshot(
-            devices: outputDevices,
-            defaultOutputDeviceUID: outputDevices.first?.uid
-        )
+        let snapshot = snapshot ?? outputDeviceSnapshot
 
         if let requestedUID,
            snapshot.devices.contains(where: { $0.uid == requestedUID }) {

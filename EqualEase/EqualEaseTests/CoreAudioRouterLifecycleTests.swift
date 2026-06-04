@@ -130,6 +130,8 @@ final class CoreAudioRouterLifecycleTests: XCTestCase {
         let host = TestRoutingHost()
         let router = CoreAudioRouter(host: host, cleanupOnLaunch: false)
 
+        XCTAssertEqual(router.outputDevices.first?.uid, host.headphones.uid)
+
         router.selectOutputDevice(uid: host.hiddenAggregate.uid)
 
         XCTAssertEqual(router.selectedOutputDeviceUID, host.speakers.uid)
@@ -219,7 +221,17 @@ private final class TestRoutingHost: CoreAudioRoutingHost {
     }
 
     func loadOutputDevices() throws -> AudioOutputDeviceSnapshot {
-        AudioOutputDeviceSnapshot(devices: devices, defaultOutputDeviceUID: defaultOutputDeviceUID)
+        let sortedDevices = devices.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        let visibleDefaultOutputDeviceUID: String?
+        if let defaultOutputDeviceUID,
+           sortedDevices.contains(where: { $0.uid == defaultOutputDeviceUID }) {
+            visibleDefaultOutputDeviceUID = defaultOutputDeviceUID
+        } else if sortedDevices.contains(where: { $0.uid == speakers.uid }) {
+            visibleDefaultOutputDeviceUID = speakers.uid
+        } else {
+            visibleDefaultOutputDeviceUID = sortedDevices.first?.uid
+        }
+        return AudioOutputDeviceSnapshot(devices: sortedDevices, defaultOutputDeviceUID: visibleDefaultOutputDeviceUID)
     }
 
     func startRoute(configuration: AudioRouteStartConfiguration) throws -> AudioRouteStartResult {
