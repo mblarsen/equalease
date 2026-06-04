@@ -116,6 +116,26 @@ final class CoreAudioRouterLifecycleTests: XCTestCase {
         XCTAssertEqual(host.stopCount, 1)
     }
 
+    func testFollowSystemOutputIgnoresHiddenDefaultOutputUID() {
+        let host = TestRoutingHost()
+        host.defaultOutputDeviceUID = host.hiddenAggregate.uid
+        let router = CoreAudioRouter(host: host, cleanupOnLaunch: false)
+
+        XCTAssertEqual(router.selectedOutputDeviceUID, host.speakers.uid)
+        XCTAssertEqual(router.outputDeviceUID, host.speakers.uid)
+        XCTAssertEqual(router.outputDeviceName, host.speakers.name)
+    }
+
+    func testSelectingUnknownOutputFallsBackToVisibleDefaultOutput() {
+        let host = TestRoutingHost()
+        let router = CoreAudioRouter(host: host, cleanupOnLaunch: false)
+
+        router.selectOutputDevice(uid: host.hiddenAggregate.uid)
+
+        XCTAssertEqual(router.selectedOutputDeviceUID, host.speakers.uid)
+        XCTAssertEqual(router.outputDeviceUID, host.speakers.uid)
+    }
+
     func testOutputVolumeCapabilityWriteAndExternalRefresh() throws {
         let host = TestRoutingHost()
         host.volumeStates[host.speakers.uid] = AudioOutputVolumeState(canSetVolume: true, volume: 0.35)
@@ -164,6 +184,11 @@ private enum TestRoutingError: LocalizedError {
 private final class TestRoutingHost: CoreAudioRoutingHost {
     let speakers = AudioOutputDevice(uid: "speakers", name: "MacBook Speakers", transport: .builtIn)
     let headphones = AudioOutputDevice(uid: "headphones", name: "Desk Headphones", transport: .bluetooth)
+    let hiddenAggregate = AudioOutputDevice(
+        uid: "boutique.code.EqualEase.routing.aggregate.hidden",
+        name: "EqualEase Aggregate Audio Device",
+        transport: .aggregate
+    )
 
     var devices: [AudioOutputDevice]
     var defaultOutputDeviceUID: String?

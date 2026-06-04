@@ -84,6 +84,7 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
         static let sampleTapName = "Sample audio tap"
         static let currentAggregateName = "EqualEase Aggregate Audio Device"
         static let aggregateUIDPrefix = "boutique.code.EqualEase.routing.aggregate."
+        static let currentAggregateUID = "\(aggregateUIDPrefix)main"
 
         static let ownedTapNames = [currentTapName]
         static let developmentCleanupTapNames = [currentTapName, sampleTapName]
@@ -102,14 +103,10 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
     private let systemObjectID = AudioObjectID(kAudioObjectSystemObject)
 
     func loadOutputDevices() throws -> AudioOutputDeviceSnapshot {
-        let defaultOutputDeviceID = try readDefaultOutputDevice()
-        let defaultOutputDeviceUID = try readAudioObjectString(
-            objectID: defaultOutputDeviceID,
-            selector: kAudioDevicePropertyDeviceUID
-        )
+        let devices = try readOutputDevices()
         return AudioOutputDeviceSnapshot(
-            devices: try readOutputDevices(),
-            defaultOutputDeviceUID: defaultOutputDeviceUID
+            devices: devices,
+            defaultOutputDeviceUID: try preferredPublicOutputDeviceUID(from: devices)
         )
     }
 
@@ -281,15 +278,14 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
 
     private func selectedOutputDeviceID(uid selectedOutputDeviceUID: String?) throws -> AudioObjectID {
         let devices = try readAudioObjectIDs(selector: kAudioHardwarePropertyDevices)
-        if let selectedOutputDeviceUID {
-            for device in devices {
-                let uid = try? readAudioObjectString(objectID: device, selector: kAudioDevicePropertyDeviceUID)
-                if uid == selectedOutputDeviceUID {
-                    return device
-                }
-            }
+        if let selectedOutputDeviceUID,
+           let deviceID = try publicOutputDeviceID(uid: selectedOutputDeviceUID, from: devices) {
+            return deviceID
         }
-        return try readDefaultOutputDevice()
+        if let deviceID = try defaultPublicOutputDeviceID(from: devices) {
+            return deviceID
+        }
+        throw CoreAudioRoutingError.missingDefaultOutputDevice
     }
 
     private func hostOutputDevice(id deviceID: AudioObjectID) throws -> HostOutputDevice {
@@ -325,6 +321,48 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
             selector: kAudioDevicePropertyStreams,
             scope: kAudioDevicePropertyScopeOutput
         ).isEmpty == false) ?? false
+    }
+
+    private func preferredPublicOutputDeviceUID(from devices: [AudioOutputDevice]) throws -> String? {
+        if let defaultDeviceID = try defaultPublicOutputDeviceID(),
+           let defaultUID = try? readAudioObjectString(objectID: defaultDeviceID, selector: kAudioDevicePropertyDeviceUID),
+           devices.contains(where: { $0.uid == defaultUID }) {
+            return defaultUID
+        }
+        return devices.first?.uid
+    }
+
+    private func defaultPublicOutputDeviceID(from devices: [AudioObjectID]? = nil) throws -> AudioObjectID? {
+        let defaultOutputDeviceID = try? readDefaultOutputDevice()
+        if let defaultOutputDeviceID, try isPublicOutputDevice(defaultOutputDeviceID) {
+            return defaultOutputDeviceID
+        }
+        return try firstPublicOutputDeviceID(from: devices ?? readAudioObjectIDs(selector: kAudioHardwarePropertyDevices))
+    }
+
+    private func firstPublicOutputDeviceID(from devices: [AudioObjectID]) throws -> AudioObjectID? {
+        for deviceID in devices where try isPublicOutputDevice(deviceID) {
+            return deviceID
+        }
+        return nil
+    }
+
+    private func publicOutputDeviceID(uid: String, from devices: [AudioObjectID]) throws -> AudioObjectID? {
+        for deviceID in devices {
+            guard isOutputDevice(deviceID) else { continue }
+            guard let deviceUID = try? readAudioObjectString(objectID: deviceID, selector: kAudioDevicePropertyDeviceUID),
+                  deviceUID == uid else { continue }
+            guard try isPublicOutputDevice(deviceID) else { return nil }
+            return deviceID
+        }
+        return nil
+    }
+
+    private func isPublicOutputDevice(_ deviceID: AudioObjectID) throws -> Bool {
+        guard isOutputDevice(deviceID) else { return false }
+        let uid = try readAudioObjectString(objectID: deviceID, selector: kAudioDevicePropertyDeviceUID)
+        let name = (try? readAudioObjectString(objectID: deviceID, selector: kAudioObjectPropertyName)) ?? uid
+        return !isEqualEaseOwnedAggregateDevice(name: name, uid: uid)
     }
 
     private func isEqualEaseOwnedAggregateDevice(name: String, uid: String) -> Bool {
@@ -377,7 +415,7 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
     private func createExclusiveTap(excluding ownProcessID: AudioObjectID) throws -> AudioObjectID {
         let description = CATapDescription(stereoGlobalTapButExcludeProcesses: [ownProcessID])
         description.name = Names.currentTapName
-        description.isPrivate = false
+        description.isPrivate = true
         description.isProcessRestoreEnabled = true
         description.muteBehavior = .muted
 
@@ -390,9 +428,18 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
     }
 
     private func createAggregateDevice() throws -> AudioObjectID {
+        if let existingDeviceID = try ownedAggregateDeviceID(uid: Names.currentAggregateUID) {
+            let status = AudioHardwareDestroyAggregateDevice(existingDeviceID)
+            guard status == kAudioHardwareNoError else {
+                throw CoreAudioRoutingError.destroyAggregateFailed(Names.currentAggregateName, status)
+            }
+        }
+
         let description: [String: Any] = [
             kAudioAggregateDeviceNameKey: Names.currentAggregateName,
-            kAudioAggregateDeviceUIDKey: "\(Names.aggregateUIDPrefix)\(UUID().uuidString)",
+            kAudioAggregateDeviceUIDKey: Names.currentAggregateUID,
+            kAudioAggregateDeviceIsPrivateKey: true,
+            kAudioAggregateDeviceIsStackedKey: true,
         ]
 
         var createdDeviceID = AudioObjectID(kAudioObjectUnknown)
@@ -401,6 +448,19 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
             throw CoreAudioRoutingError.createAggregateFailed(status)
         }
         return createdDeviceID
+    }
+
+    private func ownedAggregateDeviceID(uid: String) throws -> AudioObjectID? {
+        for deviceID in try readAudioObjectIDs(selector: kAudioHardwarePropertyDevices) {
+            let transport = try? readAudioObjectUInt32(objectID: deviceID, selector: kAudioDevicePropertyTransportType)
+            guard transport == kAudioDeviceTransportTypeAggregate else { continue }
+
+            let deviceUID = (try? readAudioObjectString(objectID: deviceID, selector: kAudioDevicePropertyDeviceUID)) ?? ""
+            let name = (try? readAudioObjectString(objectID: deviceID, selector: kAudioObjectPropertyName)) ?? ""
+            guard deviceUID == uid, isEqualEaseOwnedAggregateDevice(name: name, uid: deviceUID) else { continue }
+            return deviceID
+        }
+        return nil
     }
 
     private func destroyCurrentAggregate() {

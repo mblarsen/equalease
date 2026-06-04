@@ -120,7 +120,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
 
     func selectOutputDevice(uid: String?) {
         followsSystemOutput = false
-        selectedOutputDeviceUID = uid
+        selectedOutputDeviceUID = resolvedPreferredOutputDeviceUID(requestedUID: uid)
     }
 
     func start() {
@@ -177,7 +177,10 @@ final class CoreAudioRouter: AudioRoutingBackend {
             outputDevices = snapshot.devices
             let selectedDeviceStillAvailable = outputDevices.contains { $0.uid == selectedOutputDeviceUID }
             if followsSystemOutput || selectedOutputDeviceUID == nil || !selectedDeviceStillAvailable {
-                selectedOutputDeviceUID = snapshot.defaultOutputDeviceUID ?? outputDevices.first?.uid
+                selectedOutputDeviceUID = resolvedPreferredOutputDeviceUID(
+                    requestedUID: selectedOutputDeviceUID,
+                    snapshot: snapshot
+                )
             }
             refreshSelectedOutputDevice()
         } catch {
@@ -259,6 +262,28 @@ final class CoreAudioRouter: AudioRoutingBackend {
         outputDeviceName = selectedOutputDevice?.name ?? "Unknown output device"
         startSelectedOutputVolumeObservation()
         refreshSelectedOutputVolume()
+    }
+
+    private func resolvedPreferredOutputDeviceUID(
+        requestedUID: String?,
+        snapshot: AudioOutputDeviceSnapshot? = nil
+    ) -> String? {
+        let snapshot = snapshot ?? AudioOutputDeviceSnapshot(
+            devices: outputDevices,
+            defaultOutputDeviceUID: outputDevices.first?.uid
+        )
+
+        if let requestedUID,
+           snapshot.devices.contains(where: { $0.uid == requestedUID }) {
+            return requestedUID
+        }
+
+        if let defaultOutputDeviceUID = snapshot.defaultOutputDeviceUID,
+           snapshot.devices.contains(where: { $0.uid == defaultOutputDeviceUID }) {
+            return defaultOutputDeviceUID
+        }
+
+        return snapshot.devices.first?.uid
     }
 
     private func refreshSelectedOutputVolume() {
