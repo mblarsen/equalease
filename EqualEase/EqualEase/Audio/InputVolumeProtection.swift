@@ -83,6 +83,52 @@ protocol InputVolumeProtectionNotifying: AnyObject {
     func postLowInputVolumeNotification(deviceName: String, volume: Double, threshold: Double) async -> Bool
 }
 
+struct InputVolumeProtectionNotificationPolicy {
+    let initialBackoff: TimeInterval
+    let maximumBackoff: TimeInterval
+    let recoveryGracePeriod: TimeInterval
+
+    private(set) var lastNotificationDate: Date?
+    private(set) var nextNotificationInterval: TimeInterval = 0
+    private(set) var healthySince: Date?
+
+    static let `default` = InputVolumeProtectionNotificationPolicy(
+        initialBackoff: 5,
+        maximumBackoff: 60,
+        recoveryGracePeriod: 5 * 60
+    )
+
+    mutating func recordLowVolume(at date: Date) {
+        if let healthySince, date.timeIntervalSince(healthySince) >= recoveryGracePeriod {
+            reset()
+        }
+        healthySince = nil
+    }
+
+    mutating func recordHealthyVolume(at date: Date) {
+        healthySince = healthySince ?? date
+    }
+
+    func shouldNotify(at date: Date) -> Bool {
+        guard let lastNotificationDate else { return true }
+        return date.timeIntervalSince(lastNotificationDate) >= nextNotificationInterval
+    }
+
+    mutating func recordNotificationSent(at date: Date) {
+        lastNotificationDate = date
+        healthySince = nil
+        nextNotificationInterval = nextNotificationInterval > 0
+            ? min(nextNotificationInterval * 2, maximumBackoff)
+            : initialBackoff
+    }
+
+    mutating func reset() {
+        lastNotificationDate = nil
+        nextNotificationInterval = 0
+        healthySince = nil
+    }
+}
+
 @MainActor
 final class UserNotificationInputVolumeProtectionNotifier: InputVolumeProtectionNotifying {
     func refreshAuthorizationStatus() async -> InputVolumeProtectionNotificationStatus {

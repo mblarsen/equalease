@@ -126,11 +126,16 @@ final class InputDeviceControllerTests: XCTestCase {
         XCTAssertEqual(controller.lowVolumeProtectionStatus, "Input volume is OK.")
     }
 
-    func testNotificationEdgeTriggerAndCooldownAvoidSpam() async {
+    func testNotificationBackoffGrowsExponentiallyAndCapsAtOneMinute() async {
         let host = TestInputDeviceControlHost()
         let notifier = TestInputVolumeProtectionNotifier()
         var currentTime = Date(timeIntervalSince1970: 100)
-        let controller = InputDeviceController(host: host, notifier: notifier, now: { currentTime }, notificationCooldown: 60)
+        let controller = InputDeviceController(
+            host: host,
+            notifier: notifier,
+            now: { currentTime },
+            notificationPolicy: InputVolumeProtectionNotificationPolicy(initialBackoff: 5, maximumBackoff: 60, recoveryGracePeriod: 5 * 60)
+        )
         controller.protectionSettings = InputVolumeProtectionSettings(threshold: 0.4, capMinimum: 0.5, notificationsEnabled: true, capEnabled: false)
 
         host.volumeStates[host.builtInMicrophone.uid] = AudioInputVolumeState(canReadVolume: true, canSetVolume: true, volume: 0.3)
@@ -138,15 +143,152 @@ final class InputDeviceControllerTests: XCTestCase {
         await Task.yield()
         XCTAssertEqual(notifier.postedNotifications.count, 1)
 
-        currentTime = currentTime.addingTimeInterval(30)
+        currentTime = currentTime.addingTimeInterval(4)
         host.triggerInputVolumeChanged()
         await Task.yield()
         XCTAssertEqual(notifier.postedNotifications.count, 1)
 
-        currentTime = currentTime.addingTimeInterval(31)
+        currentTime = currentTime.addingTimeInterval(1)
         host.triggerInputVolumeChanged()
         await Task.yield()
         XCTAssertEqual(notifier.postedNotifications.count, 2)
+
+        currentTime = currentTime.addingTimeInterval(9)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 2)
+
+        currentTime = currentTime.addingTimeInterval(1)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 3)
+
+        currentTime = currentTime.addingTimeInterval(20)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 4)
+
+        currentTime = currentTime.addingTimeInterval(40)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 5)
+
+        currentTime = currentTime.addingTimeInterval(59)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 5)
+
+        currentTime = currentTime.addingTimeInterval(1)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 6)
+
+        currentTime = currentTime.addingTimeInterval(60)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 7)
+    }
+
+    func testNotificationBackoffSurvivesBriefRecoveryAndResetsAfterFiveHealthyMinutes() async {
+        let host = TestInputDeviceControlHost()
+        let notifier = TestInputVolumeProtectionNotifier()
+        var currentTime = Date(timeIntervalSince1970: 100)
+        let controller = InputDeviceController(
+            host: host,
+            notifier: notifier,
+            now: { currentTime },
+            notificationPolicy: InputVolumeProtectionNotificationPolicy(initialBackoff: 5, maximumBackoff: 60, recoveryGracePeriod: 5 * 60)
+        )
+        controller.protectionSettings = InputVolumeProtectionSettings(threshold: 0.4, capMinimum: 0.5, notificationsEnabled: true, capEnabled: false)
+
+        host.volumeStates[host.builtInMicrophone.uid] = AudioInputVolumeState(canReadVolume: true, canSetVolume: true, volume: 0.3)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 1)
+
+        currentTime = currentTime.addingTimeInterval(5)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 2)
+
+        currentTime = currentTime.addingTimeInterval(10)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 3)
+
+        host.volumeStates[host.builtInMicrophone.uid] = AudioInputVolumeState(canReadVolume: true, canSetVolume: true, volume: 0.5)
+        currentTime = currentTime.addingTimeInterval(1)
+        host.triggerInputVolumeChanged()
+
+        host.volumeStates[host.builtInMicrophone.uid] = AudioInputVolumeState(canReadVolume: true, canSetVolume: true, volume: 0.3)
+        currentTime = currentTime.addingTimeInterval(1)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 3)
+
+        host.volumeStates[host.builtInMicrophone.uid] = AudioInputVolumeState(canReadVolume: true, canSetVolume: true, volume: 0.5)
+        currentTime = currentTime.addingTimeInterval(1)
+        host.triggerInputVolumeChanged()
+
+        host.volumeStates[host.builtInMicrophone.uid] = AudioInputVolumeState(canReadVolume: true, canSetVolume: true, volume: 0.3)
+        currentTime = currentTime.addingTimeInterval(5 * 60)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 4)
+    }
+
+    func testFailedNotificationDoesNotAdvanceBackoff() async {
+        let host = TestInputDeviceControlHost()
+        let notifier = TestInputVolumeProtectionNotifier()
+        notifier.status = .denied
+        var currentTime = Date(timeIntervalSince1970: 100)
+        let controller = InputDeviceController(
+            host: host,
+            notifier: notifier,
+            now: { currentTime },
+            notificationPolicy: InputVolumeProtectionNotificationPolicy(initialBackoff: 5, maximumBackoff: 60, recoveryGracePeriod: 5 * 60)
+        )
+        controller.protectionSettings = InputVolumeProtectionSettings(threshold: 0.4, capMinimum: 0.5, notificationsEnabled: true, capEnabled: false)
+
+        host.volumeStates[host.builtInMicrophone.uid] = AudioInputVolumeState(canReadVolume: true, canSetVolume: true, volume: 0.3)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.attemptedNotifications, 1)
+        XCTAssertEqual(notifier.postedNotifications.count, 0)
+
+        currentTime = currentTime.addingTimeInterval(1)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.attemptedNotifications, 2)
+        XCTAssertEqual(notifier.postedNotifications.count, 0)
+    }
+
+    func testInFlightNotificationPreventsDuplicateSendsBeforeCompletion() async {
+        let host = TestInputDeviceControlHost()
+        let notifier = TestInputVolumeProtectionNotifier()
+        notifier.shouldBlockPost = true
+        var currentTime = Date(timeIntervalSince1970: 100)
+        let controller = InputDeviceController(
+            host: host,
+            notifier: notifier,
+            now: { currentTime },
+            notificationPolicy: InputVolumeProtectionNotificationPolicy(initialBackoff: 5, maximumBackoff: 60, recoveryGracePeriod: 5 * 60)
+        )
+        controller.protectionSettings = InputVolumeProtectionSettings(threshold: 0.4, capMinimum: 0.5, notificationsEnabled: true, capEnabled: false)
+
+        host.volumeStates[host.builtInMicrophone.uid] = AudioInputVolumeState(canReadVolume: true, canSetVolume: true, volume: 0.3)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.attemptedNotifications, 1)
+
+        currentTime = currentTime.addingTimeInterval(1)
+        host.triggerInputVolumeChanged()
+        await Task.yield()
+        XCTAssertEqual(notifier.attemptedNotifications, 1)
+
+        notifier.resumeBlockedPost(result: true)
+        await Task.yield()
+        XCTAssertEqual(notifier.postedNotifications.count, 1)
     }
 
     func testMinimumCapRaisesSettableInputVolumeAndIsRateLimited() throws {
@@ -270,7 +412,11 @@ final class TestInputDeviceControlHost: InputDeviceControlHost {
 @MainActor
 final class TestInputVolumeProtectionNotifier: InputVolumeProtectionNotifying {
     var status: InputVolumeProtectionNotificationStatus = .authorized
+    var shouldBlockPost = false
+    var attemptedNotifications = 0
     var postedNotifications: [(deviceName: String, volume: Double, threshold: Double)] = []
+
+    private var blockedPostContinuation: CheckedContinuation<Bool, Never>?
 
     func refreshAuthorizationStatus() async -> InputVolumeProtectionNotificationStatus {
         status
@@ -282,8 +428,24 @@ final class TestInputVolumeProtectionNotifier: InputVolumeProtectionNotifying {
     }
 
     func postLowInputVolumeNotification(deviceName: String, volume: Double, threshold: Double) async -> Bool {
+        attemptedNotifications += 1
+        if shouldBlockPost {
+            let posted = await withCheckedContinuation { continuation in
+                blockedPostContinuation = continuation
+            }
+            if posted {
+                postedNotifications.append((deviceName: deviceName, volume: volume, threshold: threshold))
+            }
+            return posted
+        }
         guard status == .authorized else { return false }
         postedNotifications.append((deviceName: deviceName, volume: volume, threshold: threshold))
         return true
+    }
+
+    func resumeBlockedPost(result: Bool) {
+        shouldBlockPost = false
+        blockedPostContinuation?.resume(returning: result)
+        blockedPostContinuation = nil
     }
 }

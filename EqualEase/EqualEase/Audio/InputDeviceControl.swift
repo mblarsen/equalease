@@ -56,7 +56,7 @@ final class InputDeviceController: ObservableObject {
                 return
             }
             InputVolumeProtectionSettingsStore.save(normalized)
-            evaluateLowVolumeProtection(previousWasLow: isInputVolumeLow)
+            evaluateLowVolumeProtection()
         }
     }
     @Published private(set) var isInputVolumeLow = false
@@ -68,12 +68,12 @@ final class InputDeviceController: ObservableObject {
     private let host: InputDeviceControlHost
     private let notifier: InputVolumeProtectionNotifying
     private let now: () -> Date
-    private let notificationCooldown: TimeInterval
     private let capAttemptInterval: TimeInterval
+    private var notificationPolicy: InputVolumeProtectionNotificationPolicy
     private var inputDeviceObservation: AudioRoutingObservation?
     private var inputVolumeObservation: AudioRoutingObservation?
     private var isRefreshingInputVolume = false
-    private var lastNotificationDate: Date?
+    private var isLowVolumeNotificationInFlight = false
     private var lastCapAttemptDate: Date?
 
     convenience init() {
@@ -84,14 +84,14 @@ final class InputDeviceController: ObservableObject {
         host: InputDeviceControlHost,
         notifier: InputVolumeProtectionNotifying? = nil,
         now: @escaping () -> Date = Date.init,
-        notificationCooldown: TimeInterval = 30 * 60,
+        notificationPolicy: InputVolumeProtectionNotificationPolicy = .default,
         capAttemptInterval: TimeInterval = 10
     ) {
         self.host = host
         self.notifier = notifier ?? UserNotificationInputVolumeProtectionNotifier()
         self.now = now
-        self.notificationCooldown = notificationCooldown
         self.capAttemptInterval = capAttemptInterval
+        self.notificationPolicy = notificationPolicy
         self.protectionSettings = InputVolumeProtectionSettingsStore.load()
         refreshInputDevice()
         startInputDeviceObservation()
@@ -134,7 +134,6 @@ final class InputDeviceController: ObservableObject {
     }
 
     func refreshCurrentInputVolume() {
-        let wasLow = isInputVolumeLow
         let volumeState = host.inputVolumeState(for: inputDeviceUID)
         canReadInputVolume = volumeState.canReadVolume
         canSetInputVolume = volumeState.canSetVolume
@@ -146,7 +145,7 @@ final class InputDeviceController: ObservableObject {
         isRefreshingInputVolume = true
         inputVolume = min(max(volume, 0), 1)
         isRefreshingInputVolume = false
-        evaluateLowVolumeProtection(previousWasLow: wasLow)
+        evaluateLowVolumeProtection()
     }
 
     func requestNotificationPermission() {
@@ -162,7 +161,7 @@ final class InputDeviceController: ObservableObject {
         refreshCurrentInputVolume()
     }
 
-    private func evaluateLowVolumeProtection(previousWasLow: Bool) {
+    private func evaluateLowVolumeProtection() {
         guard canReadInputVolume else {
             isInputVolumeLow = false
             lowVolumeProtectionStatus = "Low-volume detection unavailable for this input device."
@@ -170,14 +169,18 @@ final class InputDeviceController: ObservableObject {
         }
 
         let settings = protectionSettings.normalized
+        let currentDate = now()
         let currentVolume = inputVolume
         let isLow = currentVolume < settings.threshold
         isInputVolumeLow = isLow
 
         guard isLow else {
+            notificationPolicy.recordHealthyVolume(at: currentDate)
             lowVolumeProtectionStatus = "Input volume is OK."
             return
         }
+
+        notificationPolicy.recordLowVolume(at: currentDate)
 
         if settings.capEnabled {
             attemptCapIfNeeded(settings: settings, currentVolume: currentVolume)
@@ -187,8 +190,10 @@ final class InputDeviceController: ObservableObject {
             lowVolumeProtectionStatus = "Input volume is low."
         }
 
-        if settings.notificationsEnabled, shouldNotify(previousWasLow: previousWasLow) {
-            postLowVolumeNotification(volume: currentVolume, threshold: settings.threshold)
+        if settings.notificationsEnabled,
+           !isLowVolumeNotificationInFlight,
+           notificationPolicy.shouldNotify(at: currentDate) {
+            postLowVolumeNotification(volume: currentVolume, threshold: settings.threshold, currentDate: currentDate)
         }
     }
 
@@ -223,18 +228,8 @@ final class InputDeviceController: ObservableObject {
         }
     }
 
-    private func shouldNotify(previousWasLow: Bool) -> Bool {
-        guard !previousWasLow else {
-            if let lastNotificationDate {
-                return now().timeIntervalSince(lastNotificationDate) >= notificationCooldown
-            }
-            return false
-        }
-        return true
-    }
-
-    private func postLowVolumeNotification(volume: Double, threshold: Double) {
-        lastNotificationDate = now()
+    private func postLowVolumeNotification(volume: Double, threshold: Double, currentDate: Date) {
+        isLowVolumeNotificationInFlight = true
         Task { [weak self] in
             guard let self else { return }
             let posted = await notifier.postLowInputVolumeNotification(
@@ -242,8 +237,12 @@ final class InputDeviceController: ObservableObject {
                 volume: volume,
                 threshold: threshold
             )
+            if posted {
+                notificationPolicy.recordNotificationSent(at: currentDate)
+            }
             notificationAuthorizationStatus = await notifier.refreshAuthorizationStatus()
             lastLowVolumeNotificationSummary = posted ? "Posted at \(Self.shortTimeFormatter.string(from: now()))" : "Unavailable: \(notificationAuthorizationStatus.summary)"
+            isLowVolumeNotificationInFlight = false
         }
     }
 
