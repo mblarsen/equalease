@@ -81,6 +81,7 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         relayChanges(from: presentationState)
 
         NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
             }
@@ -171,9 +172,9 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
 
     var presetLockHelpText: String {
         if let context = activeContextResolver.context, context.source == .lockedPreset {
-            return "App-specific rules are paused; \(context.preset.name) stays active while you switch apps."
+            return "Preset rules are paused; \(context.preset.name) stays active while you switch apps or websites."
         }
-        return "Ignores app-specific preset rules and keeps the current preset while you switch apps."
+        return "Ignores app and website preset rules and keeps the current preset while you switch focus."
     }
 
     var currentInputDeviceName: String {

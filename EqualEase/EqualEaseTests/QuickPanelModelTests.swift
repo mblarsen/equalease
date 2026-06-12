@@ -193,7 +193,7 @@ final class QuickPanelModelTests: XCTestCase {
         XCTAssertFalse(model.showsInputVolumeControls)
     }
 
-    func testPresetLockHelpTextExplainsAppSpecificRules() throws {
+    func testPresetLockHelpTextExplainsPresetRules() throws {
         let presetStore = PresetStore(persistenceURL: temporaryPresetURL())
         let flat = try XCTUnwrap(presetStore.presets.first { $0.name == "Flat" })
         EqualEaseSettings.lockedPresetID = flat.id
@@ -212,7 +212,7 @@ final class QuickPanelModelTests: XCTestCase {
 
         XCTAssertEqual(
             model.presetLockHelpText,
-            "App-specific rules are paused; Flat stays active while you switch apps."
+            "Preset rules are paused; Flat stays active while you switch apps or websites."
         )
     }
 

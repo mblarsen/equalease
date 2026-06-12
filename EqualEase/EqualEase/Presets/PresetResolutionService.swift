@@ -7,6 +7,7 @@ import Foundation
 
 enum PresetResolutionSource: Equatable {
     case lockedPreset
+    case activeWebsite(siteKey: String, displayName: String)
     case activeApp(bundleIdentifier: String, displayName: String)
     case selectedPreset
 }
@@ -21,9 +22,11 @@ struct PresetResolutionService {
         selectedPresetID: String,
         outputDeviceUID: String?,
         activeApp: ForegroundAppIdentity?,
+        activeWebsite: BrowserPageIdentity? = nil,
         presets: [EQPreset],
         devicePresetIDs: [String: String],
         appPresetIDs: [String: String],
+        websitePresetIDs: [String: String] = [:],
         lockedPresetID: String? = nil
     ) -> PresetResolution? {
         let presetsByID = Dictionary(uniqueKeysWithValues: presets.map { ($0.id, $0) })
@@ -39,6 +42,18 @@ struct PresetResolutionService {
         // clearer base-device profile plus app/source overlay.
         _ = outputDeviceUID
         _ = devicePresetIDs
+
+        if let activeWebsite,
+           let presetID = websitePresetIDs[activeWebsite.siteKey],
+           let preset = presetsByID[presetID] {
+            return PresetResolution(
+                preset: preset,
+                source: .activeWebsite(
+                    siteKey: activeWebsite.siteKey,
+                    displayName: activeWebsite.displayName
+                )
+            )
+        }
 
         if let activeApp,
            let presetID = appPresetIDs[activeApp.bundleIdentifier],

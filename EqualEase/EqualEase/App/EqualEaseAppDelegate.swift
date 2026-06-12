@@ -246,6 +246,7 @@ final class EqualEaseAppDelegate: NSObject, NSApplicationDelegate {
             localNetworkControlServer: appModel.localNetworkControlServer,
             presetStore: appModel.presetStore,
             foregroundAppObserver: appModel.foregroundAppObserver,
+            browserPageObserver: appModel.browserPageObserver,
             selectedTab: selectedTab,
             applyPreset: appModel.apply,
             setLocalNetworkControlEnabled: appModel.setLocalNetworkControlEnabled

@@ -9,11 +9,12 @@ import Foundation
 
 @MainActor
 final class EqualEaseAppModel: ObservableObject {
-    let router = CoreAudioRouter()
-    let inputDeviceController = InputDeviceController()
-    let presetStore = PresetStore()
-    let foregroundAppObserver = ForegroundAppObserver()
-    let activeContextResolver = ActiveContextPresetResolver()
+    let router: CoreAudioRouter
+    let inputDeviceController: InputDeviceController
+    let presetStore: PresetStore
+    let foregroundAppObserver: ForegroundAppObserver
+    let browserPageObserver: BrowserPageObserver
+    let activeContextResolver: ActiveContextPresetResolver
 
     lazy var localNetworkControlBridge = LocalNetworkControlBridge(appModel: self)
     lazy var localNetworkControlServer = LocalNetworkControlServer(bridge: localNetworkControlBridge)
@@ -27,7 +28,52 @@ final class EqualEaseAppModel: ObservableObject {
     private var isSelectingPresetManually = false
 
     init() {
+        self.router = CoreAudioRouter()
+        self.inputDeviceController = InputDeviceController()
+        self.presetStore = PresetStore()
+        self.foregroundAppObserver = ForegroundAppObserver()
+        self.browserPageObserver = BrowserPageObserver()
+        self.activeContextResolver = ActiveContextPresetResolver()
+
+        installBindings()
+    }
+
+    init(
+        router: CoreAudioRouter,
+        inputDeviceController: InputDeviceController,
+        presetStore: PresetStore,
+        foregroundAppObserver: ForegroundAppObserver,
+        browserPageObserver: BrowserPageObserver,
+        activeContextResolver: ActiveContextPresetResolver
+    ) {
+        self.router = router
+        self.inputDeviceController = inputDeviceController
+        self.presetStore = presetStore
+        self.foregroundAppObserver = foregroundAppObserver
+        self.browserPageObserver = browserPageObserver
+        self.activeContextResolver = activeContextResolver
+
+        installBindings()
+    }
+
+    private func installBindings() {
         foregroundAppObserver.$activeApp
+            .sink { [weak self] activeApp in
+                guard let self else { return }
+                self.browserPageObserver.updateForegroundApp(activeApp)
+                self.configureWebsiteObservation()
+                self.scheduleEffectivePresetApplication()
+            }
+            .store(in: &cancellables)
+
+        browserPageObserver.$activePage
+            .dropFirst()
+            .sink { [weak self] _ in
+                self?.scheduleEffectivePresetApplication()
+            }
+            .store(in: &cancellables)
+
+        browserPageObserver.$pageGeneration
             .dropFirst()
             .sink { [weak self] _ in
                 self?.scheduleEffectivePresetApplication()
@@ -70,6 +116,14 @@ final class EqualEaseAppModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        presetStore.$websitePresetIDs
+            .dropFirst()
+            .sink { [weak self] websitePresetIDs in
+                self?.configureWebsiteObservation(hasWebsiteRules: !websitePresetIDs.isEmpty)
+                self?.applyEffectivePreset()
+            }
+            .store(in: &cancellables)
+
         NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
             .sink { [weak self] _ in
                 self?.applyEffectivePreset()
@@ -83,6 +137,7 @@ final class EqualEaseAppModel: ObservableObject {
             .store(in: &cancellables)
 
         installLocalNetworkStateBroadcasts()
+        configureWebsiteObservation()
 
         applyEffectivePreset()
     }
@@ -169,11 +224,20 @@ final class EqualEaseAppModel: ObservableObject {
 
     func acceptAppPresetSuggestion() {
         guard let suggestion = activeContextResolver.acceptPrompt() else { return }
-        presetStore.assignPreset(
-            id: suggestion.preset.id,
-            toAppBundleIdentifier: suggestion.app.bundleIdentifier,
-            displayName: suggestion.app.displayName
-        )
+        switch suggestion.target {
+        case let .app(app):
+            presetStore.assignPreset(
+                id: suggestion.preset.id,
+                toAppBundleIdentifier: app.bundleIdentifier,
+                displayName: app.displayName
+            )
+        case let .website(page):
+            presetStore.assignPreset(
+                id: suggestion.preset.id,
+                toWebsiteKey: page.siteKey,
+                displayName: page.displayName
+            )
+        }
         applyEffectivePreset()
     }
 
@@ -204,16 +268,27 @@ final class EqualEaseAppModel: ObservableObject {
         }
     }
 
+    private func configureWebsiteObservation() {
+        configureWebsiteObservation(hasWebsiteRules: !presetStore.websitePresetIDs.isEmpty)
+    }
+
+    private func configureWebsiteObservation(hasWebsiteRules: Bool) {
+        browserPageObserver.setAutomaticObservationEnabled(hasWebsiteRules)
+    }
+
     private var activeContextInput: ActiveContextPresetInput {
         ActiveContextPresetInput(
             selectedPresetID: presetStore.selectedPresetID,
             outputDeviceUID: router.outputDeviceUID,
             foregroundApp: foregroundAppObserver.activeApp,
+            activeWebsite: browserPageObserver.activePage,
             presets: presetStore.presets,
             devicePresetIDs: presetStore.devicePresetIDs,
             appPresetIDs: presetStore.appPresetIDs,
+            websitePresetIDs: presetStore.websitePresetIDs,
             lockedPresetID: EqualEaseSettings.lockedPresetID,
-            foregroundActivationGeneration: foregroundAppObserver.activationGeneration
+            foregroundActivationGeneration: foregroundAppObserver.activationGeneration,
+            websiteGeneration: browserPageObserver.pageGeneration
         )
     }
 
@@ -231,6 +306,8 @@ final class EqualEaseAppModel: ObservableObject {
         let contextPublishers: [AnyPublisher<Void, Never>] = [
             foregroundAppObserver.$activeApp.map { _ in () }.eraseToAnyPublisher(),
             foregroundAppObserver.$activationGeneration.map { _ in () }.eraseToAnyPublisher(),
+            browserPageObserver.$activePage.map { _ in () }.eraseToAnyPublisher(),
+            browserPageObserver.$pageGeneration.map { _ in () }.eraseToAnyPublisher(),
             activeContextResolver.$context.map { _ in () }.eraseToAnyPublisher(),
         ]
 

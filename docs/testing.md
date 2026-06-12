@@ -70,7 +70,7 @@ Use this checklist before calling a local MVP build ready. Prefer testing with r
 - [ ] If routing is active, changing output restarts routing to the new output.
 - [ ] Device-specific preset rule controls are not visible in the first-release UI.
 
-## Active-app behavior
+## Active-app and website behavior
 
 - [ ] Active app label updates after switching to Safari.
 - [ ] Active app label updates after switching to Spotify.
@@ -83,6 +83,15 @@ Use this checklist before calling a local MVP build ready. Prefer testing with r
 - [ ] Turning Pause app preset switching off resumes normal active-app rule switching.
 - [ ] Opening EqualEase does not replace the target active app with EqualEase itself.
 - [ ] Clear Active-App Rule removes the current app mapping.
+- [ ] With Safari foreground on `https://meet.google.com/` and no website rules, EqualEase does not prompt for Safari Automation permission until the user clicks Use Preset for the current Safari page in Settings > Rules.
+- [ ] After the current Safari page Use Preset action succeeds, Settings > Rules stores `meet.google.com` as a website rule and shows it above app rules.
+- [ ] After granting the Safari Automation prompt, the current app row still shows Safari rather than the transient macOS permission helper app.
+- [ ] Assigning separate presets to Safari and `meet.google.com` stores two rules in the unified Rules list, with the website rule above the app rule.
+- [ ] While Safari is on `meet.google.com`, the website preset wins over the Safari app preset.
+- [ ] Switching Safari to an unmatched active tab falls back to the Safari app preset.
+- [ ] Switching away from Safari removes website matching and falls back to the foreground app/default preset.
+- [ ] If Safari automation permission is denied or revoked from the current Safari page Use Preset action, website detection fails closed and app/default preset rules still work without prompting from background polling.
+- [ ] Clearing the last website rule stops Safari page polling.
 
 ## Settings window
 
@@ -92,7 +101,7 @@ Use this checklist before calling a local MVP build ready. Prefer testing with r
 - [ ] External automation safety can be disabled; with it off, AppleScript/URL reads and built-in preset selection still work, while Volume, Preamp, Bypass, app-preset-switching pause, and custom-preset writes are rejected.
 - [ ] Presets tab lists built-in and custom presets.
 - [ ] Presets tab provides the detailed custom preset editor while the menu bar remains a quick selector.
-- [ ] Rules tab creates active-app rules, lists them with friendly names and icons after app restart, and can clear them.
+- [ ] Rules tab creates active-app and Safari website rules, lists them with friendly names/icons after app restart, and can clear them.
 - [ ] Rules tab does not show device-rule controls or device-rule explanatory copy.
 - [ ] Diagnostics tab shows routing status, DSP bypass, available output devices with device icons, and recovery/development controls.
 - [ ] Diagnostics DSP bypass explains that audio still routes through EqualEase while bypassed.

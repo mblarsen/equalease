@@ -95,6 +95,23 @@ final class ActiveContextPresetResolverTests: XCTestCase {
         XCTAssertEqual(store.selectedPresetID, muffledPreset.id)
     }
 
+    func testWebsiteRuleTakesPrecedenceOverAppRule() throws {
+        let resolver = ActiveContextPresetResolver()
+
+        let context = try XCTUnwrap(resolver.resolve(input: input(
+            selectedPresetID: muffled.id,
+            foregroundApp: safari,
+            activeWebsite: meet,
+            appPresetIDs: [safari.bundleIdentifier: muffled.id],
+            websitePresetIDs: [meet.siteKey: voiceBoost.id]
+        )))
+
+        XCTAssertEqual(context.preset, voiceBoost)
+        XCTAssertEqual(context.source, .activeWebsite(siteKey: meet.siteKey, displayName: meet.displayName))
+        XCTAssertEqual(context.sourceSummary, "Voice Boost for meet.google.com")
+        XCTAssertTrue(context.sourceExplanation.contains(meet.siteKey))
+    }
+
     func testSelectedDefaultPresetIsFallbackWhenNoAppRuleMatches() throws {
         let resolver = ActiveContextPresetResolver()
 
@@ -118,8 +135,24 @@ final class ActiveContextPresetResolverTests: XCTestCase {
         ))
 
         let prompt = try XCTUnwrap(context.appLearningPrompt)
-        XCTAssertEqual(prompt.app, safari)
+        XCTAssertEqual(prompt.target, .app(safari))
         XCTAssertEqual(prompt.preset, voiceBoost)
+    }
+
+    func testManualPresetSelectionPrefersWebsitePromptWhenActiveWebsiteIsReadable() throws {
+        let resolver = ActiveContextPresetResolver()
+
+        let context = try XCTUnwrap(resolver.recordManualPresetSelection(
+            voiceBoost,
+            input: input(
+                selectedPresetID: voiceBoost.id,
+                foregroundApp: safari,
+                activeWebsite: meet
+            )
+        ))
+
+        XCTAssertEqual(context.appLearningPrompt?.target, .website(meet))
+        XCTAssertEqual(context.appLearningPrompt?.preset, voiceBoost)
     }
 
     func testManualPresetSelectionDoesNotPromptWhenAppAlreadyRemembersPreset() throws {
@@ -131,6 +164,22 @@ final class ActiveContextPresetResolverTests: XCTestCase {
                 selectedPresetID: voiceBoost.id,
                 foregroundApp: safari,
                 appPresetIDs: [safari.bundleIdentifier: voiceBoost.id]
+            )
+        ))
+
+        XCTAssertNil(context.appLearningPrompt)
+    }
+
+    func testManualPresetSelectionDoesNotPromptWhenWebsiteAlreadyRemembersPreset() throws {
+        let resolver = ActiveContextPresetResolver()
+
+        let context = try XCTUnwrap(resolver.recordManualPresetSelection(
+            voiceBoost,
+            input: input(
+                selectedPresetID: voiceBoost.id,
+                foregroundApp: safari,
+                activeWebsite: meet,
+                websitePresetIDs: [meet.siteKey: voiceBoost.id]
             )
         ))
 
@@ -207,6 +256,31 @@ final class ActiveContextPresetResolverTests: XCTestCase {
         XCTAssertEqual(context.source, .activeApp(bundleIdentifier: safari.bundleIdentifier, displayName: safari.displayName))
     }
 
+    func testManualPresetSelectionIsClearedByWebsiteGenerationChange() throws {
+        let resolver = ActiveContextPresetResolver()
+        _ = resolver.recordManualPresetSelection(
+            flat,
+            input: input(
+                selectedPresetID: flat.id,
+                foregroundApp: safari,
+                activeWebsite: meet,
+                websitePresetIDs: [meet.siteKey: voiceBoost.id],
+                websiteGeneration: 1
+            )
+        )
+
+        let context = try XCTUnwrap(resolver.resolve(input: input(
+            selectedPresetID: flat.id,
+            foregroundApp: safari,
+            activeWebsite: meet,
+            websitePresetIDs: [meet.siteKey: voiceBoost.id],
+            websiteGeneration: 2
+        )))
+
+        XCTAssertEqual(context.preset, voiceBoost)
+        XCTAssertEqual(context.source, .activeWebsite(siteKey: meet.siteKey, displayName: meet.displayName))
+    }
+
     func testAppSwitchClearsVisiblePrompt() throws {
         let resolver = ActiveContextPresetResolver()
         _ = resolver.recordManualPresetSelection(
@@ -255,7 +329,7 @@ final class ActiveContextPresetResolverTests: XCTestCase {
 
         let suggestion = try XCTUnwrap(resolver.acceptPrompt())
 
-        XCTAssertEqual(suggestion.app, safari)
+        XCTAssertEqual(suggestion.target, .app(safari))
         XCTAssertEqual(suggestion.preset, voiceBoost)
         XCTAssertNil(resolver.context?.appLearningPrompt)
     }
@@ -264,20 +338,26 @@ final class ActiveContextPresetResolverTests: XCTestCase {
         selectedPresetID: String,
         outputDeviceUID: String? = nil,
         foregroundApp: ForegroundAppIdentity? = nil,
+        activeWebsite: BrowserPageIdentity? = nil,
         devicePresetIDs: [String: String] = [:],
         appPresetIDs: [String: String] = [:],
+        websitePresetIDs: [String: String] = [:],
         lockedPresetID: String? = nil,
-        foregroundActivationGeneration: Int = 0
+        foregroundActivationGeneration: Int = 0,
+        websiteGeneration: Int = 0
     ) -> ActiveContextPresetInput {
         ActiveContextPresetInput(
             selectedPresetID: selectedPresetID,
             outputDeviceUID: outputDeviceUID,
             foregroundApp: foregroundApp,
+            activeWebsite: activeWebsite,
             presets: presets,
             devicePresetIDs: devicePresetIDs,
             appPresetIDs: appPresetIDs,
+            websitePresetIDs: websitePresetIDs,
             lockedPresetID: lockedPresetID,
-            foregroundActivationGeneration: foregroundActivationGeneration
+            foregroundActivationGeneration: foregroundActivationGeneration,
+            websiteGeneration: websiteGeneration
         )
     }
 
@@ -309,5 +389,15 @@ final class ActiveContextPresetResolverTests: XCTestCase {
 
     private var terminal: ForegroundAppIdentity {
         ForegroundAppIdentity(bundleIdentifier: "com.apple.Terminal", displayName: "Terminal")
+    }
+
+    private var meet: BrowserPageIdentity {
+        BrowserPageIdentity(
+            browserBundleIdentifier: safari.bundleIdentifier,
+            browserDisplayName: safari.displayName,
+            url: URL(string: "https://meet.google.com/")!,
+            siteKey: "meet.google.com",
+            displayName: "meet.google.com"
+        )
     }
 }

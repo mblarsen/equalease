@@ -10,11 +10,14 @@ struct ActiveContextPresetInput {
     var selectedPresetID: String
     var outputDeviceUID: String?
     var foregroundApp: ForegroundAppIdentity?
+    var activeWebsite: BrowserPageIdentity? = nil
     var presets: [EQPreset]
     var devicePresetIDs: [String: String]
     var appPresetIDs: [String: String]
+    var websitePresetIDs: [String: String] = [:]
     var lockedPresetID: String? = nil
     var foregroundActivationGeneration: Int = 0
+    var websiteGeneration: Int = 0
 }
 
 struct ActivePresetContext: Equatable {
@@ -27,6 +30,8 @@ struct ActivePresetContext: Equatable {
         switch source {
         case .lockedPreset:
             "\(preset.name) · paused"
+        case let .activeWebsite(_, displayName):
+            "\(preset.name) for \(displayName)"
         case let .activeApp(_, displayName):
             "\(preset.name) for \(displayName)"
         case .selectedPreset:
@@ -37,7 +42,9 @@ struct ActivePresetContext: Equatable {
     var sourceExplanation: String {
         switch source {
         case .lockedPreset:
-            "App-specific preset rules are paused. EqualEase stays on \(preset.name) until app preset switching resumes."
+            "Preset rules are paused. EqualEase stays on \(preset.name) until preset switching resumes."
+        case let .activeWebsite(siteKey, displayName):
+            "Active website \(displayName) (\(siteKey)) remembers \(preset.name)."
         case let .activeApp(bundleIdentifier, displayName):
             "Active app \(displayName) (\(bundleIdentifier)) remembers \(preset.name)."
         case .selectedPreset:
@@ -50,14 +57,14 @@ struct ActivePresetContext: Equatable {
 final class ActiveContextPresetResolver: ObservableObject {
     @Published private(set) var context: ActivePresetContext?
 
-    private var dismissedPromptBundleIdentifiers: Set<String> = []
+    private var dismissedPromptTargetKeys: Set<String> = []
     private var appLearningPrompt: AppPresetSuggestion?
     private var manualPresetOverride: AppPresetSuggestion?
-    private var manualPresetOverrideActivationGeneration: Int?
+    private var manualPresetOverrideContextKey: String?
 
     @discardableResult
     func resolve(input: ActiveContextPresetInput) -> ActivePresetContext? {
-        clearPromptIfForegroundAppChanged(to: input.foregroundApp)
+        clearPromptIfActiveTargetChanged(input: input)
 
         let resolvedPreset: EQPreset
         let resolvedSource: PresetResolutionSource
@@ -75,9 +82,11 @@ final class ActiveContextPresetResolver: ObservableObject {
                 selectedPresetID: input.selectedPresetID,
                 outputDeviceUID: input.outputDeviceUID,
                 activeApp: input.foregroundApp,
+                activeWebsite: input.activeWebsite,
                 presets: input.presets,
                 devicePresetIDs: input.devicePresetIDs,
                 appPresetIDs: input.appPresetIDs,
+                websitePresetIDs: input.websitePresetIDs,
                 lockedPresetID: input.lockedPresetID
             ) else {
                 context = nil
@@ -104,7 +113,7 @@ final class ActiveContextPresetResolver: ObservableObject {
     ) -> ActivePresetContext? {
         appLearningPrompt = input.lockedPresetID == nil ? promptCandidate(forManualPreset: preset, input: input) : nil
         manualPresetOverride = input.lockedPresetID == nil ? manualOverride(forManualPreset: preset, input: input) : nil
-        manualPresetOverrideActivationGeneration = input.foregroundActivationGeneration
+        manualPresetOverrideContextKey = manualPresetOverride == nil ? nil : activeTargetContextKey(input: input)
         return resolve(input: input)
     }
 
@@ -116,33 +125,33 @@ final class ActiveContextPresetResolver: ObservableObject {
     }
 
     func dismissPrompt() {
-        if let bundleIdentifier = appLearningPrompt?.app.bundleIdentifier {
-            dismissedPromptBundleIdentifiers.insert(bundleIdentifier)
+        if let targetKey = appLearningPrompt?.target.storageKey {
+            dismissedPromptTargetKeys.insert(targetKey)
         }
         appLearningPrompt = nil
         updateContextPrompt()
     }
 
     func resetPromptSession() {
-        dismissedPromptBundleIdentifiers.removeAll()
+        dismissedPromptTargetKeys.removeAll()
     }
 
     private func manualOverride(
         forManualPreset preset: EQPreset,
         input: ActiveContextPresetInput
     ) -> AppPresetSuggestion? {
-        guard let foregroundApp = input.foregroundApp else { return nil }
-        guard input.appPresetIDs[foregroundApp.bundleIdentifier] != preset.id else { return nil }
-        return AppPresetSuggestion(app: foregroundApp, preset: preset)
+        guard let target = learningTarget(for: input) else { return nil }
+        guard targetPresetID(for: target, input: input) != preset.id else { return nil }
+        return AppPresetSuggestion(target: target, preset: preset)
     }
 
     private func validManualOverride(input: ActiveContextPresetInput) -> AppPresetSuggestion? {
         guard let manualPresetOverride else { return nil }
-        guard manualPresetOverride.app.bundleIdentifier == input.foregroundApp?.bundleIdentifier else {
+        guard manualPresetOverride.target == learningTarget(for: input) else {
             clearManualOverride()
             return nil
         }
-        guard manualPresetOverrideActivationGeneration == input.foregroundActivationGeneration else {
+        guard manualPresetOverrideContextKey == activeTargetContextKey(input: input) else {
             clearManualOverride()
             return nil
         }
@@ -161,20 +170,51 @@ final class ActiveContextPresetResolver: ObservableObject {
         forManualPreset preset: EQPreset,
         input: ActiveContextPresetInput
     ) -> AppPresetSuggestion? {
-        guard let foregroundApp = input.foregroundApp else { return nil }
-        guard input.appPresetIDs[foregroundApp.bundleIdentifier] != preset.id else { return nil }
-        guard !dismissedPromptBundleIdentifiers.contains(foregroundApp.bundleIdentifier) else { return nil }
-        return AppPresetSuggestion(app: foregroundApp, preset: preset)
+        guard let target = learningTarget(for: input) else { return nil }
+        guard targetPresetID(for: target, input: input) != preset.id else { return nil }
+        guard !dismissedPromptTargetKeys.contains(target.storageKey) else { return nil }
+        return AppPresetSuggestion(target: target, preset: preset)
     }
 
-    private func clearPromptIfForegroundAppChanged(to foregroundApp: ForegroundAppIdentity?) {
+    private func learningTarget(for input: ActiveContextPresetInput) -> PresetLearningTarget? {
+        if let activeWebsite = input.activeWebsite {
+            return .website(activeWebsite)
+        }
+        if let foregroundApp = input.foregroundApp {
+            return .app(foregroundApp)
+        }
+        return nil
+    }
+
+    private func targetPresetID(for target: PresetLearningTarget, input: ActiveContextPresetInput) -> String? {
+        switch target {
+        case let .app(app):
+            input.appPresetIDs[app.bundleIdentifier]
+        case let .website(page):
+            input.websitePresetIDs[page.siteKey]
+        }
+    }
+
+    private func activeTargetContextKey(input: ActiveContextPresetInput) -> String? {
+        guard let target = learningTarget(for: input) else { return nil }
+        switch target {
+        case let .app(app):
+            return "app:\(app.bundleIdentifier):\(input.foregroundActivationGeneration)"
+        case let .website(page):
+            return "website:\(page.siteKey):\(input.websiteGeneration)"
+        }
+    }
+
+    private func clearPromptIfActiveTargetChanged(input: ActiveContextPresetInput) {
+        let activeTarget = learningTarget(for: input)
+
         if let manualPresetOverride,
-           manualPresetOverride.app.bundleIdentifier != foregroundApp?.bundleIdentifier {
+           manualPresetOverride.target != activeTarget {
             clearManualOverride()
         }
 
         guard let appLearningPrompt else { return }
-        guard appLearningPrompt.app.bundleIdentifier == foregroundApp?.bundleIdentifier else {
+        guard appLearningPrompt.target == activeTarget else {
             self.appLearningPrompt = nil
             updateContextPrompt()
             return
@@ -183,7 +223,7 @@ final class ActiveContextPresetResolver: ObservableObject {
 
     private func clearManualOverride() {
         manualPresetOverride = nil
-        manualPresetOverrideActivationGeneration = nil
+        manualPresetOverrideContextKey = nil
     }
 
     private func updateContextPrompt() {

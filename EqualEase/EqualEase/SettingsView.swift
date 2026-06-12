@@ -18,6 +18,7 @@ struct SettingsView: View {
     @ObservedObject var localNetworkControlServer: LocalNetworkControlServer
     @ObservedObject var presetStore: PresetStore
     @ObservedObject var foregroundAppObserver: ForegroundAppObserver
+    @ObservedObject var browserPageObserver: BrowserPageObserver
     var applyPreset: (EQPreset) -> Void
     var setLocalNetworkControlEnabled: (Bool) -> Void
     @State private var selectedTab: SettingsTab
@@ -28,6 +29,7 @@ struct SettingsView: View {
         localNetworkControlServer: LocalNetworkControlServer,
         presetStore: PresetStore,
         foregroundAppObserver: ForegroundAppObserver,
+        browserPageObserver: BrowserPageObserver,
         selectedTab: SettingsTab = .general,
         applyPreset: @escaping (EQPreset) -> Void,
         setLocalNetworkControlEnabled: @escaping (Bool) -> Void
@@ -37,6 +39,7 @@ struct SettingsView: View {
         self.localNetworkControlServer = localNetworkControlServer
         self.presetStore = presetStore
         self.foregroundAppObserver = foregroundAppObserver
+        self.browserPageObserver = browserPageObserver
         self.applyPreset = applyPreset
         self.setLocalNetworkControlEnabled = setLocalNetworkControlEnabled
         _selectedTab = State(initialValue: selectedTab)
@@ -64,7 +67,8 @@ struct SettingsView: View {
             RulesSettingsView(
                 router: router,
                 presetStore: presetStore,
-                foregroundAppObserver: foregroundAppObserver
+                foregroundAppObserver: foregroundAppObserver,
+                browserPageObserver: browserPageObserver
             )
             .tabItem { Label("Rules", systemImage: "switch.2") }
             .tag(SettingsTab.rules)
@@ -86,6 +90,7 @@ struct SettingsView: View {
         localNetworkControlServer: appModel.localNetworkControlServer,
         presetStore: appModel.presetStore,
         foregroundAppObserver: appModel.foregroundAppObserver,
+        browserPageObserver: appModel.browserPageObserver,
         applyPreset: appModel.apply,
         setLocalNetworkControlEnabled: appModel.setLocalNetworkControlEnabled
     )
