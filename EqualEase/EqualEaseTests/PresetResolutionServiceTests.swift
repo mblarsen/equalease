@@ -7,14 +7,16 @@ import XCTest
 @testable import EqualEase
 
 final class PresetResolutionServiceTests: XCTestCase {
-    func testPresetLockWinsOverActiveAppRuleAndSelectedPreset() {
+    func testPresetLockWinsOverWebsiteAppRuleAndSelectedPreset() {
         let resolution = PresetResolutionService.resolve(
             selectedPresetID: flat.id,
             outputDeviceUID: "speaker",
             activeApp: safari,
+            activeWebsite: meet,
             presets: presets,
             devicePresetIDs: ["speaker": treble.id],
             appPresetIDs: [safari.bundleIdentifier: bass.id],
+            websitePresetIDs: [meet.siteKey: treble.id],
             lockedPresetID: warm.id
         )
 
@@ -39,14 +41,35 @@ final class PresetResolutionServiceTests: XCTestCase {
         )
     }
 
-    func testActiveAppRuleWinsOverSelectedPresetWhenNoDeviceRuleExists() {
+    func testWebsiteRuleWinsOverActiveAppRule() {
         let resolution = PresetResolutionService.resolve(
             selectedPresetID: flat.id,
             outputDeviceUID: "speaker",
             activeApp: safari,
+            activeWebsite: meet,
             presets: presets,
             devicePresetIDs: [:],
-            appPresetIDs: [safari.bundleIdentifier: bass.id]
+            appPresetIDs: [safari.bundleIdentifier: bass.id],
+            websitePresetIDs: [meet.siteKey: treble.id]
+        )
+
+        XCTAssertEqual(resolution?.preset, treble)
+        XCTAssertEqual(
+            resolution?.source,
+            .activeWebsite(siteKey: meet.siteKey, displayName: meet.displayName)
+        )
+    }
+
+    func testActiveAppRuleWinsOverSelectedPresetWhenNoWebsiteRuleMatches() {
+        let resolution = PresetResolutionService.resolve(
+            selectedPresetID: flat.id,
+            outputDeviceUID: "speaker",
+            activeApp: safari,
+            activeWebsite: meet,
+            presets: presets,
+            devicePresetIDs: [:],
+            appPresetIDs: [safari.bundleIdentifier: bass.id],
+            websitePresetIDs: ["youtube.com": treble.id]
         )
 
         XCTAssertEqual(resolution?.preset, bass)
@@ -54,6 +77,60 @@ final class PresetResolutionServiceTests: XCTestCase {
             resolution?.source,
             .activeApp(bundleIdentifier: safari.bundleIdentifier, displayName: safari.displayName)
         )
+    }
+
+    func testActiveAppRuleWinsWhenWebsitePresetIDIsMissing() {
+        let resolution = PresetResolutionService.resolve(
+            selectedPresetID: flat.id,
+            outputDeviceUID: "speaker",
+            activeApp: safari,
+            activeWebsite: meet,
+            presets: presets,
+            devicePresetIDs: [:],
+            appPresetIDs: [safari.bundleIdentifier: bass.id],
+            websitePresetIDs: [meet.siteKey: "missing-preset"]
+        )
+
+        XCTAssertEqual(resolution?.preset, bass)
+        XCTAssertEqual(
+            resolution?.source,
+            .activeApp(bundleIdentifier: safari.bundleIdentifier, displayName: safari.displayName)
+        )
+    }
+
+    func testActiveAppRuleWinsWhenWebsiteRulesExistButActiveWebsiteIsUnknown() {
+        let resolution = PresetResolutionService.resolve(
+            selectedPresetID: flat.id,
+            outputDeviceUID: "speaker",
+            activeApp: safari,
+            activeWebsite: nil,
+            presets: presets,
+            devicePresetIDs: [:],
+            appPresetIDs: [safari.bundleIdentifier: bass.id],
+            websitePresetIDs: [meet.siteKey: treble.id]
+        )
+
+        XCTAssertEqual(resolution?.preset, bass)
+        XCTAssertEqual(
+            resolution?.source,
+            .activeApp(bundleIdentifier: safari.bundleIdentifier, displayName: safari.displayName)
+        )
+    }
+
+    func testSelectedPresetWinsWhenWebsiteRulesExistButActiveWebsiteAndAppAreUnknown() {
+        let resolution = PresetResolutionService.resolve(
+            selectedPresetID: warm.id,
+            outputDeviceUID: "speaker",
+            activeApp: nil,
+            activeWebsite: nil,
+            presets: presets,
+            devicePresetIDs: [:],
+            appPresetIDs: [safari.bundleIdentifier: bass.id],
+            websitePresetIDs: [meet.siteKey: treble.id]
+        )
+
+        XCTAssertEqual(resolution?.preset, warm)
+        XCTAssertEqual(resolution?.source, .selectedPreset)
     }
 
     func testSelectedPresetIsFallbackWhenNoRulesMatch() {
@@ -107,14 +184,17 @@ final class PresetResolutionServiceTests: XCTestCase {
         )
         store.assignPreset(id: customPreset.id, toDeviceUID: "speaker", deviceName: "Desk Speakers")
         store.assignPreset(id: customPreset.id, toAppBundleIdentifier: safari.bundleIdentifier, displayName: safari.displayName)
+        store.assignPreset(id: customPreset.id, toWebsiteKey: meet.siteKey, displayName: meet.displayName)
 
         store.deleteCustomPreset(id: customPreset.id)
 
         XCTAssertNil(store.preset(id: customPreset.id))
         XCTAssertNil(store.devicePresetIDs["speaker"])
         XCTAssertNil(store.appPresetIDs[safari.bundleIdentifier])
+        XCTAssertNil(store.websitePresetIDs[meet.siteKey])
         XCTAssertNil(store.deviceDisplayNames["speaker"])
         XCTAssertNil(store.appDisplayNames[safari.bundleIdentifier])
+        XCTAssertNil(store.websiteDisplayNames[meet.siteKey])
         XCTAssertEqual(store.selectedPresetID, "built-in-flat")
     }
 
@@ -129,6 +209,7 @@ final class PresetResolutionServiceTests: XCTestCase {
         store.renameCustomPreset(id: customPreset.id, name: "Speech Test")
         store.assignPreset(id: customPreset.id, toDeviceUID: "speaker", deviceName: "Desk Speakers")
         store.assignPreset(id: customPreset.id, toAppBundleIdentifier: safari.bundleIdentifier, displayName: safari.displayName)
+        store.assignPreset(id: customPreset.id, toWebsiteKey: meet.siteKey, displayName: meet.displayName)
 
         let reloadedStore = PresetStore(persistenceURL: url)
         let reloadedPreset = try XCTUnwrap(reloadedStore.preset(id: customPreset.id))
@@ -139,8 +220,10 @@ final class PresetResolutionServiceTests: XCTestCase {
         XCTAssertEqual(reloadedStore.selectedPresetID, customPreset.id)
         XCTAssertEqual(reloadedStore.devicePresetIDs["speaker"], customPreset.id)
         XCTAssertEqual(reloadedStore.appPresetIDs[safari.bundleIdentifier], customPreset.id)
+        XCTAssertEqual(reloadedStore.websitePresetIDs[meet.siteKey], customPreset.id)
         XCTAssertEqual(reloadedStore.deviceDisplayNames["speaker"], "Desk Speakers")
         XCTAssertEqual(reloadedStore.appDisplayNames[safari.bundleIdentifier], safari.displayName)
+        XCTAssertEqual(reloadedStore.websiteDisplayNames[meet.siteKey], meet.displayName)
     }
 
     @MainActor
@@ -189,5 +272,15 @@ final class PresetResolutionServiceTests: XCTestCase {
 
     private var terminal: ForegroundAppIdentity {
         ForegroundAppIdentity(bundleIdentifier: "com.apple.Terminal", displayName: "Terminal")
+    }
+
+    private var meet: BrowserPageIdentity {
+        BrowserPageIdentity(
+            browserBundleIdentifier: safari.bundleIdentifier,
+            browserDisplayName: safari.displayName,
+            url: URL(string: "https://meet.google.com/")!,
+            siteKey: "meet.google.com",
+            displayName: "meet.google.com"
+        )
     }
 }

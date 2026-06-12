@@ -18,6 +18,7 @@ struct EqualEaseApp: App {
                 localNetworkControlServer: appDelegate.appModel.localNetworkControlServer,
                 presetStore: appDelegate.appModel.presetStore,
                 foregroundAppObserver: appDelegate.appModel.foregroundAppObserver,
+                browserPageObserver: appDelegate.appModel.browserPageObserver,
                 applyPreset: appDelegate.appModel.apply,
                 setLocalNetworkControlEnabled: appDelegate.appModel.setLocalNetworkControlEnabled
             )

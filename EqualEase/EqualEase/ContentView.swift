@@ -90,13 +90,15 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 Text(model.effectivePresetSummary)
                     .font(.caption)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.9)
                     .opacity(0.8)
             }
+            .layoutPriority(1)
 
             Spacer(minLength: 8)
 
             statusBadge
-                .frame(width: 136)
+                .frame(minWidth: 64, alignment: .trailing)
         }
         .foregroundStyle(.white)
         .padding(.horizontal, 16)

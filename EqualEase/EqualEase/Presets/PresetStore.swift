@@ -32,8 +32,10 @@ final class PresetStore: ObservableObject {
     }
     @Published private(set) var devicePresetIDs: [String: String]
     @Published private(set) var appPresetIDs: [String: String]
+    @Published private(set) var websitePresetIDs: [String: String]
     @Published private(set) var deviceDisplayNames: [String: String]
     @Published private(set) var appDisplayNames: [String: String]
+    @Published private(set) var websiteDisplayNames: [String: String]
 
     var presets: [EQPreset] {
         builtInPresets + customPresets
@@ -50,8 +52,10 @@ final class PresetStore: ObservableObject {
         selectedPresetID = persisted?.selectedPresetID ?? Self.defaultBuiltInPresets[0].id
         devicePresetIDs = persisted?.devicePresetIDs ?? [:]
         appPresetIDs = persisted?.appPresetIDs ?? [:]
+        websitePresetIDs = persisted?.websitePresetIDs ?? [:]
         deviceDisplayNames = persisted?.deviceDisplayNames ?? [:]
         appDisplayNames = persisted?.appDisplayNames ?? [:]
+        websiteDisplayNames = persisted?.websiteDisplayNames ?? [:]
     }
 
     init(persistenceURL: URL) {
@@ -63,8 +67,10 @@ final class PresetStore: ObservableObject {
         selectedPresetID = persisted?.selectedPresetID ?? Self.defaultBuiltInPresets[0].id
         devicePresetIDs = persisted?.devicePresetIDs ?? [:]
         appPresetIDs = persisted?.appPresetIDs ?? [:]
+        websitePresetIDs = persisted?.websitePresetIDs ?? [:]
         deviceDisplayNames = persisted?.deviceDisplayNames ?? [:]
         appDisplayNames = persisted?.appDisplayNames ?? [:]
+        websiteDisplayNames = persisted?.websiteDisplayNames ?? [:]
     }
 
     func preset(id: String) -> EQPreset? {
@@ -128,6 +134,11 @@ final class PresetStore: ObservableObject {
         return preset(id: presetID)
     }
 
+    func presetForWebsite(key siteKey: String?) -> EQPreset? {
+        guard let siteKey, let presetID = websitePresetIDs[siteKey] else { return nil }
+        return preset(id: presetID)
+    }
+
     func assignPreset(id presetID: String, toDeviceUID uid: String?, deviceName: String? = nil) {
         guard let uid, preset(id: presetID) != nil else { return }
         devicePresetIDs[uid] = presetID
@@ -168,6 +179,28 @@ final class PresetStore: ObservableObject {
         save()
     }
 
+    func assignPreset(id presetID: String, toWebsiteKey siteKey: String?, displayName: String? = nil) {
+        guard let siteKey, preset(id: presetID) != nil else { return }
+        websitePresetIDs[siteKey] = presetID
+        if let displayName = cleanedDisplayName(displayName) {
+            websiteDisplayNames[siteKey] = displayName
+        } else {
+            websiteDisplayNames[siteKey] = siteKey
+        }
+        save()
+    }
+
+    func assignSelectedPreset(toWebsiteKey siteKey: String?) {
+        assignPreset(id: selectedPresetID, toWebsiteKey: siteKey)
+    }
+
+    func clearPreset(forWebsiteKey siteKey: String?) {
+        guard let siteKey else { return }
+        websitePresetIDs.removeValue(forKey: siteKey)
+        websiteDisplayNames.removeValue(forKey: siteKey)
+        save()
+    }
+
     func suggestedCopyName(for presetName: String) -> String {
         nextDuplicateName(for: presetName)
     }
@@ -199,8 +232,10 @@ final class PresetStore: ObservableObject {
         customPresets.removeAll { $0.id == id }
         devicePresetIDs = devicePresetIDs.filter { $0.value != id }
         appPresetIDs = appPresetIDs.filter { $0.value != id }
+        websitePresetIDs = websitePresetIDs.filter { $0.value != id }
         deviceDisplayNames = deviceDisplayNames.filter { devicePresetIDs[$0.key] != nil }
         appDisplayNames = appDisplayNames.filter { appPresetIDs[$0.key] != nil }
+        websiteDisplayNames = websiteDisplayNames.filter { websitePresetIDs[$0.key] != nil }
         if selectedPresetID == id {
             selectedPresetID = Self.defaultBuiltInPresets[0].id
         }
@@ -227,8 +262,10 @@ final class PresetStore: ObservableObject {
                 customPresets: customPresets,
                 devicePresetIDs: devicePresetIDs,
                 appPresetIDs: appPresetIDs,
+                websitePresetIDs: websitePresetIDs,
                 deviceDisplayNames: deviceDisplayNames,
-                appDisplayNames: appDisplayNames
+                appDisplayNames: appDisplayNames,
+                websiteDisplayNames: websiteDisplayNames
             )
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
@@ -269,10 +306,46 @@ final class PresetStore: ObservableObject {
     private struct PersistedState: Codable {
         var selectedPresetID: String
         var customPresets: [EQPreset]
-        var devicePresetIDs: [String: String] = [:]
-        var appPresetIDs: [String: String] = [:]
-        var deviceDisplayNames: [String: String] = [:]
-        var appDisplayNames: [String: String] = [:]
+        var devicePresetIDs: [String: String]
+        var appPresetIDs: [String: String]
+        var websitePresetIDs: [String: String]
+        var deviceDisplayNames: [String: String]
+        var appDisplayNames: [String: String]
+        var websiteDisplayNames: [String: String]
+
+        init(
+            selectedPresetID: String,
+            customPresets: [EQPreset],
+            devicePresetIDs: [String: String] = [:],
+            appPresetIDs: [String: String] = [:],
+            websitePresetIDs: [String: String] = [:],
+            deviceDisplayNames: [String: String] = [:],
+            appDisplayNames: [String: String] = [:],
+            websiteDisplayNames: [String: String] = [:]
+        ) {
+            self.selectedPresetID = selectedPresetID
+            self.customPresets = customPresets
+            self.devicePresetIDs = devicePresetIDs
+            self.appPresetIDs = appPresetIDs
+            self.websitePresetIDs = websitePresetIDs
+            self.deviceDisplayNames = deviceDisplayNames
+            self.appDisplayNames = appDisplayNames
+            self.websiteDisplayNames = websiteDisplayNames
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            selectedPresetID = try container.decodeIfPresent(String.self, forKey: .selectedPresetID) ?? Self.defaultSelectedPresetID
+            customPresets = try container.decodeIfPresent([EQPreset].self, forKey: .customPresets) ?? []
+            devicePresetIDs = try container.decodeIfPresent([String: String].self, forKey: .devicePresetIDs) ?? [:]
+            appPresetIDs = try container.decodeIfPresent([String: String].self, forKey: .appPresetIDs) ?? [:]
+            websitePresetIDs = try container.decodeIfPresent([String: String].self, forKey: .websitePresetIDs) ?? [:]
+            deviceDisplayNames = try container.decodeIfPresent([String: String].self, forKey: .deviceDisplayNames) ?? [:]
+            appDisplayNames = try container.decodeIfPresent([String: String].self, forKey: .appDisplayNames) ?? [:]
+            websiteDisplayNames = try container.decodeIfPresent([String: String].self, forKey: .websiteDisplayNames) ?? [:]
+        }
+
+        private static var defaultSelectedPresetID: String { "built-in-flat" }
     }
 
     private static let defaultBuiltInPresets: [EQPreset] = [
