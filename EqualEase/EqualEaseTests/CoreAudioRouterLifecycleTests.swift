@@ -116,6 +116,26 @@ final class CoreAudioRouterLifecycleTests: XCTestCase {
         XCTAssertEqual(host.stopCount, 1)
     }
 
+    func testFollowSystemOutputSwitchesToNewVisibleDefaultOutput() async throws {
+        let host = TestRoutingHost()
+        let router = CoreAudioRouter(host: host, restartDebounce: .milliseconds(20), cleanupOnLaunch: false)
+        router.start()
+
+        host.defaultOutputDeviceUID = host.headphones.uid
+        host.triggerOutputDevicesChanged()
+
+        XCTAssertTrue(router.followsSystemOutput)
+        XCTAssertEqual(router.selectedOutputDeviceUID, host.headphones.uid)
+        XCTAssertTrue(router.isRoutingTransitioning)
+
+        try await Task.sleep(for: .milliseconds(80))
+
+        XCTAssertEqual(router.state, .running)
+        XCTAssertEqual(router.outputDeviceUID, host.headphones.uid)
+        XCTAssertEqual(host.startedOutputUIDs, [host.speakers.uid, host.headphones.uid])
+        XCTAssertEqual(host.stopCount, 1)
+    }
+
     func testFollowSystemOutputIgnoresHiddenDefaultOutputUID() {
         let host = TestRoutingHost()
         host.defaultOutputDeviceUID = host.hiddenAggregate.uid

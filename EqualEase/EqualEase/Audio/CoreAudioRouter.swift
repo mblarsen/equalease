@@ -178,7 +178,12 @@ final class CoreAudioRouter: AudioRoutingBackend {
             outputDeviceSnapshot = snapshot
             outputDevices = snapshot.devices
             let selectedDeviceStillAvailable = outputDevices.contains { $0.uid == selectedOutputDeviceUID }
-            if followsSystemOutput || selectedOutputDeviceUID == nil || !selectedDeviceStillAvailable {
+            if followsSystemOutput {
+                selectedOutputDeviceUID = resolvedPreferredOutputDeviceUID(
+                    requestedUID: nil,
+                    snapshot: snapshot
+                )
+            } else if selectedOutputDeviceUID == nil || !selectedDeviceStillAvailable {
                 selectedOutputDeviceUID = resolvedPreferredOutputDeviceUID(
                     requestedUID: selectedOutputDeviceUID,
                     snapshot: snapshot
