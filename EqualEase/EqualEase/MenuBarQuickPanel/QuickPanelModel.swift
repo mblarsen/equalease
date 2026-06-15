@@ -112,6 +112,16 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         actions.dismissAppPresetSuggestion()
     }
 
+    func hideVolumeControls() {
+        EqualEaseSettings.showsQuickPanelVolume = false
+        objectWillChange.send()
+    }
+
+    func hidePreampControls() {
+        EqualEaseSettings.showsQuickPanelPreamp = false
+        objectWillChange.send()
+    }
+
     func hideInputVolumeControls() {
         EqualEaseSettings.showsQuickPanelInputVolume = false
         objectWillChange.send()
@@ -181,6 +191,18 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         inputDeviceController.inputDeviceName
     }
 
+    var showsVolumeControls: Bool {
+        EqualEaseSettings.showsQuickPanelVolume
+    }
+
+    var showsPreampControls: Bool {
+        EqualEaseSettings.showsQuickPanelPreamp
+    }
+
+    var showsLevelControls: Bool {
+        showsVolumeControls || showsPreampControls
+    }
+
     var showsInputSection: Bool {
         EqualEaseSettings.showsQuickPanelInputVolume
     }
@@ -202,13 +224,23 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
             return 436
         }
 
-        let baseHeightWithoutInputOrRouting: CGFloat = 376
+        let baseHeightWithoutOptionalControls: CGFloat = 244
+        let levelControlHeight: CGFloat = 62
+        let levelControlSpacing: CGFloat = showsVolumeControls && showsPreampControls ? 8 : 0
+        let volumeSectionHeight: CGFloat = showsVolumeControls ? levelControlHeight : 0
+        let preampSectionHeight: CGFloat = showsPreampControls ? levelControlHeight : 0
         let inputSectionHeight: CGFloat = showsInputSection ? 92 : 0
         let routingSectionHeight: CGFloat = showsRoutingSection ? 108 : 0
         let promptHeight: CGFloat = appLearningPrompt == nil ? 0 : 72
         return min(
             Self.maximumPanelHeight,
-            baseHeightWithoutInputOrRouting + inputSectionHeight + routingSectionHeight + promptHeight
+            baseHeightWithoutOptionalControls
+                + volumeSectionHeight
+                + preampSectionHeight
+                + levelControlSpacing
+                + inputSectionHeight
+                + routingSectionHeight
+                + promptHeight
         )
     }
 

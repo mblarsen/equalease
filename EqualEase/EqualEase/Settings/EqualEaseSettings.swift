@@ -11,6 +11,8 @@ enum EqualEaseSettings {
     static let hasCompletedRoutingOnboardingKey = "hasCompletedRoutingOnboarding"
     static let startAudioRoutingAtLaunchKey = "startAudioRoutingAtLaunch"
     static let lockedPresetIDKey = "lockedPresetID"
+    static let showsQuickPanelVolumeKey = "showsQuickPanelVolume"
+    static let showsQuickPanelPreampKey = "showsQuickPanelPreamp"
     static let showsQuickPanelInputVolumeKey = "showsQuickPanelInputVolume"
     static let showsQuickPanelRoutingKey = "showsQuickPanelRouting"
 
@@ -72,6 +74,24 @@ enum EqualEaseSettings {
 
     static var isPresetLocked: Bool {
         lockedPresetID != nil
+    }
+
+    static var showsQuickPanelVolume: Bool {
+        get {
+            defaultTrueBool(forKey: showsQuickPanelVolumeKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: showsQuickPanelVolumeKey)
+        }
+    }
+
+    static var showsQuickPanelPreamp: Bool {
+        get {
+            defaultTrueBool(forKey: showsQuickPanelPreampKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: showsQuickPanelPreampKey)
+        }
     }
 
     static var showsQuickPanelInputVolume: Bool {

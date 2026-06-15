@@ -13,6 +13,10 @@ final class EqualEaseSettingsTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.hasCompletedRoutingOnboardingKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.startAudioRoutingAtLaunchKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.lockedPresetIDKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelVolumeKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelPreampKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelInputVolumeKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelRoutingKey)
         super.tearDown()
     }
 
@@ -68,6 +72,28 @@ final class EqualEaseSettingsTests: XCTestCase {
 
         XCTAssertFalse(EqualEaseSettings.isPresetLocked)
         XCTAssertNil(EqualEaseSettings.lockedPresetID)
+    }
+
+    func testQuickPanelControlVisibilityDefaultsOnAndPersistsExplicitChoices() {
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelVolumeKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelPreampKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelInputVolumeKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelRoutingKey)
+
+        XCTAssertTrue(EqualEaseSettings.showsQuickPanelVolume)
+        XCTAssertTrue(EqualEaseSettings.showsQuickPanelPreamp)
+        XCTAssertTrue(EqualEaseSettings.showsQuickPanelInputVolume)
+        XCTAssertTrue(EqualEaseSettings.showsQuickPanelRouting)
+
+        EqualEaseSettings.showsQuickPanelVolume = false
+        EqualEaseSettings.showsQuickPanelPreamp = false
+        EqualEaseSettings.showsQuickPanelInputVolume = false
+        EqualEaseSettings.showsQuickPanelRouting = false
+
+        XCTAssertFalse(EqualEaseSettings.showsQuickPanelVolume)
+        XCTAssertFalse(EqualEaseSettings.showsQuickPanelPreamp)
+        XCTAssertFalse(EqualEaseSettings.showsQuickPanelInputVolume)
+        XCTAssertFalse(EqualEaseSettings.showsQuickPanelRouting)
     }
 
     func testRoutingOnboardingAndLaunchRestorePersistExplicitChoices() {

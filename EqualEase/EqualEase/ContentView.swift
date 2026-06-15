@@ -213,31 +213,40 @@ struct ContentView<Router: AudioRoutingBackend>: View {
         }
     }
 
+    @ViewBuilder
     private var levelControls: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            levelSlider(
-                title: "Volume",
-                value: Binding(
-                    get: { router.outputVolume },
-                    set: { router.outputVolume = $0 }
-                ),
-                range: 0...1,
-                percentage: Int(router.outputVolume * 100),
-                isEnabled: router.canSetOutputVolume,
-                helpText: "Convenience control for your Mac’s output volume. Use this first for everyday loudness."
-            )
+        if model.showsLevelControls {
+            VStack(alignment: .leading, spacing: 8) {
+                if model.showsVolumeControls {
+                    levelSlider(
+                        title: "Volume",
+                        value: Binding(
+                            get: { router.outputVolume },
+                            set: { router.outputVolume = $0 }
+                        ),
+                        range: 0...1,
+                        percentage: Int(router.outputVolume * 100),
+                        isEnabled: router.canSetOutputVolume,
+                        helpText: "Convenience control for your Mac’s output volume. Use this first for everyday loudness.",
+                        hideAction: { model.hideVolumeControls() }
+                    )
+                }
 
-            levelSlider(
-                title: "Preamp",
-                value: Binding(
-                    get: { router.outputGain },
-                    set: { router.outputGain = $0 }
-                ),
-                range: 0...2,
-                percentage: Int(router.outputGain * 100),
-                isEnabled: router.isRunning,
-                helpText: "Changes EqualEase’s processing level while Active is on. Use Volume first; lower Preamp if boosted presets distort."
-            )
+                if model.showsPreampControls {
+                    levelSlider(
+                        title: "Preamp",
+                        value: Binding(
+                            get: { router.outputGain },
+                            set: { router.outputGain = $0 }
+                        ),
+                        range: 0...2,
+                        percentage: Int(router.outputGain * 100),
+                        isEnabled: router.isRunning,
+                        helpText: "Changes EqualEase’s processing level while Active is on. Use Volume first; lower Preamp if boosted presets distort.",
+                        hideAction: { model.hidePreampControls() }
+                    )
+                }
+            }
         }
     }
 
@@ -247,12 +256,20 @@ struct ContentView<Router: AudioRoutingBackend>: View {
         range: ClosedRange<Double>,
         percentage: Int,
         isEnabled: Bool,
-        helpText: String
+        helpText: String,
+        hideAction: @escaping () -> Void
     ) -> some View {
         VStack(alignment: .leading, spacing: 2) {
-            HStack {
+            HStack(spacing: 6) {
                 Text(title)
                     .font(.caption.weight(.semibold))
+                Button("Hide") {
+                    hideAction()
+                }
+                .buttonStyle(.link)
+                .font(.caption)
+                .accessibilityLabel("Hide \(title.lowercased()) controls")
+
                 Spacer()
                 Text("\(percentage)%")
                     .font(.caption.monospacedDigit())

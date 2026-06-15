@@ -10,6 +10,8 @@ import XCTest
 final class QuickPanelModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelVolumeKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelPreampKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelInputVolumeKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelRoutingKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.hasCompletedRoutingOnboardingKey)
@@ -18,6 +20,8 @@ final class QuickPanelModelTests: XCTestCase {
     }
 
     override func tearDown() {
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelVolumeKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelPreampKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelInputVolumeKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelRoutingKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.hasCompletedRoutingOnboardingKey)
@@ -138,6 +142,40 @@ final class QuickPanelModelTests: XCTestCase {
         XCTAssertTrue(didResetPromptDismissals)
     }
 
+    func testVolumeVisibilityPreferenceDefaultsVisibleAndCanBeHiddenAndRestored() {
+        let model = makeModel()
+
+        XCTAssertTrue(model.showsVolumeControls)
+        XCTAssertTrue(model.showsLevelControls)
+
+        model.hideVolumeControls()
+
+        XCTAssertFalse(EqualEaseSettings.showsQuickPanelVolume)
+        XCTAssertFalse(model.showsVolumeControls)
+        XCTAssertTrue(model.showsLevelControls)
+
+        EqualEaseSettings.showsQuickPanelVolume = true
+
+        XCTAssertTrue(model.showsVolumeControls)
+    }
+
+    func testPreampVisibilityPreferenceDefaultsVisibleAndCanBeHiddenAndRestored() {
+        let model = makeModel()
+
+        XCTAssertTrue(model.showsPreampControls)
+        XCTAssertTrue(model.showsLevelControls)
+
+        model.hidePreampControls()
+
+        XCTAssertFalse(EqualEaseSettings.showsQuickPanelPreamp)
+        XCTAssertFalse(model.showsPreampControls)
+        XCTAssertTrue(model.showsLevelControls)
+
+        EqualEaseSettings.showsQuickPanelPreamp = true
+
+        XCTAssertTrue(model.showsPreampControls)
+    }
+
     func testInputVolumeVisibilityPreferenceDefaultsVisibleAndCanBeHiddenAndRestored() {
         let model = makeModel()
 
@@ -165,6 +203,15 @@ final class QuickPanelModelTests: XCTestCase {
         model.hideRoutingControls()
 
         XCTAssertEqual(model.preferredPanelHeight, 376)
+
+        model.hideVolumeControls()
+
+        XCTAssertEqual(model.preferredPanelHeight, 306)
+
+        model.hidePreampControls()
+
+        XCTAssertEqual(model.preferredPanelHeight, 244)
+        XCTAssertFalse(model.showsLevelControls)
     }
 
     func testRoutingSectionHidesWithRoutingPreference() {
