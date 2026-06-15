@@ -17,6 +17,9 @@ enum EqualEaseAppleScriptCommand {
     case setBypass
     case bypassState
     case toggleBypass
+    case setActive
+    case activeState
+    case toggleActive
     case lockPreset
     case unlockPreset
     case presetLockState
@@ -49,6 +52,12 @@ enum EqualEaseAppleScriptAdapter {
             return .bypassState
         case .toggleBypass:
             return .toggleBypass
+        case .setActive:
+            return .setActive(rawValue: try directParameterString(from: event, fallbackAction: "set active"))
+        case .activeState:
+            return .activeState
+        case .toggleActive:
+            return .toggleActive
         case .lockPreset:
             return .lockPreset(name: directParameterStringIfPresent(from: event))
         case .unlockPreset:

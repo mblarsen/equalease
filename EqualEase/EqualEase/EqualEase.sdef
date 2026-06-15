@@ -64,6 +64,22 @@
             <result type="boolean" description="The new bypass state."/>
         </command>
 
+        <command name="set active" code="EEqsSAct" description="Set whether EqualEase routing is active. Accepts on, off, or toggle. Returns the new active state.">
+            <access-group identifier="*"/>
+            <direct-parameter type="text" description="The active state."/>
+            <result type="boolean" description="The new active state."/>
+        </command>
+
+        <command name="active state" code="EEqsGAct" description="Return whether EqualEase routing is active.">
+            <access-group identifier="*"/>
+            <result type="boolean" description="The current active state."/>
+        </command>
+
+        <command name="toggle active" code="EEqsTAct" description="Toggle EqualEase routing on or off.">
+            <access-group identifier="*"/>
+            <result type="boolean" description="The new active state."/>
+        </command>
+
         <command name="lock preset" code="EEqsLPrs" description="Lock EqualEase to the current preset or to a named preset, temporarily ignoring app preset rules.">
             <access-group identifier="*"/>
             <direct-parameter type="text" optional="yes" description="The preset name. Omit to lock the current preset."/>
