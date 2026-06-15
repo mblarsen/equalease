@@ -133,6 +133,9 @@ final class EqualEaseAppDelegate: NSObject, NSApplicationDelegate {
             ("SByp", #selector(handleSetBypassEvent(_:withReplyEvent:))),
             ("GByp", #selector(handleBypassStateEvent(_:withReplyEvent:))),
             ("TByp", #selector(handleToggleBypassEvent(_:withReplyEvent:))),
+            ("SAct", #selector(handleSetActiveEvent(_:withReplyEvent:))),
+            ("GAct", #selector(handleActiveStateEvent(_:withReplyEvent:))),
+            ("TAct", #selector(handleToggleActiveEvent(_:withReplyEvent:))),
             ("LPrs", #selector(handleLockPresetEvent(_:withReplyEvent:))),
             ("UPrs", #selector(handleUnlockPresetEvent(_:withReplyEvent:))),
             ("GPlk", #selector(handlePresetLockStateEvent(_:withReplyEvent:))),
@@ -203,6 +206,18 @@ final class EqualEaseAppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func handleToggleBypassEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
         handleAppleScriptCommand(.toggleBypass, event: event, replyEvent: replyEvent)
+    }
+
+    @objc private func handleSetActiveEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
+        handleAppleScriptCommand(.setActive, event: event, replyEvent: replyEvent)
+    }
+
+    @objc private func handleActiveStateEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
+        handleAppleScriptCommand(.activeState, event: event, replyEvent: replyEvent)
+    }
+
+    @objc private func handleToggleActiveEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
+        handleAppleScriptCommand(.toggleActive, event: event, replyEvent: replyEvent)
     }
 
     @objc private func handleLockPresetEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {

@@ -29,6 +29,18 @@ final class EqualEaseAutomationTests: XCTestCase {
             .setBypass(rawValue: "toggle")
         )
         XCTAssertEqual(
+            try harness.module.command(for: url("equalease:///active/on")),
+            .setActive(rawValue: "on")
+        )
+        XCTAssertEqual(
+            try harness.module.command(for: url("equalease:///active/off")),
+            .setActive(rawValue: "off")
+        )
+        XCTAssertEqual(
+            try harness.module.command(for: url("equalease:///active/toggle")),
+            .setActive(rawValue: "toggle")
+        )
+        XCTAssertEqual(
             try harness.module.command(for: url("equalease:///lock/on/Warm")),
             .lockPreset(name: "Warm")
         )
@@ -46,7 +58,7 @@ final class EqualEaseAutomationTests: XCTestCase {
         )
     }
 
-    func testURLCommandExecutionSupportsPresetPreampVolumeAndBypass() throws {
+    func testURLCommandExecutionSupportsPresetPreampVolumeBypassAndActive() throws {
         let harness = AutomationHarness()
 
         XCTAssertEqual(
@@ -72,6 +84,18 @@ final class EqualEaseAutomationTests: XCTestCase {
             .boolean(true)
         )
         XCTAssertTrue(harness.target.automationIsBypassed)
+
+        XCTAssertEqual(
+            try harness.module.execute(try harness.module.command(for: url("equalease:///active/on"))),
+            .boolean(true)
+        )
+        XCTAssertTrue(harness.target.automationIsActive)
+
+        XCTAssertEqual(
+            try harness.module.execute(try harness.module.command(for: url("equalease:///active/toggle"))),
+            .boolean(false)
+        )
+        XCTAssertFalse(harness.target.automationIsActive)
     }
 
     func testURLCommandExecutionSupportsPresetLock() throws {
@@ -128,6 +152,27 @@ final class EqualEaseAutomationTests: XCTestCase {
         )
         XCTAssertEqual(
             try EqualEaseAppleScriptAdapter.automationCommand(
+                for: .setActive,
+                event: appleEvent(directObject: NSAppleEventDescriptor(string: "toggle"))
+            ),
+            .setActive(rawValue: "toggle")
+        )
+        XCTAssertEqual(
+            try EqualEaseAppleScriptAdapter.automationCommand(
+                for: .activeState,
+                event: appleEvent()
+            ),
+            .activeState
+        )
+        XCTAssertEqual(
+            try EqualEaseAppleScriptAdapter.automationCommand(
+                for: .toggleActive,
+                event: appleEvent()
+            ),
+            .toggleActive
+        )
+        XCTAssertEqual(
+            try EqualEaseAppleScriptAdapter.automationCommand(
                 for: .lockPreset,
                 event: appleEvent(directObject: NSAppleEventDescriptor(string: "Warm"))
             ),
@@ -171,12 +216,14 @@ final class EqualEaseAutomationTests: XCTestCase {
         harness.target.automationPreamp = 0.8
         harness.target.automationOutputVolume = 0.4
         harness.target.automationIsBypassed = true
+        harness.target.automationIsActive = true
 
         XCTAssertEqual(try harness.module.execute(.listPresets), .strings(harness.target.automationPresets.map(\.name)))
         XCTAssertEqual(try harness.module.execute(.currentPresetName), .string("Flat"))
         XCTAssertEqual(try harness.module.execute(.currentPreamp), .number(80))
         XCTAssertEqual(try harness.module.execute(.currentOutputVolume), .number(40))
         XCTAssertEqual(try harness.module.execute(.bypassState), .boolean(true))
+        XCTAssertEqual(try harness.module.execute(.activeState), .boolean(true))
         XCTAssertEqual(try harness.module.execute(.presetLockState), .boolean(false))
 
         XCTAssertEqual(try harness.module.execute(.selectPreset(name: "Warm")), .string("Warm"))
@@ -201,6 +248,14 @@ final class EqualEaseAutomationTests: XCTestCase {
         assertThrowsAutomationError(
             try harness.module.execute(.toggleBypass),
             equals: .externalAutomationWritesDisabled("Bypass")
+        )
+        assertThrowsAutomationError(
+            try harness.module.execute(.setActive(rawValue: "on")),
+            equals: .externalAutomationWritesDisabled("Active")
+        )
+        assertThrowsAutomationError(
+            try harness.module.execute(.toggleActive),
+            equals: .externalAutomationWritesDisabled("Active")
         )
         assertThrowsAutomationError(
             try harness.module.execute(.selectPreset(name: "Custom Speech")),
@@ -236,6 +291,17 @@ final class EqualEaseAutomationTests: XCTestCase {
             assertThrowsAutomationError(
                 try harness.module.execute(.setBypass(rawValue: value)),
                 equals: .invalidBypassValue(value)
+            )
+        }
+    }
+
+    func testInvalidActiveValuesAreClear() throws {
+        let harness = AutomationHarness()
+
+        for value in ["yes", "no", "true", "false", "1", "0"] {
+            assertThrowsAutomationError(
+                try harness.module.execute(.setActive(rawValue: value)),
+                equals: .invalidActiveValue(value)
             )
         }
     }
@@ -346,6 +412,7 @@ private final class TestAutomationTarget: EqualEaseAutomationCommandTarget {
     var automationPreamp = 1.0
     var automationOutputVolume = 1.0
     var automationIsBypassed = false
+    var automationIsActive = false
     var lockedPresetID: String?
 
     var automationCurrentPresetName: String {

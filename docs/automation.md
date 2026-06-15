@@ -7,7 +7,7 @@ EqualEase exposes two local automation surfaces for development and personal wor
 
 These controls operate on the running app model. If EqualEase is not running, macOS launches it before delivering the URL or Apple event.
 
-External writes are controlled by **Settings > General > Allow automation to change sound settings**. The setting is off by default. When it is off, automation can still read state and select built-in presets, but it cannot change Volume, Preamp, Bypass, whether app preset switching is paused, or custom presets.
+External writes are controlled by **Settings > General > Allow automation to change sound settings**. The setting is off by default. When it is off, automation can still read state and select built-in presets, but it cannot change Active, Volume, Preamp, Bypass, whether app preset switching is paused, or custom presets.
 
 ## Deep links
 
@@ -19,6 +19,7 @@ Supported links:
 equalease:///preset/<name>
 equalease:///preamp/<level>
 equalease:///volume/<level>
+equalease:///active/<on|off|toggle>
 equalease:///bypass/<yes|no|toggle>
 equalease:///lock/<on|off|toggle>
 equalease:///lock/on/<name>
@@ -34,7 +35,10 @@ open 'equalease:///preamp/125%25'
 open 'equalease:///volume/45'
 open 'equalease:///volume/0.45'
 open 'equalease:///volume/33%25'
-open 'equalease:///bypass/yes'    # bypass processing
+open 'equalease:///active/on'     # start EqualEase routing
+open 'equalease:///active/off'    # stop EqualEase routing
+open 'equalease:///active/toggle'
+open 'equalease:///bypass/yes'    # bypass processing without stopping routing
 open 'equalease:///bypass/no'     # process audio normally
 open 'equalease:///bypass/toggle'
 open 'equalease:///lock/on'       # lock the current effective preset
@@ -51,7 +55,15 @@ Level parsing is intentionally forgiving:
 - Volume accepts `0...1`, `0...100`, or percent strings such as `45%`.
 - Values are clamped to the supported range.
 
-Preamp, volume, bypass, and preset-lock links require automation writes to be enabled in Settings > General.
+Active, preamp, volume, bypass, and preset-lock links require automation writes to be enabled in Settings > General.
+
+Use Active for normal on/off automation:
+
+- `on` starts EqualEase audio routing.
+- `off` stops EqualEase audio routing.
+- `toggle` flips the current routing state.
+
+When Active is off, EqualEase stops routing/capturing system audio. The native macOS purple recording indicator goes away after routing stops.
 
 Preset lock values answer the question “lock the current preset?”:
 
@@ -65,7 +77,7 @@ Bypass values answer the question “bypass processing?”:
 - `no` means audio is processed normally.
 - `toggle` flips the current bypass state.
 
-`on` and `off` are intentionally not documented or accepted because they can mean either “bypass is on/off” or “processing is on/off”.
+`on` and `off` are intentionally not documented or accepted for bypass because they can mean either “bypass is on/off” or “processing is on/off”. Bypass is a diagnostics/debug control: it leaves EqualEase routing active but makes the DSP do nothing. Because routing stays active, macOS may still show the purple recording indicator while bypass is enabled. For Shortcuts, scripts, or launchers that should switch EqualEase itself on or off, use the Active URL instead.
 
 ## AppleScript / osascript
 
@@ -84,6 +96,12 @@ tell application "EqualEase"
     current output volume
     set output volume 45
     set output volume "33%"
+
+    active state
+    set active "on"
+    set active "off"
+    set active "toggle"
+    toggle active
 
     bypass state
     set bypass "yes" -- bypass processing
@@ -109,6 +127,10 @@ osascript -e 'tell application "EqualEase" to set preamp level 90'
 osascript -e 'tell application "EqualEase" to current preamp level'
 osascript -e 'tell application "EqualEase" to set output volume 45'
 osascript -e 'tell application "EqualEase" to current output volume'
+osascript -e 'tell application "EqualEase" to set active "on"'
+osascript -e 'tell application "EqualEase" to set active "off"'
+osascript -e 'tell application "EqualEase" to active state'
+osascript -e 'tell application "EqualEase" to toggle active'
 osascript -e 'tell application "EqualEase" to set bypass "yes"'
 osascript -e 'tell application "EqualEase" to set bypass "no"'
 osascript -e 'tell application "EqualEase" to bypass state'
@@ -126,7 +148,7 @@ When automation writes are disabled in Settings > General:
 
 - Read commands still work.
 - `select preset` only works for built-in presets.
-- `set preamp level`, `set output volume`, `set bypass`, `toggle bypass`, `lock preset`, `unlock preset`, and `toggle preset lock` return an AppleScript error.
+- `set active`, `toggle active`, `set preamp level`, `set output volume`, `set bypass`, `toggle bypass`, `lock preset`, `unlock preset`, and `toggle preset lock` return an AppleScript error.
 
 ## Notes
 
