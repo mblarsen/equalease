@@ -72,6 +72,8 @@ struct GeneralSettingsView: View {
     @AppStorage(EqualEaseSettings.allowsExternalAutomationWritesKey) private var allowsExternalAutomationWrites = false
     @AppStorage(EqualEaseSettings.localNetworkRemoteEnabledKey) private var localNetworkRemoteEnabled = false
     @AppStorage(EqualEaseSettings.startAudioRoutingAtLaunchKey) private var startAudioRoutingAtLaunch = false
+    @AppStorage(EqualEaseSettings.showsQuickPanelVolumeKey) private var showsQuickPanelVolume = true
+    @AppStorage(EqualEaseSettings.showsQuickPanelPreampKey) private var showsQuickPanelPreamp = true
     @AppStorage(EqualEaseSettings.showsQuickPanelInputVolumeKey) private var showsQuickPanelInputVolume = true
     @AppStorage(EqualEaseSettings.showsQuickPanelRoutingKey) private var showsQuickPanelRouting = true
 
@@ -108,6 +110,8 @@ struct GeneralSettingsView: View {
             }
 
             Section("Quick Panel") {
+                Toggle("Show volume in the quick panel", isOn: $showsQuickPanelVolume)
+                Toggle("Show preamp in the quick panel", isOn: $showsQuickPanelPreamp)
                 Toggle("Show input volume in the quick panel", isOn: $showsQuickPanelInputVolume)
                 Toggle("Show routing controls in the quick panel", isOn: $showsQuickPanelRouting)
 
