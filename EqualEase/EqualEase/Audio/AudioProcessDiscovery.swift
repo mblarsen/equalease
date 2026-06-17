@@ -82,7 +82,7 @@ final class AudioProcessDiscovery: AudioProcessDiscovering, ObservableObject {
                 apps.append(app)
             }
         } catch {
-            // Silently fail; next poll will retry.
+            NSLog("EqualEase audio-process discovery failed: %@", error.localizedDescription)
         }
         if apps != discoveredApps {
             discoveredApps = apps

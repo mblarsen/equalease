@@ -118,7 +118,7 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
         var sampleRate: Double
     }
 
-    private var tapID = AudioObjectID(kAudioObjectUnknown)
+    private var fallbackTapID = AudioObjectID(kAudioObjectUnknown)
     private var perAppTapIDs: [AudioObjectID] = []
     private var aggregateDeviceID = AudioObjectID(kAudioObjectUnknown)
     private let loopback = CoreAudioLoopback()
@@ -139,8 +139,8 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
         // Build tap list and stream configs.
         if configuration.appTapConfigs.isEmpty {
             // Legacy single global tap (backward compatible).
-            tapID = try createExclusiveTapExcludingAll([ownProcessID])
-            let tapUID = try readAudioObjectString(objectID: tapID, selector: kAudioTapPropertyUID)
+            fallbackTapID = try createExclusiveTapExcludingAll([ownProcessID])
+            let tapUID = try readAudioObjectString(objectID: fallbackTapID, selector: kAudioTapPropertyUID)
 
             aggregateDeviceID = try createAggregateDevice()
             try add(uid: output.device.uid, to: aggregateDeviceID, selector: kAudioAggregateDevicePropertyFullSubDeviceList)
@@ -168,8 +168,8 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
 
             // Fallback tap: exclude all per-app process objects and EqualEase's own process object.
             let excludedProcessObjectIDs = configuration.appTapConfigs.map { $0.processObjectID } + [ownProcessID]
-            tapID = try createExclusiveTapExcludingAll(excludedProcessObjectIDs)
-            let fallbackTapUID = try readAudioObjectString(objectID: tapID, selector: kAudioTapPropertyUID)
+            fallbackTapID = try createExclusiveTapExcludingAll(excludedProcessObjectIDs)
+            let fallbackTapUID = try readAudioObjectString(objectID: fallbackTapID, selector: kAudioTapPropertyUID)
             tapUIDs.append(fallbackTapUID)
             // Fallback stream: unity gain, not bypassed (processes through EQ normally).
             streamConfigs.append(StreamConfig(gain: 1.0, bypassed: ObjCBool(false), muted: ObjCBool(false)))
@@ -563,14 +563,14 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
     }
 
     private func destroyCurrentTap() {
-        guard tapID != kAudioObjectUnknown else { return }
-        AudioHardwareDestroyProcessTap(tapID)
-        tapID = AudioObjectID(kAudioObjectUnknown)
+        guard fallbackTapID != kAudioObjectUnknown else { return }
+        AudioHardwareDestroyProcessTap(fallbackTapID)
+        fallbackTapID = AudioObjectID(kAudioObjectUnknown)
     }
 
     private func destroyPerAppTaps() {
-        for tapID in perAppTapIDs {
-            AudioHardwareDestroyProcessTap(tapID)
+        for appTapID in perAppTapIDs {
+            AudioHardwareDestroyProcessTap(appTapID)
         }
         perAppTapIDs = []
     }
