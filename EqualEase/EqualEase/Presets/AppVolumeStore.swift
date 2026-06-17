@@ -30,12 +30,8 @@ final class AppVolumeStore: ObservableObject {
 
     private let persistenceURL: URL
 
-    init(fileManager: FileManager = .default) {
-        self.persistenceURL = Self.persistenceURL(fileManager: fileManager)
-        let persisted = Self.loadPersistedState(from: persistenceURL)
-        appVolumes = persisted?.appVolumes ?? [:]
-        appModes = persisted?.appModes ?? [:]
-        preMuteModes = persisted?.preMuteModes ?? [:]
+    convenience init(fileManager: FileManager = .default) {
+        self.init(persistenceURL: Self.persistenceURL(fileManager: fileManager))
     }
 
     init(persistenceURL: URL) {
