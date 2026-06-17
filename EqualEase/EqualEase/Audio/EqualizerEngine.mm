@@ -254,8 +254,11 @@ struct EqualizerDSPState {
         return;
     }
 
+    if (_state == nullptr) {
+        return;
+    }
     for (NSUInteger sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
-        output[sampleIndex] = [self processSample:input[sampleIndex] channelIndex:channelIndex];
+        output[sampleIndex] = _state->process(input[sampleIndex], channelIndex);
     }
 }
 

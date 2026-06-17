@@ -76,6 +76,7 @@ struct GeneralSettingsView: View {
     @AppStorage(EqualEaseSettings.showsQuickPanelPreampKey) private var showsQuickPanelPreamp = true
     @AppStorage(EqualEaseSettings.showsQuickPanelInputVolumeKey) private var showsQuickPanelInputVolume = true
     @AppStorage(EqualEaseSettings.showsQuickPanelRoutingKey) private var showsQuickPanelRouting = true
+    @AppStorage(EqualEaseSettings.showsQuickPanelAppVolumeKey) private var showsQuickPanelAppVolume = true
 
     var body: some View {
         Form {
@@ -113,9 +114,10 @@ struct GeneralSettingsView: View {
                 Toggle("Show volume in the quick panel", isOn: $showsQuickPanelVolume)
                 Toggle("Show preamp in the quick panel", isOn: $showsQuickPanelPreamp)
                 Toggle("Show input volume in the quick panel", isOn: $showsQuickPanelInputVolume)
+                Toggle("Show app volume in the quick panel", isOn: $showsQuickPanelAppVolume)
                 Toggle("Show routing controls in the quick panel", isOn: $showsQuickPanelRouting)
 
-                Text("When these are off, the quick panel hides the matching section and shrinks to fit. Diagnostics still shows routing and input state.")
+                Text("When these are off, the quick panel hides the matching section and shrinks to fit. Diagnostics still shows routing, input state, and discovered app audio state.")
                     .foregroundStyle(.secondary)
             }
 

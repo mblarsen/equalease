@@ -262,6 +262,8 @@ final class EqualEaseAppDelegate: NSObject, NSApplicationDelegate {
             presetStore: appModel.presetStore,
             foregroundAppObserver: appModel.foregroundAppObserver,
             browserPageObserver: appModel.browserPageObserver,
+            appVolumeStore: appModel.appVolumeStore,
+            audioProcessDiscovery: appModel.audioProcessDiscovery,
             selectedTab: selectedTab,
             applyPreset: appModel.apply,
             setLocalNetworkControlEnabled: appModel.setLocalNetworkControlEnabled

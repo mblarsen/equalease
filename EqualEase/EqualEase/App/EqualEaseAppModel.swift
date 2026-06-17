@@ -15,6 +15,8 @@ final class EqualEaseAppModel: ObservableObject {
     let foregroundAppObserver: ForegroundAppObserver
     let browserPageObserver: BrowserPageObserver
     let activeContextResolver: ActiveContextPresetResolver
+    let appVolumeStore: AppVolumeStore
+    let audioProcessDiscovery: AudioProcessDiscovery
 
     lazy var localNetworkControlBridge = LocalNetworkControlBridge(appModel: self)
     lazy var localNetworkControlServer = LocalNetworkControlServer(bridge: localNetworkControlBridge)
@@ -25,6 +27,7 @@ final class EqualEaseAppModel: ObservableObject {
 
     private var cancellables: Set<AnyCancellable> = []
     private var scheduledEffectivePresetTask: Task<Void, Never>?
+    private var scheduledAppVolumeConfigurationTask: Task<Void, Never>?
     private var isSelectingPresetManually = false
 
     init() {
@@ -34,6 +37,8 @@ final class EqualEaseAppModel: ObservableObject {
         self.foregroundAppObserver = ForegroundAppObserver()
         self.browserPageObserver = BrowserPageObserver()
         self.activeContextResolver = ActiveContextPresetResolver()
+        self.appVolumeStore = AppVolumeStore()
+        self.audioProcessDiscovery = AudioProcessDiscovery()
 
         installBindings()
     }
@@ -44,7 +49,9 @@ final class EqualEaseAppModel: ObservableObject {
         presetStore: PresetStore,
         foregroundAppObserver: ForegroundAppObserver,
         browserPageObserver: BrowserPageObserver,
-        activeContextResolver: ActiveContextPresetResolver
+        activeContextResolver: ActiveContextPresetResolver,
+        appVolumeStore: AppVolumeStore? = nil,
+        audioProcessDiscovery: AudioProcessDiscovery? = nil
     ) {
         self.router = router
         self.inputDeviceController = inputDeviceController
@@ -52,6 +59,8 @@ final class EqualEaseAppModel: ObservableObject {
         self.foregroundAppObserver = foregroundAppObserver
         self.browserPageObserver = browserPageObserver
         self.activeContextResolver = activeContextResolver
+        self.appVolumeStore = appVolumeStore ?? AppVolumeStore()
+        self.audioProcessDiscovery = audioProcessDiscovery ?? AudioProcessDiscovery()
 
         installBindings()
     }
@@ -136,6 +145,26 @@ final class EqualEaseAppModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        Publishers.Merge(
+            audioProcessDiscovery.$discoveredApps.map { _ in () },
+            appVolumeStore.objectWillChange.map { _ in () }.eraseToAnyPublisher()
+        )
+        .sink { [weak self] _ in
+            self?.scheduleAppVolumeConfigurationApplication()
+        }
+        .store(in: &cancellables)
+
+        router.$state
+            .sink { [weak self] state in
+                guard let self else { return }
+                if state == .running || state == .starting {
+                    self.audioProcessDiscovery.startPolling()
+                }
+            }
+            .store(in: &cancellables)
+
+        audioProcessDiscovery.startPolling()
+
         installLocalNetworkStateBroadcasts()
         configureWebsiteObservation()
 
@@ -165,7 +194,10 @@ final class EqualEaseAppModel: ObservableObject {
     func shutdown() {
         scheduledEffectivePresetTask?.cancel()
         scheduledEffectivePresetTask = nil
+        scheduledAppVolumeConfigurationTask?.cancel()
+        scheduledAppVolumeConfigurationTask = nil
         localNetworkControlServer.stop()
+        audioProcessDiscovery.stopPolling()
         router.stop()
     }
 
@@ -289,6 +321,22 @@ final class EqualEaseAppModel: ObservableObject {
             lockedPresetID: EqualEaseSettings.lockedPresetID,
             foregroundActivationGeneration: foregroundAppObserver.activationGeneration,
             websiteGeneration: browserPageObserver.pageGeneration
+        )
+    }
+
+    private func scheduleAppVolumeConfigurationApplication() {
+        scheduledAppVolumeConfigurationTask?.cancel()
+        scheduledAppVolumeConfigurationTask = Task { @MainActor [weak self] in
+            await Task.yield()
+            guard !Task.isCancelled else { return }
+            self?.applyAppVolumeConfiguration()
+        }
+    }
+
+    private func applyAppVolumeConfiguration() {
+        router.updateAppTapConfigs(
+            apps: audioProcessDiscovery.discoveredApps,
+            volumeStore: appVolumeStore
         )
     }
 

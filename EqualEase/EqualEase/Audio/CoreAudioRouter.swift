@@ -53,6 +53,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
     @Published var bandGains = Array(repeating: 0.0, count: 10) {
         didSet { applyBandGains() }
     }
+    @Published private(set) var appTapConfigs: [AudioAppTapConfig] = []
 
     private let host: CoreAudioRoutingHost
     private let restartDebounce: Duration
@@ -122,6 +123,32 @@ final class CoreAudioRouter: AudioRoutingBackend {
     func selectOutputDevice(uid: String?) {
         followsSystemOutput = false
         selectedOutputDeviceUID = resolvedPreferredOutputDeviceUID(requestedUID: uid)
+    }
+
+    func updateAppTapConfigs(apps: [AudioAppIdentity], volumeStore: AppVolumeStore) {
+        var seenProcessObjectIDs: Set<AudioObjectID> = []
+        let configs = apps
+            .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
+            .compactMap { app -> AudioAppTapConfig? in
+                guard seenProcessObjectIDs.insert(app.processObjectID).inserted else { return nil }
+                return AudioAppTapConfig(
+                    processObjectID: app.processObjectID,
+                    bundleID: app.bundleID,
+                    gain: min(max(volumeStore.volume(for: app.bundleID), 0), 1),
+                    mode: volumeStore.mode(for: app.bundleID)
+                )
+            }
+
+        let previousProcessObjectIDs = appTapConfigs.map(\.processObjectID)
+        let nextProcessObjectIDs = configs.map(\.processObjectID)
+        appTapConfigs = configs
+
+        if isRunning, previousProcessObjectIDs != nextProcessObjectIDs {
+            scheduleRestartRouting(reason: "Audio apps changed")
+        } else if isRunning {
+            host.setStreamConfigs(streamConfigs(from: configs))
+            refreshRunningStatus()
+        }
     }
 
     func start() {
@@ -207,7 +234,8 @@ final class CoreAudioRouter: AudioRoutingBackend {
             isBypassed: isBypassed,
             outputGain: clampedOutputGain,
             equalizerEnabled: equalizerEnabled,
-            bandGains: bandGains
+            bandGains: bandGains,
+            appTapConfigs: appTapConfigs
         )
     }
 
@@ -263,6 +291,16 @@ final class CoreAudioRouter: AudioRoutingBackend {
         for (index, gain) in bandGains.enumerated() {
             host.setBandGain(min(max(gain, -12), 12), at: index)
         }
+    }
+
+    private func streamConfigs(from appTapConfigs: [AudioAppTapConfig]) -> [StreamConfig] {
+        appTapConfigs.map {
+            StreamConfig(
+                gain: Float(min(max($0.gain, 0), 1)),
+                bypassed: ObjCBool($0.isBypassed),
+                muted: ObjCBool($0.isMuted)
+            )
+        } + [StreamConfig(gain: 1.0, bypassed: ObjCBool(false), muted: ObjCBool(false))]
     }
 
     private func refreshSelectedOutputDevice() {

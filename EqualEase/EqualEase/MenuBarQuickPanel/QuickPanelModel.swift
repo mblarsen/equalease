@@ -52,6 +52,8 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
     let foregroundAppObserver: ForegroundAppObserver
     let activeContextResolver: ActiveContextPresetResolver
     let presentationState: QuickPanelPresentationState
+    let appVolumeStore: AppVolumeStore
+    let audioProcessDiscovery: AudioProcessDiscovery
 
     private let actions: QuickPanelActions
     private var cancellables: Set<AnyCancellable> = []
@@ -63,6 +65,8 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         foregroundAppObserver: ForegroundAppObserver,
         activeContextResolver: ActiveContextPresetResolver,
         presentationState: QuickPanelPresentationState,
+        appVolumeStore: AppVolumeStore,
+        audioProcessDiscovery: AudioProcessDiscovery,
         actions: QuickPanelActions
     ) {
         self.router = router
@@ -71,6 +75,8 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         self.foregroundAppObserver = foregroundAppObserver
         self.activeContextResolver = activeContextResolver
         self.presentationState = presentationState
+        self.appVolumeStore = appVolumeStore
+        self.audioProcessDiscovery = audioProcessDiscovery
         self.actions = actions
 
         relayChanges(from: router)
@@ -79,6 +85,8 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         relayChanges(from: foregroundAppObserver)
         relayChanges(from: activeContextResolver)
         relayChanges(from: presentationState)
+        relayChanges(from: appVolumeStore)
+        relayChanges(from: audioProcessDiscovery)
 
         NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
             .receive(on: RunLoop.main)
@@ -130,6 +138,37 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
     func hideRoutingControls() {
         EqualEaseSettings.showsQuickPanelRouting = false
         objectWillChange.send()
+    }
+
+    func hideAppVolumeControls() {
+        EqualEaseSettings.showsQuickPanelAppVolume = false
+        objectWillChange.send()
+    }
+
+    func setAppVolume(_ volume: Double, for bundleID: String) {
+        appVolumeStore.setVolume(volume, for: bundleID)
+    }
+
+    func setAppMode(_ mode: AppAudioMode, for bundleID: String) {
+        appVolumeStore.setMode(mode, for: bundleID)
+    }
+
+    func toggleAppProcessBypass(for bundleID: String) {
+        let underlying = appVolumeStore.nonMuteMode(for: bundleID)
+        let next = underlying == .on ? AppAudioMode.off : .on
+        if appVolumeStore.mode(for: bundleID) == .mute {
+            appVolumeStore.setMuted(false, for: bundleID)
+        }
+        setAppMode(next, for: bundleID)
+    }
+
+    /// Toggle mute on/off without disturbing the underlying Process/Bypass state.
+    func toggleAppMute(for bundleID: String) {
+        appVolumeStore.setMuted(appVolumeStore.mode(for: bundleID) != .mute, for: bundleID)
+    }
+
+    func setAppBypassed(_ bypassed: Bool, for bundleID: String) {
+        appVolumeStore.setBypassed(bypassed, for: bundleID)
     }
 
     func openSettingsWindow() {
@@ -215,6 +254,25 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         EqualEaseSettings.showsQuickPanelRouting
     }
 
+    var showsAppVolumeSection: Bool {
+        EqualEaseSettings.showsQuickPanelAppVolume
+    }
+
+    /// Audio-emitting apps discovered by CoreAudio, sorted by name.
+    var discoveredApps: [AudioAppIdentity] {
+        var seenBundleIDs: Set<String> = []
+        return audioProcessDiscovery.discoveredApps
+            .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
+            .filter { app in
+                seenBundleIDs.insert(app.bundleID).inserted
+            }
+    }
+
+    /// Whether per-app volume is available (requires audio routing to be active).
+    var isAppVolumeAvailable: Bool {
+        router.isRunning
+    }
+
     var shouldShowRoutingOnboarding: Bool {
         EqualEaseSettings.shouldPresentRoutingOnboarding && !router.isRunning && router.state != .starting
     }
@@ -231,6 +289,7 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         let preampSectionHeight: CGFloat = showsPreampControls ? levelControlHeight : 0
         let inputSectionHeight: CGFloat = showsInputSection ? 92 : 0
         let routingSectionHeight: CGFloat = showsRoutingSection ? 108 : 0
+        let appVolumeSectionHeight: CGFloat = showsAppVolumeSection && isAppVolumeAvailable ? CGFloat(max(44, discoveredApps.count * 48 + 28)) : 0
         let promptHeight: CGFloat = appLearningPrompt == nil ? 0 : 72
         return min(
             Self.maximumPanelHeight,
@@ -239,6 +298,7 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
                 + preampSectionHeight
                 + levelControlSpacing
                 + inputSectionHeight
+                + appVolumeSectionHeight
                 + routingSectionHeight
                 + promptHeight
         )

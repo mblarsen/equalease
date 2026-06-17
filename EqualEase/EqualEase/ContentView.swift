@@ -77,7 +77,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
 
     private var header: some View {
         HStack(alignment: .center, spacing: 12) {
-            Image(nsImage: NSImage(named: "MenuBarIcon") ?? NSImage(systemSymbolName: "slider.vertical.3", accessibilityDescription: "EqualEase")!)
+            Image(nsImage: NSImage(named: "MenuBarIcon") ?? NSImage(systemSymbolName: "slider.vertical.3", accessibilityDescription: "EqualEase") ?? NSImage(size: NSSize(width: 20, height: 20)))
                 .renderingMode(.template)
                 .resizable()
                 .scaledToFit()
@@ -230,6 +230,8 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                         helpText: "Convenience control for your Mac’s output volume. Use this first for everyday loudness.",
                         hideAction: { model.hideVolumeControls() }
                     )
+
+                    appVolumeSection
                 }
 
                 if model.showsPreampControls {
@@ -425,6 +427,104 @@ struct ContentView<Router: AudioRoutingBackend>: View {
     }
 
     @ViewBuilder
+    private var appVolumeSection: some View {
+        if model.showsAppVolumeSection && model.isAppVolumeAvailable {
+            VStack(alignment: .leading, spacing: 4) {
+                if model.discoveredApps.isEmpty {
+                    Text("No audio-emitting apps detected.")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(model.discoveredApps, id: \.bundleID) { app in
+                        appVolumeRow(app: app)
+                    }
+                }
+            }
+        }
+    }
+
+    private func appVolumeRow(app: AudioAppIdentity) -> some View {
+        HStack(spacing: 6) {
+            if let icon = icon(for: app) {
+                Image(nsImage: icon)
+                    .resizable()
+                    .frame(width: 14, height: 14)
+            } else {
+                Image(systemName: "app.fill")
+                    .frame(width: 14, height: 14)
+            }
+
+            Text(app.displayName)
+                .font(.caption2.weight(.medium))
+                .lineLimit(1)
+                .frame(width: 92, alignment: .leading)
+
+            let mode = model.appVolumeStore.mode(for: app.bundleID)
+            let isMuted = mode == .mute
+            let nonMuteMode = model.appVolumeStore.nonMuteMode(for: app.bundleID)
+            let isProcessing = nonMuteMode == .on
+
+            Slider(
+                value: Binding(
+                    get: { model.appVolumeStore.volume(for: app.bundleID) },
+                    set: { model.setAppVolume($0, for: app.bundleID) }
+                ),
+                in: 0...1
+            )
+            .tint(Color(red: 0.94, green: 0.39, blue: 0.11))
+            .disabled(isMuted || !isProcessing)
+            .help("Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost.")
+
+            HStack(spacing: 4) {
+                // Process/Bypass toggle
+                Button(action: {
+                    model.toggleAppProcessBypass(for: app.bundleID)
+                }) {
+                    Text(isProcessing ? "Process" : "Bypass")
+                        .font(.caption2.weight(.medium))
+                        .foregroundColor(isProcessing ? .white : .secondary)
+                        .frame(width: 58)
+                        .padding(.vertical, 3)
+                        .background(
+                            isProcessing
+                                ? Color(red: 0.94, green: 0.39, blue: 0.11)
+                                : Color.secondary.opacity(0.15),
+                            in: RoundedRectangle(cornerRadius: 6)
+                        )
+                        .opacity(isMuted ? 0.4 : 1)
+                }
+                .buttonStyle(.plain)
+                .disabled(isMuted)
+
+                // Mute toggle
+                Button(action: {
+                    model.toggleAppMute(for: app.bundleID)
+                }) {
+                    Text("Mute")
+                        .font(.caption2.weight(.medium))
+                        .foregroundColor(isMuted ? .white : .secondary)
+                        .frame(width: 44)
+                        .padding(.vertical, 3)
+                        .background(
+                            isMuted
+                                ? Color(red: 0.94, green: 0.39, blue: 0.11)
+                                : Color.secondary.opacity(0.15),
+                            in: RoundedRectangle(cornerRadius: 6)
+                        )
+                }
+                .buttonStyle(.plain)
+            }
+            .help(isMuted
+                ? "Muted: silence this app."
+                : isProcessing
+                    ? "Process: app volume then global EQ."
+                    : "Bypass: pass through unprocessed.")
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(app.displayName) volume")
+    }
+
+    @ViewBuilder
     private var secondaryControls: some View {
         if model.showsRoutingSection {
             VStack(alignment: .leading, spacing: 8) {
@@ -480,6 +580,12 @@ struct ContentView<Router: AudioRoutingBackend>: View {
             .padding(10)
             .background(.quaternary, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
         }
+    }
+
+    private func icon(for app: AudioAppIdentity) -> NSImage? {
+        NSWorkspace.shared.runningApplications.first { runningApp in
+            runningApp.processIdentifier == app.pid || runningApp.bundleIdentifier == app.bundleID
+        }?.icon
     }
 
     private var footerActions: some View {
@@ -575,6 +681,8 @@ private struct HeaderPointer: Shape {
         foregroundAppObserver: foregroundAppObserver,
         activeContextResolver: activeContextResolver,
         presentationState: QuickPanelPresentationState(),
+        appVolumeStore: AppVolumeStore(),
+        audioProcessDiscovery: AudioProcessDiscovery(pollingInterval: 60),
         actions: .noOp
     ))
 }

@@ -19,6 +19,8 @@ struct SettingsView: View {
     @ObservedObject var presetStore: PresetStore
     @ObservedObject var foregroundAppObserver: ForegroundAppObserver
     @ObservedObject var browserPageObserver: BrowserPageObserver
+    @ObservedObject var appVolumeStore: AppVolumeStore
+    @ObservedObject var audioProcessDiscovery: AudioProcessDiscovery
     var applyPreset: (EQPreset) -> Void
     var setLocalNetworkControlEnabled: (Bool) -> Void
     @State private var selectedTab: SettingsTab
@@ -30,6 +32,8 @@ struct SettingsView: View {
         presetStore: PresetStore,
         foregroundAppObserver: ForegroundAppObserver,
         browserPageObserver: BrowserPageObserver,
+        appVolumeStore: AppVolumeStore,
+        audioProcessDiscovery: AudioProcessDiscovery,
         selectedTab: SettingsTab = .general,
         applyPreset: @escaping (EQPreset) -> Void,
         setLocalNetworkControlEnabled: @escaping (Bool) -> Void
@@ -40,6 +44,8 @@ struct SettingsView: View {
         self.presetStore = presetStore
         self.foregroundAppObserver = foregroundAppObserver
         self.browserPageObserver = browserPageObserver
+        self.appVolumeStore = appVolumeStore
+        self.audioProcessDiscovery = audioProcessDiscovery
         self.applyPreset = applyPreset
         self.setLocalNetworkControlEnabled = setLocalNetworkControlEnabled
         _selectedTab = State(initialValue: selectedTab)
@@ -73,7 +79,12 @@ struct SettingsView: View {
             .tabItem { Label("Rules", systemImage: "switch.2") }
             .tag(SettingsTab.rules)
 
-            DiagnosticsSettingsView(router: router, inputDeviceController: inputDeviceController)
+            DiagnosticsSettingsView(
+                router: router,
+                inputDeviceController: inputDeviceController,
+                appVolumeStore: appVolumeStore,
+                audioProcessDiscovery: audioProcessDiscovery
+            )
                 .tabItem { Label("Diagnostics", systemImage: "stethoscope") }
                 .tag(SettingsTab.diagnostics)
         }
@@ -91,6 +102,8 @@ struct SettingsView: View {
         presetStore: appModel.presetStore,
         foregroundAppObserver: appModel.foregroundAppObserver,
         browserPageObserver: appModel.browserPageObserver,
+        appVolumeStore: appModel.appVolumeStore,
+        audioProcessDiscovery: appModel.audioProcessDiscovery,
         applyPreset: appModel.apply,
         setLocalNetworkControlEnabled: appModel.setLocalNetworkControlEnabled
     )
