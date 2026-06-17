@@ -467,22 +467,22 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 in: 0...1
             )
             .tint(Color(red: 0.94, green: 0.39, blue: 0.11))
-            .disabled(model.appVolumeStore.isBypassed(app.bundleID))
+            .disabled(model.appVolumeStore.mode(for: app.bundleID) != .on)
             .help("Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost.")
 
-            Text("\(Int(model.appVolumeStore.volume(for: app.bundleID) * 100))%")
-                .font(.caption2.monospacedDigit())
-                .foregroundStyle(.secondary)
-                .frame(width: 32, alignment: .trailing)
-
-            Toggle("Bypass", isOn: Binding(
-                get: { model.appVolumeStore.isBypassed(app.bundleID) },
-                set: { model.setAppBypassed($0, for: app.bundleID) }
-            ))
+            Picker("Mode", selection: Binding(
+                get: { model.appVolumeStore.mode(for: app.bundleID) },
+                set: { model.setAppMode($0, for: app.bundleID) }
+            )) {
+                ForEach(AppAudioMode.allCases, id: \.self) { mode in
+                    Text(mode.label).tag(mode)
+                }
+            }
             .labelsHidden()
-            .toggleStyle(.checkbox)
+            .pickerStyle(.segmented)
+            .frame(width: 118)
             .controlSize(.mini)
-            .help("Bypass: audio passes through unprocessed (no EQ, no volume control)")
+            .help("On: process normally. Off: pass through unprocessed. Mute: silence this app.")
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(app.displayName) volume")

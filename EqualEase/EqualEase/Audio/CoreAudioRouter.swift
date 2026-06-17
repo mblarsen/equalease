@@ -135,7 +135,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
                     processObjectID: app.processObjectID,
                     bundleID: app.bundleID,
                     gain: min(max(volumeStore.volume(for: app.bundleID), 0), 1),
-                    isBypassed: volumeStore.isBypassed(app.bundleID)
+                    mode: volumeStore.mode(for: app.bundleID)
                 )
             }
 
@@ -295,8 +295,12 @@ final class CoreAudioRouter: AudioRoutingBackend {
 
     private func streamConfigs(from appTapConfigs: [AudioAppTapConfig]) -> [StreamConfig] {
         appTapConfigs.map {
-            StreamConfig(gain: Float(min(max($0.gain, 0), 1)), bypassed: ObjCBool($0.isBypassed))
-        } + [StreamConfig(gain: 1.0, bypassed: ObjCBool(false))]
+            StreamConfig(
+                gain: Float(min(max($0.gain, 0), 1)),
+                bypassed: ObjCBool($0.isBypassed),
+                muted: ObjCBool($0.isMuted)
+            )
+        } + [StreamConfig(gain: 1.0, bypassed: ObjCBool(false), muted: ObjCBool(false))]
     }
 
     private func refreshSelectedOutputDevice() {

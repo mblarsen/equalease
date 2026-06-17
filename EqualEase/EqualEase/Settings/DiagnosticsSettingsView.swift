@@ -69,23 +69,29 @@ struct DiagnosticsSettingsView: View {
                             HStack {
                                 Text(app.displayName)
                                 Spacer()
-                                Text("\(Int(appVolumeStore.volume(for: app.bundleID) * 100))%")
-                                    .monospacedDigit()
+                                Text(appVolumeStore.mode(for: app.bundleID).label)
                                     .foregroundStyle(.secondary)
                             }
                             Text("\(app.bundleID) · PID \(app.pid) · process object \(app.processObjectID)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            if appVolumeStore.isBypassed(app.bundleID) {
-                                Label("Per-app bypass: verbatim pass-through, no gain, no EQ", systemImage: "pause.circle.fill")
+                            switch appVolumeStore.mode(for: app.bundleID) {
+                            case .on:
+                                EmptyView()
+                            case .off:
+                                Label("Per-app off: verbatim pass-through, no volume, no EQ", systemImage: "pause.circle.fill")
                                     .font(.caption)
                                     .foregroundStyle(.orange)
+                            case .mute:
+                                Label("Per-app mute: tapped but silenced", systemImage: "speaker.slash.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(.red)
                             }
                         }
                     }
                 }
 
-                Text("Per-app volume uses one tap per audio-emitting app plus a fallback tap for everything else. Bypassed apps remain tapped, but their stream is copied verbatim before the global EQ path.")
+                Text("Per-app volume uses one tap per audio-emitting app plus a fallback tap for everything else. Off apps remain tapped but pass through verbatim; muted apps are tapped but silenced.")
                     .foregroundStyle(.secondary)
             }
 

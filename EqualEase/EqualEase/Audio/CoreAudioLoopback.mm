@@ -51,7 +51,7 @@ static OSStatus RoutingIOProc(AudioObjectID,
     _engine = [[EqualizerEngine alloc] initWithChannelCount:8 sampleRate:48000.0f];
 
     // Default: single stream, unity gain, not bypassed (legacy behavior).
-    auto* defaultConfigs = new std::vector<StreamConfig>(1, {1.0f, NO});
+    auto* defaultConfigs = new std::vector<StreamConfig>(1, {1.0f, NO, NO});
     _streamConfigs.store(defaultConfigs, std::memory_order_release);
 
     return self;
@@ -231,14 +231,18 @@ static OSStatus RoutingIOProc(AudioObjectID,
                     if ((offset + 1) * sizeof(Float32) > inBuf.mDataByteSize) continue;
 
                     bool isBypassed = loopback.bypassed;
+                    bool isMuted = false;
                     float gain = 1.0f;
                     if (streamIdx < configCount) {
                         const StreamConfig& cfg = (*streamConfigs)[streamIdx];
                         isBypassed = isBypassed || cfg.bypassed;
+                        isMuted = cfg.muted;
                         gain = std::max(0.0f, std::min(cfg.gain, 1.0f));
                     }
 
-                    if (isBypassed) {
+                    if (isMuted) {
+                        continue;
+                    } else if (isBypassed) {
                         bypassAccum[channelIdx] += inSamples[offset];
                     } else {
                         eqAccum[channelIdx] += inSamples[offset] * gain;
@@ -250,14 +254,18 @@ static OSStatus RoutingIOProc(AudioObjectID,
                 if ((sampleIndex + 1) * sizeof(Float32) > inBuf.mDataByteSize) continue;
 
                 bool isBypassed = loopback.bypassed;
+                bool isMuted = false;
                 float gain = 1.0f;
                 if (streamIdx < configCount) {
                     const StreamConfig& cfg = (*streamConfigs)[streamIdx];
                     isBypassed = isBypassed || cfg.bypassed;
+                    isMuted = cfg.muted;
                     gain = std::max(0.0f, std::min(cfg.gain, 1.0f));
                 }
 
-                if (isBypassed) {
+                if (isMuted) {
+                    continue;
+                } else if (isBypassed) {
                     bypassAccum[channelIdx] += inSamples[sampleIndex];
                 } else {
                     eqAccum[channelIdx] += inSamples[sampleIndex] * gain;

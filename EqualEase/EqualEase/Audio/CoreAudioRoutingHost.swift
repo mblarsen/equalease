@@ -19,8 +19,11 @@ struct AudioAppTapConfig: Equatable {
     var bundleID: String
     /// Per-app volume multiplier (0–1, default 1.0).
     var gain: Double
-    /// Whether this app's audio should be passed through verbatim (no gain, no EQ).
-    var isBypassed: Bool = false
+    /// Per-app processing mode: on, off (verbatim pass-through), or mute.
+    var mode: AppAudioMode = .on
+
+    var isBypassed: Bool { mode == .off }
+    var isMuted: Bool { mode == .mute }
 }
 
 struct AudioRouteStartConfiguration: Equatable {
@@ -156,7 +159,11 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
                 perAppTapIDs.append(perAppTapID)
                 let perAppTapUID = try readAudioObjectString(objectID: perAppTapID, selector: kAudioTapPropertyUID)
                 tapUIDs.append(perAppTapUID)
-                streamConfigs.append(StreamConfig(gain: Float(min(max(appConfig.gain, 0), 1)), bypassed: ObjCBool(appConfig.isBypassed)))
+                streamConfigs.append(StreamConfig(
+                    gain: Float(min(max(appConfig.gain, 0), 1)),
+                    bypassed: ObjCBool(appConfig.isBypassed),
+                    muted: ObjCBool(appConfig.isMuted)
+                ))
             }
 
             // Fallback tap: exclude all per-app process objects and EqualEase's own process object.
@@ -165,7 +172,7 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
             let fallbackTapUID = try readAudioObjectString(objectID: tapID, selector: kAudioTapPropertyUID)
             tapUIDs.append(fallbackTapUID)
             // Fallback stream: unity gain, not bypassed (processes through EQ normally).
-            streamConfigs.append(StreamConfig(gain: 1.0, bypassed: ObjCBool(false)))
+            streamConfigs.append(StreamConfig(gain: 1.0, bypassed: ObjCBool(false), muted: ObjCBool(false)))
 
             aggregateDeviceID = try createAggregateDevice()
             try add(uid: output.device.uid, to: aggregateDeviceID, selector: kAudioAggregateDevicePropertyFullSubDeviceList)
