@@ -27,6 +27,7 @@ final class EqualEaseAppModel: ObservableObject {
 
     private var cancellables: Set<AnyCancellable> = []
     private var scheduledEffectivePresetTask: Task<Void, Never>?
+    private var scheduledAppVolumeConfigurationTask: Task<Void, Never>?
     private var isSelectingPresetManually = false
 
     init() {
@@ -149,7 +150,7 @@ final class EqualEaseAppModel: ObservableObject {
             appVolumeStore.objectWillChange.map { _ in () }.eraseToAnyPublisher()
         )
         .sink { [weak self] _ in
-            self?.applyAppVolumeConfiguration()
+            self?.scheduleAppVolumeConfigurationApplication()
         }
         .store(in: &cancellables)
 
@@ -193,6 +194,8 @@ final class EqualEaseAppModel: ObservableObject {
     func shutdown() {
         scheduledEffectivePresetTask?.cancel()
         scheduledEffectivePresetTask = nil
+        scheduledAppVolumeConfigurationTask?.cancel()
+        scheduledAppVolumeConfigurationTask = nil
         localNetworkControlServer.stop()
         audioProcessDiscovery.stopPolling()
         router.stop()
@@ -319,6 +322,15 @@ final class EqualEaseAppModel: ObservableObject {
             foregroundActivationGeneration: foregroundAppObserver.activationGeneration,
             websiteGeneration: browserPageObserver.pageGeneration
         )
+    }
+
+    private func scheduleAppVolumeConfigurationApplication() {
+        scheduledAppVolumeConfigurationTask?.cancel()
+        scheduledAppVolumeConfigurationTask = Task { @MainActor [weak self] in
+            await Task.yield()
+            guard !Task.isCancelled else { return }
+            self?.applyAppVolumeConfiguration()
+        }
     }
 
     private func applyAppVolumeConfiguration() {
