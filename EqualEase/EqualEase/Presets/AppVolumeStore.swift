@@ -29,13 +29,15 @@ final class AppVolumeStore: ObservableObject {
     @Published private(set) var preMuteModes: [String: AppAudioMode]
 
     private let persistenceURL: URL
+    private let fileManager: FileManager
 
     convenience init(fileManager: FileManager = .default) {
-        self.init(persistenceURL: Self.persistenceURL(fileManager: fileManager))
+        self.init(persistenceURL: Self.persistenceURL(fileManager: fileManager), fileManager: fileManager)
     }
 
-    init(persistenceURL: URL) {
+    init(persistenceURL: URL, fileManager: FileManager = .default) {
         self.persistenceURL = persistenceURL
+        self.fileManager = fileManager
         let persisted = Self.loadPersistedState(from: persistenceURL)
         appVolumes = persisted?.appVolumes ?? [:]
         appModes = persisted?.appModes ?? [:]
@@ -122,7 +124,7 @@ final class AppVolumeStore: ObservableObject {
 
     private func save() {
         do {
-            try FileManager.default.createDirectory(
+            try fileManager.createDirectory(
                 at: persistenceURL.deletingLastPathComponent(),
                 withIntermediateDirectories: true
             )
