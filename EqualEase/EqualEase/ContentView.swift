@@ -77,7 +77,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
 
     private var header: some View {
         HStack(alignment: .center, spacing: 12) {
-            Image(nsImage: NSImage(named: "MenuBarIcon") ?? NSImage(systemSymbolName: "slider.vertical.3", accessibilityDescription: "EqualEase")!)
+            Image(nsImage: NSImage(named: "MenuBarIcon") ?? NSImage(systemSymbolName: "slider.vertical.3", accessibilityDescription: "EqualEase") ?? NSImage(size: NSSize(width: 20, height: 20)))
                 .renderingMode(.template)
                 .resizable()
                 .scaledToFit()
