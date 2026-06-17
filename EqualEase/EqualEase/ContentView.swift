@@ -460,8 +460,9 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 .frame(width: 92, alignment: .leading)
 
             let mode = model.appVolumeStore.mode(for: app.bundleID)
-            let isProcessing = mode == .on
             let isMuted = mode == .mute
+            let underlyingMode = model.underlyingMode(for: app.bundleID)
+            let isProcessing = underlyingMode == .on
 
             Slider(
                 value: Binding(
@@ -471,7 +472,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 in: 0...1
             )
             .tint(Color(red: 0.94, green: 0.39, blue: 0.11))
-            .disabled(mode != .on)
+            .disabled(isMuted || !isProcessing)
             .help("Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost.")
 
             HStack(spacing: 4) {
@@ -490,14 +491,12 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                                 : Color.secondary.opacity(0.15),
                             in: RoundedRectangle(cornerRadius: 6)
                         )
-                        .opacity(isMuted ? 0.4 : 1)
                 }
                 .buttonStyle(.plain)
-                .disabled(isMuted)
 
                 // Mute toggle
                 Button(action: {
-                    model.setAppMode(isMuted ? .on : .mute, for: app.bundleID)
+                    model.toggleAppMute(for: app.bundleID)
                 }) {
                     Text("Mute")
                         .font(.caption2.weight(.medium))
