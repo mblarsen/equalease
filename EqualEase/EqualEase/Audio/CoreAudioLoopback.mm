@@ -374,11 +374,11 @@ static OSStatus RoutingIOProc(AudioObjectID,
                     }
 
                     if (isMuted) continue;
-                    const Float32 sample = inSamples[offset] * gain;
                     if (isBypassed) {
-                        addSampleToOutput(sample, sampleIndex, channelIdx, channelsPerStream, outputData, outputBuffersAreStreams);
+                        // Bypass = verbatim pass-through: no app volume, no EQ, no preamp.
+                        addSampleToOutput(inSamples[offset], sampleIndex, channelIdx, channelsPerStream, outputData, outputBuffersAreStreams);
                     } else if (eqScratch[channelIdx] != nullptr) {
-                        eqScratch[channelIdx][sampleIndex] += sample;
+                        eqScratch[channelIdx][sampleIndex] += inSamples[offset] * gain;
                     }
                 }
             }
@@ -401,11 +401,11 @@ static OSStatus RoutingIOProc(AudioObjectID,
                 }
 
                 if (isMuted) continue;
-                const Float32 sample = inSamples[sampleIndex] * gain;
                 if (isBypassed) {
-                    addSampleToOutput(sample, sampleIndex, channelIdx, channelsPerStream, outputData, outputBuffersAreStreams);
+                    // Bypass = verbatim pass-through: no app volume, no EQ, no preamp.
+                    addSampleToOutput(inSamples[sampleIndex], sampleIndex, channelIdx, channelsPerStream, outputData, outputBuffersAreStreams);
                 } else if (eqScratch[channelIdx] != nullptr) {
-                    eqScratch[channelIdx][sampleIndex] += sample;
+                    eqScratch[channelIdx][sampleIndex] += inSamples[sampleIndex] * gain;
                 }
             }
         }
