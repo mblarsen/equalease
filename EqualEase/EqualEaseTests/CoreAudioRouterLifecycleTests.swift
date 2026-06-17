@@ -303,6 +303,10 @@ private final class TestRoutingHost: CoreAudioRoutingHost {
         bandGains[index] = min(max(gain, -12), 12)
     }
 
+    func setStreamConfigs(_ configs: [StreamConfig]) {
+        // No-op in test host.
+    }
+
     func outputVolumeState(for outputDeviceUID: String?) -> AudioOutputVolumeState {
         guard let uid = outputDeviceUID else {
             return AudioOutputVolumeState(canSetVolume: false, volume: nil)

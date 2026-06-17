@@ -12,12 +12,25 @@ struct AudioOutputDeviceSnapshot: Equatable {
     var defaultOutputDeviceUID: String?
 }
 
+struct AudioAppTapConfig: Equatable {
+    /// The process object ID for this tap's target process.
+    var processObjectID: AudioObjectID
+    /// The bundle ID for display and volume lookup.
+    var bundleID: String
+    /// Per-app gain multiplier (0–2, default 1.0).
+    var gain: Double
+    /// Whether this app's audio should be passed through verbatim (no gain, no EQ).
+    var isBypassed: Bool = false
+}
+
 struct AudioRouteStartConfiguration: Equatable {
     var selectedOutputDeviceUID: String?
     var isBypassed: Bool
     var outputGain: Double
     var equalizerEnabled: Bool
     var bandGains: [Double]
+    /// Per-app tap configurations. Empty means legacy single global tap.
+    var appTapConfigs: [AudioAppTapConfig] = []
 }
 
 struct AudioRouteStartResult: Equatable {
@@ -53,6 +66,10 @@ protocol CoreAudioRoutingHost: AnyObject {
     func setEqualizerEnabled(_ isEnabled: Bool)
     func setBandGain(_ gain: Double, at index: Int)
 
+    /// Update per-app stream configs for the running IOProc.
+    /// The configs array maps 1:1 to the tap list order in the aggregate device.
+    func setStreamConfigs(_ configs: [StreamConfig])
+
     func outputVolumeState(for outputDeviceUID: String?) -> AudioOutputVolumeState
     func setOutputVolume(_ volume: Double, for outputDeviceUID: String?)
 
@@ -86,8 +103,9 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
         static let aggregateUIDPrefix = "boutique.code.EqualEase.routing.aggregate."
         static let currentAggregateUID = "\(aggregateUIDPrefix)main"
 
-        static let ownedTapNames = [currentTapName]
-        static let developmentCleanupTapNames = [currentTapName, sampleTapName]
+        static let ownedTapNames = [currentTapName, perAppTapNamePrefix]
+        static let developmentCleanupTapNames = [currentTapName, sampleTapName, perAppTapNamePrefix]
+        static let perAppTapNamePrefix = "EqualEase App Tap"
         static let ownedAggregateNames = [currentAggregateName]
     }
 
@@ -98,6 +116,7 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
     }
 
     private var tapID = AudioObjectID(kAudioObjectUnknown)
+    private var perAppTapIDs: [AudioObjectID] = []
     private var aggregateDeviceID = AudioObjectID(kAudioObjectUnknown)
     private let loopback = CoreAudioLoopback()
     private let systemObjectID = AudioObjectID(kAudioObjectSystemObject)
@@ -114,12 +133,48 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
         let ownProcessID = try findOwnAudioProcessID()
         let output = try selectedOutputDevice(uid: configuration.selectedOutputDeviceUID)
 
-        tapID = try createExclusiveTap(excluding: ownProcessID)
-        let tapUID = try readAudioObjectString(objectID: tapID, selector: kAudioTapPropertyUID)
+        // Build tap list and stream configs.
+        if configuration.appTapConfigs.isEmpty {
+            // Legacy single global tap (backward compatible).
+            tapID = try createExclusiveTapExcludingAll([ownProcessID])
+            let tapUID = try readAudioObjectString(objectID: tapID, selector: kAudioTapPropertyUID)
 
-        aggregateDeviceID = try createAggregateDevice()
-        try add(uid: output.device.uid, to: aggregateDeviceID, selector: kAudioAggregateDevicePropertyFullSubDeviceList)
-        try add(uid: tapUID, to: aggregateDeviceID, selector: kAudioAggregateDevicePropertyTapList)
+            aggregateDeviceID = try createAggregateDevice()
+            try add(uid: output.device.uid, to: aggregateDeviceID, selector: kAudioAggregateDevicePropertyFullSubDeviceList)
+            try add(uid: tapUID, to: aggregateDeviceID, selector: kAudioAggregateDevicePropertyTapList)
+        } else {
+            // Per-app taps + fallback tap.
+            var tapUIDs: [String] = []
+            var streamConfigs: [StreamConfig] = []
+
+            // Per-app taps (isExclusive = false, processes = [appPID]).
+            for appConfig in configuration.appTapConfigs {
+                let perAppTapID = try createPerAppTap(
+                    processObjectID: appConfig.processObjectID,
+                    name: "EqualEase App Tap: \(appConfig.bundleID)"
+                )
+                perAppTapIDs.append(perAppTapID)
+                let perAppTapUID = try readAudioObjectString(objectID: perAppTapID, selector: kAudioTapPropertyUID)
+                tapUIDs.append(perAppTapUID)
+                streamConfigs.append(StreamConfig(gain: Float(appConfig.gain), bypassed: ObjCBool(appConfig.isBypassed)))
+            }
+
+            // Fallback tap: exclude all per-app PIDs and EqualEase's own PID.
+            let allExcludedPIDs = configuration.appTapConfigs.map { $0.processObjectID } + [ownProcessID]
+            tapID = try createExclusiveTapExcludingAll(allExcludedPIDs)
+            let fallbackTapUID = try readAudioObjectString(objectID: tapID, selector: kAudioTapPropertyUID)
+            tapUIDs.append(fallbackTapUID)
+            // Fallback stream: unity gain, not bypassed (processes through EQ normally).
+            streamConfigs.append(StreamConfig(gain: 1.0, bypassed: ObjCBool(false)))
+
+            aggregateDeviceID = try createAggregateDevice()
+            try add(uid: output.device.uid, to: aggregateDeviceID, selector: kAudioAggregateDevicePropertyFullSubDeviceList)
+            for tapUID in tapUIDs {
+                try add(uid: tapUID, to: aggregateDeviceID, selector: kAudioAggregateDevicePropertyTapList)
+            }
+
+            loopback.setStreamConfigs(streamConfigs, count: UInt(streamConfigs.count))
+        }
 
         loopback.deviceID = aggregateDeviceID
         loopback.sampleRate = Float(output.sampleRate)
@@ -138,6 +193,7 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
     func stopRoute() {
         loopback.stop()
         destroyCurrentAggregate()
+        destroyPerAppTaps()
         destroyCurrentTap()
     }
 
@@ -160,6 +216,11 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
 
     func setBandGain(_ gain: Double, at index: Int) {
         loopback.setBandGain(Float(gain), at: index)
+    }
+
+    func setStreamConfigs(_ configs: [StreamConfig]) {
+        guard !configs.isEmpty else { return }
+        loopback.setStreamConfigs(configs, count: UInt(configs.count))
     }
 
     func outputVolumeState(for outputDeviceUID: String?) -> AudioOutputVolumeState {
@@ -374,7 +435,8 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
 
         for tap in try readAudioObjectIDs(selector: kAudioHardwarePropertyTapList) {
             let name = (try? readAudioObjectString(objectID: tap, selector: kAudioObjectPropertyName)) ?? ""
-            if tapNames.contains(name) {
+            // Destroy taps with exact name match or per-app tap name prefix.
+            if tapNames.contains(name) || name.hasPrefix(Names.perAppTapNamePrefix) {
                 let status = AudioHardwareDestroyProcessTap(tap)
                 guard status == kAudioHardwareNoError else {
                     throw CoreAudioRoutingError.destroyTapFailed(name, status)
@@ -412,12 +474,36 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
         throw CoreAudioRoutingError.missingOwnAudioProcess(ownPID)
     }
 
-    private func createExclusiveTap(excluding ownProcessID: AudioObjectID) throws -> AudioObjectID {
-        let description = CATapDescription(stereoGlobalTapButExcludeProcesses: [ownProcessID])
+    private func createExclusiveTapExcludingAll(_ processObjectIDs: [AudioObjectID]) throws -> AudioObjectID {
+        // Exclude specific processes (per-app PIDs + EqualEase).
+        // isExclusive = true means "tap everything EXCEPT these processes."
+        let description = CATapDescription(stereoGlobalTapButExcludeProcesses: processObjectIDs)
         description.name = Names.currentTapName
         description.isPrivate = true
         description.isProcessRestoreEnabled = true
         description.muteBehavior = .muted
+
+        var createdTapID = AudioObjectID(kAudioObjectUnknown)
+        let status = AudioHardwareCreateProcessTap(description, &createdTapID)
+        guard status == kAudioHardwareNoError, createdTapID != kAudioObjectUnknown else {
+            throw CoreAudioRoutingError.createTapFailed(status)
+        }
+        return createdTapID
+    }
+
+    private func createPerAppTap(processObjectID: AudioObjectID, name: String) throws -> AudioObjectID {
+        // isExclusive = false means "tap ONLY the listed processes."
+        let description = CATapDescription(stereoGlobalTapButExcludeProcesses: [processObjectID])
+        description.name = name
+        description.isPrivate = true
+        description.isProcessRestoreEnabled = true
+        description.muteBehavior = .muted
+        // This is the critical direction flag:
+        // isExclusive = false → include mode (tap only the listed processes).
+        // isExclusive = true → exclude mode (tap everything except listed processes).
+        // CATapDescription(stereoGlobalTapButExcludeProcesses:) sets isExclusive = true,
+        // so we need to flip it for per-app taps.
+        description.isExclusive = false
 
         var createdTapID = AudioObjectID(kAudioObjectUnknown)
         let status = AudioHardwareCreateProcessTap(description, &createdTapID)
@@ -473,6 +559,13 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
         guard tapID != kAudioObjectUnknown else { return }
         AudioHardwareDestroyProcessTap(tapID)
         tapID = AudioObjectID(kAudioObjectUnknown)
+    }
+
+    private func destroyPerAppTaps() {
+        for tapID in perAppTapIDs {
+            AudioHardwareDestroyProcessTap(tapID)
+        }
+        perAppTapIDs = []
     }
 
     private func waitForAggregateDeviceReadiness(_ deviceID: AudioObjectID) {
