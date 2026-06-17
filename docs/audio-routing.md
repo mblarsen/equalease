@@ -32,9 +32,9 @@ Per-app taps (non-bypassed apps)
   → global EQ (10-band peaking filters)
   → global preamp
   → clipping protection
-  ┌─────────────────────────────────────┐
+  ┌──────────────────────────────────────┐
   │ mix with bypass pass-through streams │
-  └─────────────────────────────────────┘
+  └──────────────────────────────────────┘
   → output device
 
 Bypassed app streams (verbatim pass-through)
