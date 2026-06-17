@@ -44,7 +44,6 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                                 } else {
                                     presetSelection
                                     levelControls
-                                    appVolumeSection
                                     inputControls
                                     appLearningPrompt
                                     secondaryControls
@@ -231,6 +230,8 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                         helpText: "Convenience control for your Mac’s output volume. Use this first for everyday loudness.",
                         hideAction: { model.hideVolumeControls() }
                     )
+
+                    appVolumeSection
                 }
 
                 if model.showsPreampControls {
@@ -428,18 +429,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
     @ViewBuilder
     private var appVolumeSection: some View {
         if model.showsAppVolumeSection && model.isAppVolumeAvailable {
-            VStack(alignment: .leading, spacing: 6) {
-                HStack(spacing: 6) {
-                    Text("App Volume")
-                        .font(.caption.weight(.semibold))
-                    Button("Hide") {
-                        model.hideAppVolumeControls()
-                    }
-                    .buttonStyle(.link)
-                    .font(.caption)
-                    .accessibilityLabel("Hide app volume controls")
-                }
-
+            VStack(alignment: .leading, spacing: 4) {
                 if model.discoveredApps.isEmpty {
                     Text("No audio-emitting apps detected.")
                         .font(.caption2)
@@ -454,52 +444,48 @@ struct ContentView<Router: AudioRoutingBackend>: View {
     }
 
     private func appVolumeRow(app: AudioAppIdentity) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            HStack(spacing: 8) {
-                if let icon = icon(for: app) {
-                    Image(nsImage: icon)
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                } else {
-                    Image(systemName: "app.fill")
-                        .frame(width: 16, height: 16)
-                }
-
-                Text(app.displayName)
-                    .font(.caption.weight(.medium))
-                    .lineLimit(1)
-                    .layoutPriority(1)
-
-                Spacer(minLength: 4)
-
-                Toggle("Bypass", isOn: Binding(
-                    get: { model.appVolumeStore.isBypassed(app.bundleID) },
-                    set: { model.setAppBypassed($0, for: app.bundleID) }
-                ))
-                .toggleStyle(.checkbox)
-                .controlSize(.mini)
-                .font(.caption2)
-                .help("Bypass: audio passes through unprocessed (no EQ, no volume control)")
+        HStack(spacing: 6) {
+            if let icon = icon(for: app) {
+                Image(nsImage: icon)
+                    .resizable()
+                    .frame(width: 14, height: 14)
+            } else {
+                Image(systemName: "app.fill")
+                    .frame(width: 14, height: 14)
             }
 
-            HStack(spacing: 4) {
-                Slider(
-                    value: Binding(
-                        get: { model.appVolumeStore.volume(for: app.bundleID) },
-                        set: { model.setAppVolume($0, for: app.bundleID) }
-                    ),
-                    in: 0...1
-                )
-                .tint(Color(red: 0.94, green: 0.39, blue: 0.11))
-                .disabled(model.appVolumeStore.isBypassed(app.bundleID))
-                .help("Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost.")
+            Text(app.displayName)
+                .font(.caption2.weight(.medium))
+                .lineLimit(1)
+                .frame(width: 92, alignment: .leading)
 
-                Text("\(Int(model.appVolumeStore.volume(for: app.bundleID) * 100))%")
-                    .font(.caption2.monospacedDigit())
-                    .foregroundStyle(.secondary)
-                    .frame(width: 36, alignment: .trailing)
-            }
+            Slider(
+                value: Binding(
+                    get: { model.appVolumeStore.volume(for: app.bundleID) },
+                    set: { model.setAppVolume($0, for: app.bundleID) }
+                ),
+                in: 0...1
+            )
+            .tint(Color(red: 0.94, green: 0.39, blue: 0.11))
+            .disabled(model.appVolumeStore.isBypassed(app.bundleID))
+            .help("Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost.")
+
+            Text("\(Int(model.appVolumeStore.volume(for: app.bundleID) * 100))%")
+                .font(.caption2.monospacedDigit())
+                .foregroundStyle(.secondary)
+                .frame(width: 32, alignment: .trailing)
+
+            Toggle("Bypass", isOn: Binding(
+                get: { model.appVolumeStore.isBypassed(app.bundleID) },
+                set: { model.setAppBypassed($0, for: app.bundleID) }
+            ))
+            .labelsHidden()
+            .toggleStyle(.checkbox)
+            .controlSize(.mini)
+            .help("Bypass: audio passes through unprocessed (no EQ, no volume control)")
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(app.displayName) volume")
     }
 
     @ViewBuilder
