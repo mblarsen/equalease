@@ -17,7 +17,7 @@ struct AudioAppTapConfig: Equatable {
     var processObjectID: AudioObjectID
     /// The bundle ID for display and volume lookup.
     var bundleID: String
-    /// Per-app gain multiplier (0–2, default 1.0).
+    /// Per-app volume multiplier (0–1, default 1.0).
     var gain: Double
     /// Whether this app's audio should be passed through verbatim (no gain, no EQ).
     var isBypassed: Bool = false
@@ -147,7 +147,7 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
             var tapUIDs: [String] = []
             var streamConfigs: [StreamConfig] = []
 
-            // Per-app taps (isExclusive = false, processes = [appPID]).
+            // Per-app taps (isExclusive = false, processes = [process object ID]).
             for appConfig in configuration.appTapConfigs {
                 let perAppTapID = try createPerAppTap(
                     processObjectID: appConfig.processObjectID,
@@ -156,12 +156,12 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
                 perAppTapIDs.append(perAppTapID)
                 let perAppTapUID = try readAudioObjectString(objectID: perAppTapID, selector: kAudioTapPropertyUID)
                 tapUIDs.append(perAppTapUID)
-                streamConfigs.append(StreamConfig(gain: Float(appConfig.gain), bypassed: ObjCBool(appConfig.isBypassed)))
+                streamConfigs.append(StreamConfig(gain: Float(min(max(appConfig.gain, 0), 1)), bypassed: ObjCBool(appConfig.isBypassed)))
             }
 
-            // Fallback tap: exclude all per-app PIDs and EqualEase's own PID.
-            let allExcludedPIDs = configuration.appTapConfigs.map { $0.processObjectID } + [ownProcessID]
-            tapID = try createExclusiveTapExcludingAll(allExcludedPIDs)
+            // Fallback tap: exclude all per-app process objects and EqualEase's own process object.
+            let excludedProcessObjectIDs = configuration.appTapConfigs.map { $0.processObjectID } + [ownProcessID]
+            tapID = try createExclusiveTapExcludingAll(excludedProcessObjectIDs)
             let fallbackTapUID = try readAudioObjectString(objectID: tapID, selector: kAudioTapPropertyUID)
             tapUIDs.append(fallbackTapUID)
             // Fallback stream: unity gain, not bypassed (processes through EQ normally).
@@ -475,7 +475,7 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
     }
 
     private func createExclusiveTapExcludingAll(_ processObjectIDs: [AudioObjectID]) throws -> AudioObjectID {
-        // Exclude specific processes (per-app PIDs + EqualEase).
+        // Exclude specific CoreAudio process objects (per-app taps + EqualEase).
         // isExclusive = true means "tap everything EXCEPT these processes."
         let description = CATapDescription(stereoGlobalTapButExcludeProcesses: processObjectIDs)
         description.name = Names.currentTapName

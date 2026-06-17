@@ -488,10 +488,11 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                         get: { model.appVolumeStore.volume(for: app.bundleID) },
                         set: { model.setAppVolume($0, for: app.bundleID) }
                     ),
-                    in: 0...2
+                    in: 0...1
                 )
                 .tint(Color(red: 0.94, green: 0.39, blue: 0.11))
                 .disabled(model.appVolumeStore.isBypassed(app.bundleID))
+                .help("Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost.")
 
                 Text("\(Int(model.appVolumeStore.volume(for: app.bundleID) * 100))%")
                     .font(.caption2.monospacedDigit())

@@ -20,7 +20,7 @@ struct AudioAppIdentity: Identifiable, Equatable, Sendable {
     let displayName: String
     /// Whether this process should be bypassed (verbatim pass-through, no EQ, no gain).
     var isBypassed: Bool = false
-    /// Per-app volume gain multiplier. 1.0 = unity (no change). Range 0–2.
+    /// Per-app volume multiplier. 1.0 = normal/full volume. Range 0–1.
     var volume: Double = 1.0
 
     var id: AudioObjectID { processObjectID }

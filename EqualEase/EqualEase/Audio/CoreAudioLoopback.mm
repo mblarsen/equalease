@@ -255,7 +255,7 @@ static OSStatus RoutingIOProc(AudioObjectID,
             if (streamIdx < configCount) {
                 const StreamConfig& cfg = (*streamConfigs)[streamIdx];
                 isBypassed = cfg.bypassed;
-                gain = std::max(0.0f, std::min(cfg.gain, 2.0f));
+                gain = std::max(0.0f, std::min(cfg.gain, 1.0f));
             }
 
             if (isBypassed) {

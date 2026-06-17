@@ -28,14 +28,14 @@ final class AppVolumeStore: ObservableObject {
         bypassedApps = persisted?.bypassedApps ?? []
     }
 
-    /// Returns the volume gain for an app, defaulting to 1.0 (unity).
+    /// Returns the app volume multiplier, defaulting to 1.0 (normal/full volume).
     func volume(for bundleID: String) -> Double {
         appVolumes[bundleID] ?? 1.0
     }
 
-    /// Sets the volume gain for an app (clamped to 0–2).
+    /// Sets the app volume multiplier (clamped to 0–1; 1.0 = normal/full volume).
     func setVolume(_ volume: Double, for bundleID: String) {
-        let clamped = min(max(volume, 0), 2)
+        let clamped = min(max(volume, 0), 1)
         if clamped == 1.0 {
             appVolumes.removeValue(forKey: bundleID)
         } else {

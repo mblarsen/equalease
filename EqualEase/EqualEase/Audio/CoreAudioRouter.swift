@@ -126,22 +126,24 @@ final class CoreAudioRouter: AudioRoutingBackend {
     }
 
     func updateAppTapConfigs(apps: [AudioAppIdentity], volumeStore: AppVolumeStore) {
+        var seenProcessObjectIDs: Set<AudioObjectID> = []
         let configs = apps
             .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
-            .map { app in
-                AudioAppTapConfig(
+            .compactMap { app -> AudioAppTapConfig? in
+                guard seenProcessObjectIDs.insert(app.processObjectID).inserted else { return nil }
+                return AudioAppTapConfig(
                     processObjectID: app.processObjectID,
                     bundleID: app.bundleID,
-                    gain: volumeStore.volume(for: app.bundleID),
+                    gain: min(max(volumeStore.volume(for: app.bundleID), 0), 1),
                     isBypassed: volumeStore.isBypassed(app.bundleID)
                 )
             }
 
-        let previousProcessIDs = appTapConfigs.map(\.processObjectID)
-        let nextProcessIDs = configs.map(\.processObjectID)
+        let previousProcessObjectIDs = appTapConfigs.map(\.processObjectID)
+        let nextProcessObjectIDs = configs.map(\.processObjectID)
         appTapConfigs = configs
 
-        if isRunning, previousProcessIDs != nextProcessIDs {
+        if isRunning, previousProcessObjectIDs != nextProcessObjectIDs {
             scheduleRestartRouting(reason: "Audio apps changed")
         } else if isRunning {
             host.setStreamConfigs(streamConfigs(from: configs))
@@ -293,7 +295,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
 
     private func streamConfigs(from appTapConfigs: [AudioAppTapConfig]) -> [StreamConfig] {
         appTapConfigs.map {
-            StreamConfig(gain: Float($0.gain), bypassed: ObjCBool($0.isBypassed))
+            StreamConfig(gain: Float(min(max($0.gain, 0), 1)), bypassed: ObjCBool($0.isBypassed))
         } + [StreamConfig(gain: 1.0, bypassed: ObjCBool(false))]
     }
 
