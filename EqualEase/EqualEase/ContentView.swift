@@ -491,8 +491,10 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                                 : Color.secondary.opacity(0.15),
                             in: RoundedRectangle(cornerRadius: 6)
                         )
+                        .opacity(isMuted ? 0.4 : 1)
                 }
                 .buttonStyle(.plain)
+                .disabled(isMuted)
 
                 // Mute toggle
                 Button(action: {
