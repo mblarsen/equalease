@@ -41,6 +41,9 @@ static OSStatus RoutingIOProc(AudioObjectID,
     std::atomic<uint64_t> _completedEpoch;
     std::mutex _retiredSnapshotsMutex;
     std::vector<StreamConfigSnapshot*> _retiredSnapshots;
+    // Scratch buffers for accumulating non-bypassed audio before EQ processing.
+    // Sized lazily; once grown they stay allocated to avoid real-time heap traffic.
+    std::vector<Float32> _eqScratch[8];
 }
 
 @synthesize deviceID = _deviceID;
@@ -67,6 +70,11 @@ static OSStatus RoutingIOProc(AudioObjectID,
     auto* defaultConfigs = new std::vector<StreamConfig>(1, {1.0f, NO, NO});
     auto* defaultSnapshot = new StreamConfigSnapshot{1, defaultConfigs};
     _streamConfigs.store(defaultSnapshot, std::memory_order_release);
+
+    // Pre-size scratch buffers to a typical CoreAudio buffer size.
+    for (size_t ch = 0; ch < 8; ++ch) {
+        _eqScratch[ch].reserve(4096);
+    }
 
     return self;
 }
@@ -131,6 +139,19 @@ static OSStatus RoutingIOProc(AudioObjectID,
 /// NOT part of the public header — used only by the static IOProc.
 - (const StreamConfigSnapshot*)streamConfigsPointer {
     return _streamConfigs.load(std::memory_order_acquire);
+}
+
+/// Returns a writable scratch buffer for the given channel, sized to at least `size`.
+/// NOT part of the public header — used only by the static IOProc.
+- (Float32*)eqScratchBufferForChannel:(NSUInteger)channel size:(UInt32)size {
+    if (channel >= 8) {
+        return nullptr;
+    }
+    auto& buffer = _eqScratch[channel];
+    if (buffer.size() < size) {
+        buffer.resize(size);
+    }
+    return buffer.data();
 }
 
 /// Called by the IOProc after it finishes processing a callback.
@@ -202,6 +223,13 @@ static OSStatus RoutingIOProc(AudioObjectID,
     return [_engine processSample:input channelIndex:channelIndex];
 }
 
+- (void)processInput:(const float *)input
+              output:(float *)output
+         sampleCount:(NSUInteger)sampleCount
+        channelIndex:(NSUInteger)channelIndex {
+    [_engine processInput:input output:output sampleCount:sampleCount channelIndex:channelIndex];
+}
+
 - (void)dealloc {
     [self stop];
     auto* snapshot = _streamConfigs.load(std::memory_order_acquire);
@@ -223,6 +251,36 @@ static OSStatus RoutingIOProc(AudioObjectID,
 
 @end
 
+/// Adds `sample` to every output buffer location that corresponds to
+/// `channelIdx` at `sampleIndex`. Handles both stream-shaped (interleaved)
+/// and channel-shaped output buffer lists.
+static inline void addSampleToOutput(Float32 sample,
+                                     UInt32 sampleIndex,
+                                     UInt32 channelIdx,
+                                     UInt32 channelsPerStream,
+                                     AudioBufferList* outputData,
+                                     bool outputBuffersAreStreams) noexcept {
+    const UInt32 outputBufferCount = outputData->mNumberBuffers;
+    for (UInt32 outIdx = 0; outIdx < outputBufferCount; ++outIdx) {
+        AudioBuffer& outBuf = outputData->mBuffers[outIdx];
+        if (outBuf.mData == nullptr) continue;
+
+        if (outputBuffersAreStreams) {
+            const UInt32 outChannels = std::max<UInt32>(1, outBuf.mNumberChannels);
+            if (channelIdx >= outChannels) continue;
+            const UInt32 offset = sampleIndex * outChannels + channelIdx;
+            if ((offset + 1) * sizeof(Float32) > outBuf.mDataByteSize) continue;
+            auto* outSamples = static_cast<Float32*>(outBuf.mData);
+            outSamples[offset] += sample;
+        } else {
+            if (outIdx % channelsPerStream != channelIdx) continue;
+            if ((sampleIndex + 1) * sizeof(Float32) > outBuf.mDataByteSize) continue;
+            auto* outSamples = static_cast<Float32*>(outBuf.mData);
+            outSamples[sampleIndex] += sample;
+        }
+    }
+}
+
 /// Real-time audio callback.
 ///
 /// CoreAudio tap-backed aggregates may deliver either:
@@ -230,6 +288,8 @@ static OSStatus RoutingIOProc(AudioObjectID,
 /// - one buffer per channel, ordered by stream then channel.
 ///
 /// The IOProc supports both shapes so multiple app taps can be mixed reliably.
+/// EQ processing is performed on whole buffers via `processInput:` to avoid
+/// Objective-C message sends inside the per-sample hot loop.
 static OSStatus RoutingIOProc(AudioObjectID,
                               const AudioTimeStamp*,
                               const AudioBufferList* inputData,
@@ -267,28 +327,43 @@ static OSStatus RoutingIOProc(AudioObjectID,
         return kAudioHardwareNoError;
     }
 
-    Float32 eqAccum[maxChannels];
-    Float32 bypassAccum[maxChannels];
+    // Cache global state outside the hot loop; avoid Objective-C messaging per sample.
+    const bool globalBypassed = loopback.bypassed;
 
-    for (UInt32 sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
-        memset(eqAccum, 0, sizeof(Float32) * channelsPerStream);
-        memset(bypassAccum, 0, sizeof(Float32) * channelsPerStream);
+    // Clear output buffers and per-channel EQ scratch buffers.
+    for (UInt32 outIdx = 0; outIdx < outputBufferCount; ++outIdx) {
+        AudioBuffer& outBuf = outputData->mBuffers[outIdx];
+        if (outBuf.mData != nullptr && outBuf.mDataByteSize > 0) {
+            memset(outBuf.mData, 0, outBuf.mDataByteSize);
+        }
+    }
 
-        for (UInt32 inputIdx = 0; inputIdx < inputBufferCount; ++inputIdx) {
-            const AudioBuffer& inBuf = inputData->mBuffers[inputIdx];
-            if (inBuf.mData == nullptr) continue;
+    Float32* eqScratch[8] = {nullptr};
+    for (UInt32 ch = 0; ch < channelsPerStream; ++ch) {
+        eqScratch[ch] = [loopback eqScratchBufferForChannel:ch size:sampleCount];
+        if (eqScratch[ch] != nullptr) {
+            memset(eqScratch[ch], 0, sizeof(Float32) * sampleCount);
+        }
+    }
 
-            const UInt32 bufferChannels = std::max<UInt32>(1, inBuf.mNumberChannels);
-            const auto* inSamples = static_cast<const Float32*>(inBuf.mData);
+    // First pass: classify each input sample as muted, bypassed, or processed,
+    // and route it to the appropriate accumulator.
+    for (UInt32 inputIdx = 0; inputIdx < inputBufferCount; ++inputIdx) {
+        const AudioBuffer& inBuf = inputData->mBuffers[inputIdx];
+        if (inBuf.mData == nullptr) continue;
 
-            if (inputBuffersAreStreams) {
-                const UInt32 streamIdx = inputIdx;
-                const UInt32 channelLimit = std::min(channelsPerStream, bufferChannels);
+        const UInt32 bufferChannels = std::max<UInt32>(1, inBuf.mNumberChannels);
+        const auto* inSamples = static_cast<const Float32*>(inBuf.mData);
+
+        if (inputBuffersAreStreams) {
+            const UInt32 streamIdx = inputIdx;
+            const UInt32 channelLimit = std::min(channelsPerStream, bufferChannels);
+            for (UInt32 sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
                 for (UInt32 channelIdx = 0; channelIdx < channelLimit; ++channelIdx) {
                     const UInt32 offset = sampleIndex * bufferChannels + channelIdx;
                     if ((offset + 1) * sizeof(Float32) > inBuf.mDataByteSize) continue;
 
-                    bool isBypassed = loopback.bypassed;
+                    bool isBypassed = globalBypassed;
                     bool isMuted = false;
                     float gain = 1.0f;
                     if (streamIdx < configCount) {
@@ -298,20 +373,24 @@ static OSStatus RoutingIOProc(AudioObjectID,
                         gain = std::max(0.0f, std::min(cfg.gain, 1.0f));
                     }
 
-                    if (isMuted) {
-                        continue;
-                    } else if (isBypassed) {
-                        bypassAccum[channelIdx] += inSamples[offset];
-                    } else {
-                        eqAccum[channelIdx] += inSamples[offset] * gain;
+                    if (isMuted) continue;
+                    const Float32 sample = inSamples[offset] * gain;
+                    if (isBypassed) {
+                        addSampleToOutput(sample, sampleIndex, channelIdx, channelsPerStream, outputData, outputBuffersAreStreams);
+                    } else if (eqScratch[channelIdx] != nullptr) {
+                        eqScratch[channelIdx][sampleIndex] += sample;
                     }
                 }
-            } else {
-                const UInt32 streamIdx = inputIdx / channelsPerStream;
-                const UInt32 channelIdx = inputIdx % channelsPerStream;
+            }
+        } else {
+            const UInt32 streamIdx = inputIdx / channelsPerStream;
+            const UInt32 channelIdx = inputIdx % channelsPerStream;
+            if (channelIdx >= channelsPerStream) continue;
+
+            for (UInt32 sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
                 if ((sampleIndex + 1) * sizeof(Float32) > inBuf.mDataByteSize) continue;
 
-                bool isBypassed = loopback.bypassed;
+                bool isBypassed = globalBypassed;
                 bool isMuted = false;
                 float gain = 1.0f;
                 if (streamIdx < configCount) {
@@ -321,45 +400,52 @@ static OSStatus RoutingIOProc(AudioObjectID,
                     gain = std::max(0.0f, std::min(cfg.gain, 1.0f));
                 }
 
-                if (isMuted) {
-                    continue;
-                } else if (isBypassed) {
-                    bypassAccum[channelIdx] += inSamples[sampleIndex];
-                } else {
-                    eqAccum[channelIdx] += inSamples[sampleIndex] * gain;
+                if (isMuted) continue;
+                const Float32 sample = inSamples[sampleIndex] * gain;
+                if (isBypassed) {
+                    addSampleToOutput(sample, sampleIndex, channelIdx, channelsPerStream, outputData, outputBuffersAreStreams);
+                } else if (eqScratch[channelIdx] != nullptr) {
+                    eqScratch[channelIdx][sampleIndex] += sample;
                 }
             }
         }
+    }
 
-        if (!loopback.bypassed) {
-            for (UInt32 ch = 0; ch < channelsPerStream; ++ch) {
-                eqAccum[ch] = [loopback processSample:eqAccum[ch] channelIndex:ch];
-            }
+    // Second pass: run EQ/preamp/clipping on each channel's accumulated buffer.
+    // One Objective-C message per channel per callback — no per-sample messaging.
+    if (!globalBypassed) {
+        for (UInt32 ch = 0; ch < channelsPerStream; ++ch) {
+            if (eqScratch[ch] == nullptr) continue;
+            [loopback processInput:eqScratch[ch] output:eqScratch[ch] sampleCount:sampleCount channelIndex:ch];
         }
+    }
 
+    // Third pass: mix processed audio into the output and clamp.
+    for (UInt32 ch = 0; ch < channelsPerStream; ++ch) {
+        if (eqScratch[ch] == nullptr) continue;
+        for (UInt32 sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
+            addSampleToOutput(eqScratch[ch][sampleIndex], sampleIndex, ch, channelsPerStream, outputData, outputBuffersAreStreams);
+        }
+    }
+
+    for (UInt32 outIdx = 0; outIdx < outputBufferCount; ++outIdx) {
+        AudioBuffer& outBuf = outputData->mBuffers[outIdx];
+        if (outBuf.mData == nullptr) continue;
+        auto* outSamples = static_cast<Float32*>(outBuf.mData);
+        const UInt32 outChannels = std::max<UInt32>(1, outBuf.mNumberChannels);
         if (outputBuffersAreStreams) {
-            for (UInt32 outIdx = 0; outIdx < outputBufferCount; ++outIdx) {
-                AudioBuffer& outBuf = outputData->mBuffers[outIdx];
-                if (outBuf.mData == nullptr) continue;
-                const UInt32 outChannels = std::max<UInt32>(1, outBuf.mNumberChannels);
-                auto* outSamples = static_cast<Float32*>(outBuf.mData);
-                const UInt32 channelLimit = std::min(channelsPerStream, outChannels);
+            const UInt32 channelLimit = std::min(channelsPerStream, outChannels);
+            for (UInt32 sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
                 for (UInt32 channelIdx = 0; channelIdx < channelLimit; ++channelIdx) {
                     const UInt32 offset = sampleIndex * outChannels + channelIdx;
                     if ((offset + 1) * sizeof(Float32) > outBuf.mDataByteSize) continue;
-                    Float32 mixed = eqAccum[channelIdx] + bypassAccum[channelIdx];
-                    outSamples[offset] = std::max(-1.0f, std::min(mixed, 1.0f));
+                    outSamples[offset] = std::max(-1.0f, std::min(outSamples[offset], 1.0f));
                 }
             }
         } else {
-            for (UInt32 outIdx = 0; outIdx < outputBufferCount; ++outIdx) {
-                AudioBuffer& outBuf = outputData->mBuffers[outIdx];
-                if (outBuf.mData == nullptr) continue;
+            for (UInt32 sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
                 if ((sampleIndex + 1) * sizeof(Float32) > outBuf.mDataByteSize) continue;
-                const UInt32 channelIdx = outIdx % channelsPerStream;
-                auto* outSamples = static_cast<Float32*>(outBuf.mData);
-                Float32 mixed = eqAccum[channelIdx] + bypassAccum[channelIdx];
-                outSamples[sampleIndex] = std::max(-1.0f, std::min(mixed, 1.0f));
+                outSamples[sampleIndex] = std::max(-1.0f, std::min(outSamples[sampleIndex], 1.0f));
             }
         }
     }
