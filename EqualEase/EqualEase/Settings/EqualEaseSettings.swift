@@ -15,6 +15,7 @@ enum EqualEaseSettings {
     static let showsQuickPanelPreampKey = "showsQuickPanelPreamp"
     static let showsQuickPanelInputVolumeKey = "showsQuickPanelInputVolume"
     static let showsQuickPanelRoutingKey = "showsQuickPanelRouting"
+    static let showsQuickPanelAppVolumeKey = "showsQuickPanelAppVolume"
 
     static var allowsExternalAutomationWrites: Bool {
         get {
@@ -109,6 +110,15 @@ enum EqualEaseSettings {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: showsQuickPanelRoutingKey)
+        }
+    }
+
+    static var showsQuickPanelAppVolume: Bool {
+        get {
+            defaultTrueBool(forKey: showsQuickPanelAppVolumeKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: showsQuickPanelAppVolumeKey)
         }
     }
 

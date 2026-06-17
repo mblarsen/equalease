@@ -8,6 +8,8 @@ import SwiftUI
 struct DiagnosticsSettingsView: View {
     @ObservedObject var router: CoreAudioRouter
     @ObservedObject var inputDeviceController: InputDeviceController
+    @ObservedObject var appVolumeStore: AppVolumeStore
+    @ObservedObject var audioProcessDiscovery: AudioProcessDiscovery
 
     var body: some View {
         Form {
@@ -50,7 +52,40 @@ struct DiagnosticsSettingsView: View {
                 Toggle("Bypass EQ processing", isOn: $router.isBypassed)
                     .disabled(!router.isRunning || router.isRoutingTransitioning)
 
-                Text("Diagnostic control only: audio still routes through EqualEase while this is on. Use the main Active toggle to turn EqualEase off completely.")
+                Text("Diagnostic control only: global bypass still routes audio through EqualEase. Per-app bypass is shown below and keeps that app tapped so it can still follow EqualEase’s selected output.")
+                    .foregroundStyle(.secondary)
+            }
+
+            Section("Per-app audio") {
+                LabeledContent("Discovered audio apps", value: "\(audioProcessDiscovery.discoveredApps.count)")
+                LabeledContent("Configured app taps", value: "\(router.appTapConfigs.count)")
+
+                if audioProcessDiscovery.discoveredApps.isEmpty {
+                    Text(router.isRunning ? "No audio-emitting apps detected yet." : "Per-app audio appears when EqualEase Active is on and apps are emitting sound.")
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(audioProcessDiscovery.discoveredApps.sorted { $0.displayName < $1.displayName }, id: \.bundleID) { app in
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(app.displayName)
+                                Spacer()
+                                Text("\(Int(appVolumeStore.volume(for: app.bundleID) * 100))%")
+                                    .monospacedDigit()
+                                    .foregroundStyle(.secondary)
+                            }
+                            Text("\(app.bundleID) · PID \(app.pid) · process object \(app.processObjectID)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            if appVolumeStore.isBypassed(app.bundleID) {
+                                Label("Per-app bypass: verbatim pass-through, no gain, no EQ", systemImage: "pause.circle.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(.orange)
+                            }
+                        }
+                    }
+                }
+
+                Text("Per-app volume uses one tap per audio-emitting app plus a fallback tap for everything else. Bypassed apps remain tapped, but their stream is copied verbatim before the global EQ path.")
                     .foregroundStyle(.secondary)
             }
 
@@ -149,6 +184,11 @@ struct DiagnosticsSettingsView: View {
 }
 
 #Preview {
-    DiagnosticsSettingsView(router: CoreAudioRouter(), inputDeviceController: InputDeviceController())
+    DiagnosticsSettingsView(
+        router: CoreAudioRouter(),
+        inputDeviceController: InputDeviceController(),
+        appVolumeStore: AppVolumeStore(),
+        audioProcessDiscovery: AudioProcessDiscovery(pollingInterval: 60)
+    )
         .padding()
 }

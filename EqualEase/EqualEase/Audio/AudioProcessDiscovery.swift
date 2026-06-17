@@ -37,7 +37,7 @@ protocol AudioProcessDiscovering: AnyObject {
 }
 
 @MainActor
-final class AudioProcessDiscovery: AudioProcessDiscovering {
+final class AudioProcessDiscovery: AudioProcessDiscovering, ObservableObject {
     @Published private(set) var discoveredApps: [AudioAppIdentity] = []
 
     private var pollingTimer: Timer?

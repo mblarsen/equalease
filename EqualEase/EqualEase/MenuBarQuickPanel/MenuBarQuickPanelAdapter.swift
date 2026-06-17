@@ -155,6 +155,8 @@ final class MenuBarQuickPanelAdapter: NSObject, NSWindowDelegate {
             foregroundAppObserver: appModel.foregroundAppObserver,
             activeContextResolver: appModel.activeContextResolver,
             presentationState: presentationState,
+            appVolumeStore: appModel.appVolumeStore,
+            audioProcessDiscovery: appModel.audioProcessDiscovery,
             actions: actions
         )
         model.objectWillChange

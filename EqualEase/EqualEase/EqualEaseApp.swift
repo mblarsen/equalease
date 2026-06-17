@@ -19,6 +19,8 @@ struct EqualEaseApp: App {
                 presetStore: appDelegate.appModel.presetStore,
                 foregroundAppObserver: appDelegate.appModel.foregroundAppObserver,
                 browserPageObserver: appDelegate.appModel.browserPageObserver,
+                appVolumeStore: appDelegate.appModel.appVolumeStore,
+                audioProcessDiscovery: appDelegate.appModel.audioProcessDiscovery,
                 applyPreset: appDelegate.appModel.apply,
                 setLocalNetworkControlEnabled: appDelegate.appModel.setLocalNetworkControlEnabled
             )

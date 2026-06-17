@@ -45,6 +45,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                                     presetSelection
                                     levelControls
                                     inputControls
+                                    appVolumeSection
                                     appLearningPrompt
                                     secondaryControls
                                 }
@@ -425,6 +426,82 @@ struct ContentView<Router: AudioRoutingBackend>: View {
     }
 
     @ViewBuilder
+    private var appVolumeSection: some View {
+        if model.showsAppVolumeSection && model.isAppVolumeAvailable {
+            VStack(alignment: .leading, spacing: 6) {
+                HStack(spacing: 6) {
+                    Text("App Volume")
+                        .font(.caption.weight(.semibold))
+                    Button("Hide") {
+                        model.hideAppVolumeControls()
+                    }
+                    .buttonStyle(.link)
+                    .font(.caption)
+                    .accessibilityLabel("Hide app volume controls")
+                }
+
+                if model.discoveredApps.isEmpty {
+                    Text("No audio-emitting apps detected.")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(model.discoveredApps, id: \.bundleID) { app in
+                        appVolumeRow(app: app)
+                    }
+                }
+            }
+        }
+    }
+
+    private func appVolumeRow(app: AudioAppIdentity) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 8) {
+                if let icon = icon(for: app) {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                } else {
+                    Image(systemName: "app.fill")
+                        .frame(width: 16, height: 16)
+                }
+
+                Text(app.displayName)
+                    .font(.caption.weight(.medium))
+                    .lineLimit(1)
+                    .layoutPriority(1)
+
+                Spacer(minLength: 4)
+
+                Toggle("Bypass", isOn: Binding(
+                    get: { model.appVolumeStore.isBypassed(app.bundleID) },
+                    set: { model.setAppBypassed($0, for: app.bundleID) }
+                ))
+                .toggleStyle(.checkbox)
+                .controlSize(.mini)
+                .font(.caption2)
+                .help("Bypass: audio passes through unprocessed (no EQ, no volume control)")
+            }
+
+            HStack(spacing: 4) {
+                Slider(
+                    value: Binding(
+                        get: { model.appVolumeStore.volume(for: app.bundleID) },
+                        set: { model.setAppVolume($0, for: app.bundleID) }
+                    ),
+                    in: 0...2
+                )
+                .tint(Color(red: 0.94, green: 0.39, blue: 0.11))
+                .disabled(model.appVolumeStore.isBypassed(app.bundleID))
+
+                Text("\(Int(model.appVolumeStore.volume(for: app.bundleID) * 100))%")
+                    .font(.caption2.monospacedDigit())
+                    .foregroundStyle(.secondary)
+                    .frame(width: 36, alignment: .trailing)
+            }
+        }
+    }
+
+    @ViewBuilder
     private var secondaryControls: some View {
         if model.showsRoutingSection {
             VStack(alignment: .leading, spacing: 8) {
@@ -480,6 +557,12 @@ struct ContentView<Router: AudioRoutingBackend>: View {
             .padding(10)
             .background(.quaternary, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
         }
+    }
+
+    private func icon(for app: AudioAppIdentity) -> NSImage? {
+        NSWorkspace.shared.runningApplications.first { runningApp in
+            runningApp.processIdentifier == app.pid || runningApp.bundleIdentifier == app.bundleID
+        }?.icon
     }
 
     private var footerActions: some View {
@@ -575,6 +658,8 @@ private struct HeaderPointer: Shape {
         foregroundAppObserver: foregroundAppObserver,
         activeContextResolver: activeContextResolver,
         presentationState: QuickPanelPresentationState(),
+        appVolumeStore: AppVolumeStore(),
+        audioProcessDiscovery: AudioProcessDiscovery(pollingInterval: 60),
         actions: .noOp
     ))
 }

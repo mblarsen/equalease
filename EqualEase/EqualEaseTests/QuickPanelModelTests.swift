@@ -343,6 +343,8 @@ final class QuickPanelModelTests: XCTestCase {
             foregroundAppObserver: foregroundAppObserver,
             activeContextResolver: activeContextResolver,
             presentationState: presentationState,
+            appVolumeStore: AppVolumeStore(persistenceURL: temporaryAppVolumeURL()),
+            audioProcessDiscovery: AudioProcessDiscovery(pollingInterval: 60),
             actions: actions
         )
     }
@@ -351,6 +353,12 @@ final class QuickPanelModelTests: XCTestCase {
         FileManager.default.temporaryDirectory
             .appendingPathComponent("EqualEaseQuickPanelTests-\(UUID().uuidString)", isDirectory: true)
             .appendingPathComponent("presets.json")
+    }
+
+    private func temporaryAppVolumeURL() -> URL {
+        FileManager.default.temporaryDirectory
+            .appendingPathComponent("EqualEaseQuickPanelTests-\(UUID().uuidString)", isDirectory: true)
+            .appendingPathComponent("app-volumes.json")
     }
 }
 

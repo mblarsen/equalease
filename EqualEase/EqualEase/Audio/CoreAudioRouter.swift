@@ -53,6 +53,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
     @Published var bandGains = Array(repeating: 0.0, count: 10) {
         didSet { applyBandGains() }
     }
+    @Published private(set) var appTapConfigs: [AudioAppTapConfig] = []
 
     private let host: CoreAudioRoutingHost
     private let restartDebounce: Duration
@@ -122,6 +123,30 @@ final class CoreAudioRouter: AudioRoutingBackend {
     func selectOutputDevice(uid: String?) {
         followsSystemOutput = false
         selectedOutputDeviceUID = resolvedPreferredOutputDeviceUID(requestedUID: uid)
+    }
+
+    func updateAppTapConfigs(apps: [AudioAppIdentity], volumeStore: AppVolumeStore) {
+        let configs = apps
+            .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
+            .map { app in
+                AudioAppTapConfig(
+                    processObjectID: app.processObjectID,
+                    bundleID: app.bundleID,
+                    gain: volumeStore.volume(for: app.bundleID),
+                    isBypassed: volumeStore.isBypassed(app.bundleID)
+                )
+            }
+
+        let previousProcessIDs = appTapConfigs.map(\.processObjectID)
+        let nextProcessIDs = configs.map(\.processObjectID)
+        appTapConfigs = configs
+
+        if isRunning, previousProcessIDs != nextProcessIDs {
+            scheduleRestartRouting(reason: "Audio apps changed")
+        } else if isRunning {
+            host.setStreamConfigs(streamConfigs(from: configs))
+            refreshRunningStatus()
+        }
     }
 
     func start() {
@@ -207,7 +232,8 @@ final class CoreAudioRouter: AudioRoutingBackend {
             isBypassed: isBypassed,
             outputGain: clampedOutputGain,
             equalizerEnabled: equalizerEnabled,
-            bandGains: bandGains
+            bandGains: bandGains,
+            appTapConfigs: appTapConfigs
         )
     }
 
@@ -263,6 +289,12 @@ final class CoreAudioRouter: AudioRoutingBackend {
         for (index, gain) in bandGains.enumerated() {
             host.setBandGain(min(max(gain, -12), 12), at: index)
         }
+    }
+
+    private func streamConfigs(from appTapConfigs: [AudioAppTapConfig]) -> [StreamConfig] {
+        appTapConfigs.map {
+            StreamConfig(gain: Float($0.gain), bypassed: ObjCBool($0.isBypassed))
+        } + [StreamConfig(gain: 1.0, bypassed: ObjCBool(false))]
     }
 
     private func refreshSelectedOutputDevice() {
