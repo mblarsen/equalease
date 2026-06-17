@@ -169,11 +169,16 @@ static OSStatus RoutingIOProc(AudioObjectID,
 
 /// Real-time audio callback.
 ///
-/// CoreAudio tap-backed aggregates may deliver either:
-/// - one buffer per stream, with `mNumberChannels > 1` (interleaved stereo), or
-/// - one buffer per channel, ordered by stream then channel.
+/// CoreAudio provides non-interleaved buffers here: one buffer per channel.
+/// With multi-tap routing, buffers are ordered by stream then channel:
+/// tap0-left, tap0-right, tap1-left, tap1-right, ...
 ///
-/// The IOProc supports both shapes so multiple app taps can be mixed reliably.
+/// Processing:
+/// 1. Map each input buffer to `(streamIndex, channelIndex)`.
+/// 2. Bypassed streams accumulate verbatim into `bypassAccum[channel]`.
+/// 3. Non-bypassed streams apply per-app gain and accumulate into `eqAccum[channel]`.
+/// 4. Apply global EQ/preamp/clipping to the non-bypassed accumulation.
+/// 5. Mix processed + bypass accumulations into the output channel buffers.
 static OSStatus RoutingIOProc(AudioObjectID,
                               const AudioTimeStamp*,
                               const AudioBufferList* inputData,
@@ -198,14 +203,33 @@ static OSStatus RoutingIOProc(AudioObjectID,
     const auto* streamConfigs = [loopback streamConfigsPointer];
     const NSUInteger configCount = streamConfigs ? streamConfigs->size() : 0;
 
-    const bool inputBuffersAreStreams = inputData->mBuffers[0].mNumberChannels > 1 || inputBufferCount <= configCount;
-    const bool outputBuffersAreStreams = outputData->mBuffers[0].mNumberChannels > 1 || outputBufferCount == 1;
-    const UInt32 firstOutputChannels = std::max<UInt32>(1, outputData->mBuffers[0].mNumberChannels);
     const UInt32 sampleCount = (outputData->mBuffers[0].mDataByteSize > 0 && outputData->mBuffers[0].mData != nullptr)
-        ? outputData->mBuffers[0].mDataByteSize / (sizeof(Float32) * (outputBuffersAreStreams ? firstOutputChannels : 1))
+        ? outputData->mBuffers[0].mDataByteSize / sizeof(Float32)
         : 0;
 
     if (sampleCount == 0) {
+        return kAudioHardwareNoError;
+    }
+
+    // Global bypass: preserve the old pass-through semantics, copying each
+    // channel of the first stream to the matching output channel.
+    if (loopback.bypassed) {
+        for (UInt32 outIdx = 0; outIdx < outputBufferCount; ++outIdx) {
+            AudioBuffer& outBuf = outputData->mBuffers[outIdx];
+            if (outBuf.mData == nullptr) continue;
+
+            const UInt32 sourceInputIdx = outIdx % channelsPerStream;
+            if (sourceInputIdx < inputBufferCount && inputData->mBuffers[sourceInputIdx].mData != nullptr) {
+                const AudioBuffer& inBuf = inputData->mBuffers[sourceInputIdx];
+                const UInt32 copyBytes = std::min(inBuf.mDataByteSize, outBuf.mDataByteSize);
+                memcpy(outBuf.mData, inBuf.mData, copyBytes);
+                if (copyBytes < outBuf.mDataByteSize) {
+                    memset(static_cast<char*>(outBuf.mData) + copyBytes, 0, outBuf.mDataByteSize - copyBytes);
+                }
+            } else {
+                memset(outBuf.mData, 0, outBuf.mDataByteSize);
+            }
+        }
         return kAudioHardwareNoError;
     }
 
@@ -219,82 +243,42 @@ static OSStatus RoutingIOProc(AudioObjectID,
         for (UInt32 inputIdx = 0; inputIdx < inputBufferCount; ++inputIdx) {
             const AudioBuffer& inBuf = inputData->mBuffers[inputIdx];
             if (inBuf.mData == nullptr) continue;
+            if ((sampleIndex + 1) * sizeof(Float32) > inBuf.mDataByteSize) continue;
 
-            const UInt32 bufferChannels = std::max<UInt32>(1, inBuf.mNumberChannels);
+            const UInt32 streamIdx = inputIdx / channelsPerStream;
+            const UInt32 channelIdx = inputIdx % channelsPerStream;
             const auto* inSamples = static_cast<const Float32*>(inBuf.mData);
+            const Float32 inputSample = inSamples[sampleIndex];
 
-            if (inputBuffersAreStreams) {
-                const UInt32 streamIdx = inputIdx;
-                const UInt32 channelLimit = std::min(channelsPerStream, bufferChannels);
-                for (UInt32 channelIdx = 0; channelIdx < channelLimit; ++channelIdx) {
-                    const UInt32 offset = sampleIndex * bufferChannels + channelIdx;
-                    if ((offset + 1) * sizeof(Float32) > inBuf.mDataByteSize) continue;
+            bool isBypassed = false;
+            float gain = 1.0f;
+            if (streamIdx < configCount) {
+                const StreamConfig& cfg = (*streamConfigs)[streamIdx];
+                isBypassed = cfg.bypassed;
+                gain = std::max(0.0f, std::min(cfg.gain, 1.0f));
+            }
 
-                    bool isBypassed = loopback.bypassed;
-                    float gain = 1.0f;
-                    if (streamIdx < configCount) {
-                        const StreamConfig& cfg = (*streamConfigs)[streamIdx];
-                        isBypassed = isBypassed || cfg.bypassed;
-                        gain = std::max(0.0f, std::min(cfg.gain, 1.0f));
-                    }
-
-                    if (isBypassed) {
-                        bypassAccum[channelIdx] += inSamples[offset];
-                    } else {
-                        eqAccum[channelIdx] += inSamples[offset] * gain;
-                    }
-                }
+            if (isBypassed) {
+                bypassAccum[channelIdx] += inputSample;
             } else {
-                const UInt32 streamIdx = inputIdx / channelsPerStream;
-                const UInt32 channelIdx = inputIdx % channelsPerStream;
-                if ((sampleIndex + 1) * sizeof(Float32) > inBuf.mDataByteSize) continue;
-
-                bool isBypassed = loopback.bypassed;
-                float gain = 1.0f;
-                if (streamIdx < configCount) {
-                    const StreamConfig& cfg = (*streamConfigs)[streamIdx];
-                    isBypassed = isBypassed || cfg.bypassed;
-                    gain = std::max(0.0f, std::min(cfg.gain, 1.0f));
-                }
-
-                if (isBypassed) {
-                    bypassAccum[channelIdx] += inSamples[sampleIndex];
-                } else {
-                    eqAccum[channelIdx] += inSamples[sampleIndex] * gain;
-                }
+                eqAccum[channelIdx] += inputSample * gain;
             }
         }
 
-        if (!loopback.bypassed) {
-            for (UInt32 ch = 0; ch < channelsPerStream; ++ch) {
-                eqAccum[ch] = [loopback processSample:eqAccum[ch] channelIndex:ch];
-            }
+        for (UInt32 ch = 0; ch < channelsPerStream; ++ch) {
+            eqAccum[ch] = [loopback processSample:eqAccum[ch] channelIndex:ch];
         }
 
-        if (outputBuffersAreStreams) {
-            for (UInt32 outIdx = 0; outIdx < outputBufferCount; ++outIdx) {
-                AudioBuffer& outBuf = outputData->mBuffers[outIdx];
-                if (outBuf.mData == nullptr) continue;
-                const UInt32 outChannels = std::max<UInt32>(1, outBuf.mNumberChannels);
-                auto* outSamples = static_cast<Float32*>(outBuf.mData);
-                const UInt32 channelLimit = std::min(channelsPerStream, outChannels);
-                for (UInt32 channelIdx = 0; channelIdx < channelLimit; ++channelIdx) {
-                    const UInt32 offset = sampleIndex * outChannels + channelIdx;
-                    if ((offset + 1) * sizeof(Float32) > outBuf.mDataByteSize) continue;
-                    Float32 mixed = eqAccum[channelIdx] + bypassAccum[channelIdx];
-                    outSamples[offset] = std::max(-1.0f, std::min(mixed, 1.0f));
-                }
-            }
-        } else {
-            for (UInt32 outIdx = 0; outIdx < outputBufferCount; ++outIdx) {
-                AudioBuffer& outBuf = outputData->mBuffers[outIdx];
-                if (outBuf.mData == nullptr) continue;
-                if ((sampleIndex + 1) * sizeof(Float32) > outBuf.mDataByteSize) continue;
-                const UInt32 channelIdx = outIdx % channelsPerStream;
-                auto* outSamples = static_cast<Float32*>(outBuf.mData);
-                Float32 mixed = eqAccum[channelIdx] + bypassAccum[channelIdx];
-                outSamples[sampleIndex] = std::max(-1.0f, std::min(mixed, 1.0f));
-            }
+        for (UInt32 outIdx = 0; outIdx < outputBufferCount; ++outIdx) {
+            AudioBuffer& outBuf = outputData->mBuffers[outIdx];
+            if (outBuf.mData == nullptr) continue;
+            if ((sampleIndex + 1) * sizeof(Float32) > outBuf.mDataByteSize) continue;
+
+            const UInt32 channelIdx = outIdx % channelsPerStream;
+            auto* outSamples = static_cast<Float32*>(outBuf.mData);
+            Float32 mixed = eqAccum[channelIdx] + bypassAccum[channelIdx];
+            mixed = std::max(-1.0f, std::min(mixed, 1.0f));
+            outSamples[sampleIndex] = mixed;
         }
     }
 
