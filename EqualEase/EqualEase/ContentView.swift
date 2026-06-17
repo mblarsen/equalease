@@ -459,6 +459,10 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 .lineLimit(1)
                 .frame(width: 92, alignment: .leading)
 
+            let mode = model.appVolumeStore.mode(for: app.bundleID)
+            let isProcessing = mode == .on
+            let isMuted = mode == .mute
+
             Slider(
                 value: Binding(
                     get: { model.appVolumeStore.volume(for: app.bundleID) },
@@ -467,7 +471,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 in: 0...1
             )
             .tint(Color(red: 0.94, green: 0.39, blue: 0.11))
-            .disabled(model.appVolumeStore.mode(for: app.bundleID) != .on)
+            .disabled(mode != .on)
             .help("Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost.")
 
             HStack(spacing: 4) {
@@ -475,32 +479,33 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 Button(action: {
                     model.toggleAppProcessBypass(for: app.bundleID)
                 }) {
-                    Text(model.appVolumeStore.mode(for: app.bundleID) == .on ? "Process" : "Bypass")
+                    Text(isProcessing ? "Process" : "Bypass")
                         .font(.caption2.weight(.medium))
-                        .foregroundColor(model.appVolumeStore.mode(for: app.bundleID) == .on ? .white : .secondary)
+                        .foregroundColor(isProcessing ? .white : .secondary)
                         .frame(width: 58)
                         .padding(.vertical, 3)
                         .background(
-                            model.appVolumeStore.mode(for: app.bundleID) == .on
+                            isProcessing
                                 ? Color(red: 0.94, green: 0.39, blue: 0.11)
                                 : Color.secondary.opacity(0.15),
                             in: RoundedRectangle(cornerRadius: 6)
                         )
+                        .opacity(isMuted ? 0.4 : 1)
                 }
                 .buttonStyle(.plain)
+                .disabled(isMuted)
 
                 // Mute toggle
                 Button(action: {
-                    let current = model.appVolumeStore.mode(for: app.bundleID)
-                    model.setAppMode(current == .mute ? .on : .mute, for: app.bundleID)
+                    model.setAppMode(isMuted ? .on : .mute, for: app.bundleID)
                 }) {
                     Text("Mute")
                         .font(.caption2.weight(.medium))
-                        .foregroundColor(model.appVolumeStore.mode(for: app.bundleID) == .mute ? .white : .secondary)
+                        .foregroundColor(isMuted ? .white : .secondary)
                         .frame(width: 44)
                         .padding(.vertical, 3)
                         .background(
-                            model.appVolumeStore.mode(for: app.bundleID) == .mute
+                            isMuted
                                 ? Color(red: 0.94, green: 0.39, blue: 0.11)
                                 : Color.secondary.opacity(0.15),
                             in: RoundedRectangle(cornerRadius: 6)
@@ -508,9 +513,9 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 }
                 .buttonStyle(.plain)
             }
-            .help(model.appVolumeStore.mode(for: app.bundleID) == .mute
+            .help(isMuted
                 ? "Muted: silence this app."
-                : model.appVolumeStore.mode(for: app.bundleID) == .on
+                : isProcessing
                     ? "Process: app volume then global EQ."
                     : "Bypass: pass through unprocessed.")
         }
