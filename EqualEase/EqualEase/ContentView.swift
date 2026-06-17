@@ -470,19 +470,49 @@ struct ContentView<Router: AudioRoutingBackend>: View {
             .disabled(model.appVolumeStore.mode(for: app.bundleID) != .on)
             .help("Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost.")
 
-            Picker("Mode", selection: Binding(
-                get: { model.appVolumeStore.mode(for: app.bundleID) },
-                set: { model.setAppMode($0, for: app.bundleID) }
-            )) {
-                ForEach(AppAudioMode.allCases, id: \.self) { mode in
-                    Text(mode.label).tag(mode)
+            HStack(spacing: 4) {
+                // Process/Bypass toggle
+                Button(action: {
+                    model.toggleAppProcessBypass(for: app.bundleID)
+                }) {
+                    Text(model.appVolumeStore.mode(for: app.bundleID) == .on ? "Process" : "Bypass")
+                        .font(.caption2.weight(.medium))
+                        .foregroundColor(model.appVolumeStore.mode(for: app.bundleID) == .on ? .white : .secondary)
+                        .frame(width: 58)
+                        .padding(.vertical, 3)
+                        .background(
+                            model.appVolumeStore.mode(for: app.bundleID) == .on
+                                ? Color(red: 0.94, green: 0.39, blue: 0.11)
+                                : Color.secondary.opacity(0.15),
+                            in: RoundedRectangle(cornerRadius: 6)
+                        )
                 }
+                .buttonStyle(.plain)
+
+                // Mute toggle
+                Button(action: {
+                    let current = model.appVolumeStore.mode(for: app.bundleID)
+                    model.setAppMode(current == .mute ? .on : .mute, for: app.bundleID)
+                }) {
+                    Text("Mute")
+                        .font(.caption2.weight(.medium))
+                        .foregroundColor(model.appVolumeStore.mode(for: app.bundleID) == .mute ? .white : .secondary)
+                        .frame(width: 44)
+                        .padding(.vertical, 3)
+                        .background(
+                            model.appVolumeStore.mode(for: app.bundleID) == .mute
+                                ? Color(red: 0.94, green: 0.39, blue: 0.11)
+                                : Color.secondary.opacity(0.15),
+                            in: RoundedRectangle(cornerRadius: 6)
+                        )
+                }
+                .buttonStyle(.plain)
             }
-            .labelsHidden()
-            .pickerStyle(.segmented)
-            .frame(width: 118)
-            .controlSize(.mini)
-            .help("On: process normally. Off: pass through unprocessed. Mute: silence this app.")
+            .help(model.appVolumeStore.mode(for: app.bundleID) == .mute
+                ? "Muted: silence this app."
+                : model.appVolumeStore.mode(for: app.bundleID) == .on
+                    ? "Process: app volume then global EQ."
+                    : "Bypass: pass through unprocessed.")
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(app.displayName) volume")

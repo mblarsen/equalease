@@ -155,6 +155,12 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         objectWillChange.send()
     }
 
+    func toggleAppProcessBypass(for bundleID: String) {
+        let current = appVolumeStore.mode(for: bundleID)
+        if current == .mute { return }
+        setAppMode(current == .on ? .off : .on, for: bundleID)
+    }
+
     func setAppBypassed(_ bypassed: Bool, for bundleID: String) {
         appVolumeStore.setBypassed(bypassed, for: bundleID)
         objectWillChange.send()
