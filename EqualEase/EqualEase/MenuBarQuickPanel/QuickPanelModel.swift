@@ -147,12 +147,10 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
 
     func setAppVolume(_ volume: Double, for bundleID: String) {
         appVolumeStore.setVolume(volume, for: bundleID)
-        objectWillChange.send()
     }
 
     func setAppMode(_ mode: AppAudioMode, for bundleID: String) {
         appVolumeStore.setMode(mode, for: bundleID)
-        objectWillChange.send()
     }
 
     func toggleAppProcessBypass(for bundleID: String) {
@@ -167,12 +165,10 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
     /// Toggle mute on/off without disturbing the underlying Process/Bypass state.
     func toggleAppMute(for bundleID: String) {
         appVolumeStore.setMuted(appVolumeStore.mode(for: bundleID) != .mute, for: bundleID)
-        objectWillChange.send()
     }
 
     func setAppBypassed(_ bypassed: Bool, for bundleID: String) {
         appVolumeStore.setBypassed(bypassed, for: bundleID)
-        objectWillChange.send()
     }
 
     func openSettingsWindow() {
