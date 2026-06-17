@@ -44,8 +44,8 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                                 } else {
                                     presetSelection
                                     levelControls
-                                    inputControls
                                     appVolumeSection
+                                    inputControls
                                     appLearningPrompt
                                     secondaryControls
                                 }
