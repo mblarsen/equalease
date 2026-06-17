@@ -71,9 +71,11 @@ static OSStatus RoutingIOProc(AudioObjectID,
     auto* defaultSnapshot = new StreamConfigSnapshot{1, defaultConfigs};
     _streamConfigs.store(defaultSnapshot, std::memory_order_release);
 
-    // Pre-size scratch buffers to a typical CoreAudio buffer size.
+    // Pre-allocate scratch buffers to a typical CoreAudio buffer size.
+    // Using resize (not reserve) so no lazy heap allocation happens in the IOProc.
+    constexpr size_t kMaxBufferFrames = 4096;
     for (size_t ch = 0; ch < 8; ++ch) {
-        _eqScratch[ch].reserve(4096);
+        _eqScratch[ch].resize(kMaxBufferFrames);
     }
 
     return self;
@@ -144,14 +146,10 @@ static OSStatus RoutingIOProc(AudioObjectID,
 /// Returns a writable scratch buffer for the given channel, sized to at least `size`.
 /// NOT part of the public header — used only by the static IOProc.
 - (Float32*)eqScratchBufferForChannel:(NSUInteger)channel size:(UInt32)size {
-    if (channel >= 8) {
+    if (channel >= 8 || size > _eqScratch[channel].size()) {
         return nullptr;
     }
-    auto& buffer = _eqScratch[channel];
-    if (buffer.size() < size) {
-        buffer.resize(size);
-    }
-    return buffer.data();
+    return _eqScratch[channel].data();
 }
 
 /// Called by the IOProc after it finishes processing a callback.
@@ -164,10 +162,11 @@ static OSStatus RoutingIOProc(AudioObjectID,
 - (void)cleanupRetiredSnapshots {
     const uint64_t completed = _completedEpoch.load(std::memory_order_acquire);
     std::lock_guard<std::mutex> lock(_retiredSnapshotsMutex);
+    auto* current = _streamConfigs.load(std::memory_order_acquire);
     _retiredSnapshots.erase(
         std::remove_if(_retiredSnapshots.begin(), _retiredSnapshots.end(),
-            [completed](StreamConfigSnapshot* snapshot) {
-                if (snapshot != nullptr && snapshot->epoch <= completed) {
+            [completed, current](StreamConfigSnapshot* snapshot) {
+                if (snapshot != nullptr && snapshot != current && snapshot->epoch <= completed) {
                     delete snapshot->configs;
                     delete snapshot;
                     return true;
