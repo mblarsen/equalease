@@ -158,22 +158,21 @@ static OSStatus RoutingIOProc(AudioObjectID,
     _completedEpoch.store(epoch, std::memory_order_release);
 }
 
-/// Frees snapshots whose epoch has been acknowledged by the IOProc.
+/// Frees retired snapshots once a newer snapshot has also been retired,
+/// guaranteeing no in-flight IOProc is still using the old one.
+///
+/// Keeps the most recently retired snapshot as a safety buffer: it may have
+/// been read by an IOProc just before the swap, and that IOProc may still be
+/// running. A snapshot is only freed when another snapshot has been retired
+/// after it, guaranteeing the in-flight IOProc has moved on.
 - (void)cleanupRetiredSnapshots {
-    const uint64_t completed = _completedEpoch.load(std::memory_order_acquire);
     std::lock_guard<std::mutex> lock(_retiredSnapshotsMutex);
-    auto* current = _streamConfigs.load(std::memory_order_acquire);
-    _retiredSnapshots.erase(
-        std::remove_if(_retiredSnapshots.begin(), _retiredSnapshots.end(),
-            [completed, current](StreamConfigSnapshot* snapshot) {
-                if (snapshot != nullptr && snapshot != current && snapshot->epoch <= completed) {
-                    delete snapshot->configs;
-                    delete snapshot;
-                    return true;
-                }
-                return false;
-            }),
-        _retiredSnapshots.end());
+    while (_retiredSnapshots.size() > 1) {
+        auto* snapshot = _retiredSnapshots.front();
+        _retiredSnapshots.erase(_retiredSnapshots.begin());
+        delete snapshot->configs;
+        delete snapshot;
+    }
 }
 
 - (BOOL)start {
