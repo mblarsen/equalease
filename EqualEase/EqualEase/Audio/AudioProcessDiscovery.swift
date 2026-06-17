@@ -18,10 +18,6 @@ struct AudioAppIdentity: Identifiable, Equatable, Sendable {
     let bundleID: String
     /// Human-readable display name resolved via NSWorkspace.
     let displayName: String
-    /// Whether this process should be bypassed (verbatim pass-through, no EQ, no gain).
-    var isBypassed: Bool = false
-    /// Per-app volume multiplier. 1.0 = normal/full volume. Range 0–1.
-    var volume: Double = 1.0
 
     var id: AudioObjectID { processObjectID }
 }
