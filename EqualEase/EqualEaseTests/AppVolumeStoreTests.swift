@@ -68,6 +68,36 @@ final class AppVolumeStoreTests: XCTestCase {
         XCTAssertFalse(store.isBypassed("com.example.App"))
     }
 
+    // MARK: - Mute
+
+    func testMutePreservesNonMuteMode() {
+        store.setMode(.off, for: "com.example.App")
+        store.setMuted(true, for: "com.example.App")
+
+        XCTAssertEqual(store.mode(for: "com.example.App"), .mute)
+        XCTAssertEqual(store.nonMuteMode(for: "com.example.App"), .off)
+
+        store.setMuted(false, for: "com.example.App")
+        XCTAssertEqual(store.mode(for: "com.example.App"), .off)
+    }
+
+    func testMuteDefaultsRestoreToOn() {
+        store.setMuted(true, for: "com.example.App")
+        store.setMuted(false, for: "com.example.App")
+        XCTAssertEqual(store.mode(for: "com.example.App"), .on)
+    }
+
+    func testMutedStateSurvivesPersistenceRoundTrip() {
+        let persistenceURL = tempDirectory.appendingPathComponent("mute-roundtrip.json")
+        let original = AppVolumeStore(persistenceURL: persistenceURL)
+        original.setMode(.off, for: "com.example.App")
+        original.setMuted(true, for: "com.example.App")
+
+        let loaded = AppVolumeStore(persistenceURL: persistenceURL)
+        XCTAssertEqual(loaded.mode(for: "com.example.App"), .mute)
+        XCTAssertEqual(loaded.nonMuteMode(for: "com.example.App"), .off)
+    }
+
     // MARK: - Pruning
 
     func testPruneStaleApps() {

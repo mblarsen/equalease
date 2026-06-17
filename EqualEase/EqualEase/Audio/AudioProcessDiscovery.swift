@@ -55,9 +55,13 @@ final class AudioProcessDiscovery: AudioProcessDiscovering, ObservableObject {
         pollingTimer = Timer.scheduledTimer(
             withTimeInterval: pollingInterval,
             repeats: true
-        ) { [weak self] _ in
+        ) { [weak self] timer in
             Task { @MainActor [weak self] in
-                self?.refresh()
+                guard let self else {
+                    timer.invalidate()
+                    return
+                }
+                self.refresh()
             }
         }
     }

@@ -317,6 +317,47 @@ final class QuickPanelModelTests: XCTestCase {
         XCTAssertTrue(didQuit)
     }
 
+    func testToggleAppProcessBypassSwitchesMode() {
+        let model = makeModel()
+        let appID = "com.example.App"
+
+        XCTAssertEqual(model.appVolumeStore.mode(for: appID), .on)
+
+        model.toggleAppProcessBypass(for: appID)
+        XCTAssertEqual(model.appVolumeStore.mode(for: appID), .off)
+
+        model.toggleAppProcessBypass(for: appID)
+        XCTAssertEqual(model.appVolumeStore.mode(for: appID), .on)
+    }
+
+    func testToggleAppMutePreservesProcessBypassState() {
+        let model = makeModel()
+        let appID = "com.example.App"
+
+        model.toggleAppProcessBypass(for: appID)
+        XCTAssertEqual(model.appVolumeStore.mode(for: appID), .off)
+
+        model.toggleAppMute(for: appID)
+        XCTAssertEqual(model.appVolumeStore.mode(for: appID), .mute)
+        XCTAssertEqual(model.appVolumeStore.nonMuteMode(for: appID), .off)
+
+        model.toggleAppMute(for: appID)
+        XCTAssertEqual(model.appVolumeStore.mode(for: appID), .off)
+    }
+
+    func testToggleAppProcessBypassWhileMutedUnmutesAndAppliesChange() {
+        let model = makeModel()
+        let appID = "com.example.App"
+
+        model.toggleAppProcessBypass(for: appID)
+        model.toggleAppMute(for: appID)
+        XCTAssertEqual(model.appVolumeStore.mode(for: appID), .mute)
+        XCTAssertEqual(model.appVolumeStore.nonMuteMode(for: appID), .off)
+
+        model.toggleAppProcessBypass(for: appID)
+        XCTAssertEqual(model.appVolumeStore.mode(for: appID), .on)
+    }
+
     private func makeModel(
         router providedRouter: TestQuickPanelRouter? = nil,
         inputDeviceController providedInputDeviceController: InputDeviceController? = nil,

@@ -25,6 +25,8 @@ enum AppAudioMode: String, Codable, CaseIterable, Sendable {
 final class AppVolumeStore: ObservableObject {
     @Published private(set) var appVolumes: [String: Double]
     @Published private(set) var appModes: [String: AppAudioMode]
+    /// Mode an app was in before it was muted, persisted so unmuting restores it across launches.
+    @Published private(set) var preMuteModes: [String: AppAudioMode]
 
     private let persistenceURL: URL
 
@@ -33,6 +35,7 @@ final class AppVolumeStore: ObservableObject {
         let persisted = Self.loadPersistedState(from: persistenceURL)
         appVolumes = persisted?.appVolumes ?? [:]
         appModes = persisted?.appModes ?? [:]
+        preMuteModes = persisted?.preMuteModes ?? [:]
     }
 
     init(persistenceURL: URL) {
@@ -40,6 +43,7 @@ final class AppVolumeStore: ObservableObject {
         let persisted = Self.loadPersistedState(from: persistenceURL)
         appVolumes = persisted?.appVolumes ?? [:]
         appModes = persisted?.appModes ?? [:]
+        preMuteModes = persisted?.preMuteModes ?? [:]
     }
 
     /// Returns the app volume multiplier, defaulting to 1.0 (normal/full volume).
@@ -73,6 +77,29 @@ final class AppVolumeStore: ObservableObject {
         save()
     }
 
+    /// Returns the mode that will be active when the app is not muted.
+    func nonMuteMode(for bundleID: String) -> AppAudioMode {
+        if mode(for: bundleID) == .mute {
+            return preMuteModes[bundleID] ?? .on
+        }
+        return mode(for: bundleID)
+    }
+
+    /// Mute or unmute an app without changing its Process/Bypass state.
+    /// The pre-mute mode is persisted so it survives app restarts.
+    func setMuted(_ muted: Bool, for bundleID: String) {
+        let current = mode(for: bundleID)
+        if muted {
+            if current != .mute {
+                preMuteModes[bundleID] = current
+                setMode(.mute, for: bundleID)
+            }
+        } else {
+            let restore = preMuteModes.removeValue(forKey: bundleID) ?? .on
+            setMode(restore, for: bundleID)
+        }
+    }
+
     /// Legacy compatibility for older UI/tests: bypass maps to mode `.off`.
     func isBypassed(_ bundleID: String) -> Bool {
         mode(for: bundleID) == .off
@@ -87,9 +114,11 @@ final class AppVolumeStore: ObservableObject {
     func pruneStaleApps(keeping activeBundleIDs: Set<String>) {
         let volumeKeysToRemove = Set(appVolumes.keys).subtracting(activeBundleIDs)
         let modeKeysToRemove = Set(appModes.keys).subtracting(activeBundleIDs)
-        guard !volumeKeysToRemove.isEmpty || !modeKeysToRemove.isEmpty else { return }
+        let preMuteKeysToRemove = Set(preMuteModes.keys).subtracting(activeBundleIDs)
+        guard !volumeKeysToRemove.isEmpty || !modeKeysToRemove.isEmpty || !preMuteKeysToRemove.isEmpty else { return }
         for key in volumeKeysToRemove { appVolumes.removeValue(forKey: key) }
         for key in modeKeysToRemove { appModes.removeValue(forKey: key) }
+        for key in preMuteKeysToRemove { preMuteModes.removeValue(forKey: key) }
         save()
     }
 
@@ -103,7 +132,8 @@ final class AppVolumeStore: ObservableObject {
             )
             let state = PersistedState(
                 appVolumes: appVolumes,
-                appModes: appModes
+                appModes: appModes,
+                preMuteModes: preMuteModes
             )
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
@@ -136,10 +166,12 @@ final class AppVolumeStore: ObservableObject {
     private struct PersistedState: Codable {
         var appVolumes: [String: Double]
         var appModes: [String: AppAudioMode]
+        var preMuteModes: [String: AppAudioMode]
 
-        init(appVolumes: [String: Double] = [:], appModes: [String: AppAudioMode] = [:]) {
+        init(appVolumes: [String: Double] = [:], appModes: [String: AppAudioMode] = [:], preMuteModes: [String: AppAudioMode] = [:]) {
             self.appVolumes = appVolumes
             self.appModes = appModes
+            self.preMuteModes = preMuteModes
         }
 
         init(from decoder: Decoder) throws {
@@ -151,17 +183,20 @@ final class AppVolumeStore: ObservableObject {
                 let legacyBypassedApps = try container.decodeIfPresent(Set<String>.self, forKey: .bypassedApps) ?? []
                 appModes = Dictionary(uniqueKeysWithValues: legacyBypassedApps.map { ($0, .off) })
             }
+            preMuteModes = try container.decodeIfPresent([String: AppAudioMode].self, forKey: .preMuteModes) ?? [:]
         }
 
         func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(appVolumes, forKey: .appVolumes)
             try container.encode(appModes, forKey: .appModes)
+            try container.encode(preMuteModes, forKey: .preMuteModes)
         }
 
         private enum CodingKeys: String, CodingKey {
             case appVolumes
             case appModes
+            case preMuteModes
             case bypassedApps
         }
     }

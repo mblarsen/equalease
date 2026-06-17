@@ -8,7 +8,16 @@
 
 #include <algorithm>
 #include <atomic>
+#include <mutex>
 #include <vector>
+
+/// Snapshot of the stream config vector plus a monotonic epoch.
+/// The IOProc reports back the epoch it observed, allowing retired snapshots
+/// to be freed only after the real-time callback has moved past them.
+struct StreamConfigSnapshot {
+    uint64_t epoch;
+    std::vector<StreamConfig>* configs;
+};
 
 static OSStatus RoutingIOProc(AudioObjectID,
                               const AudioTimeStamp*,
@@ -26,9 +35,12 @@ static OSStatus RoutingIOProc(AudioObjectID,
 
 @implementation CoreAudioLoopback {
     EqualizerEngine *_engine;
-    // Per-stream config, atomically swapped via setStreamConfigs:count:.
-    // The IOProc reads the pointer atomically; the setter swaps in a new vector.
-    std::atomic<std::vector<StreamConfig>*> _streamConfigs;
+    // Per-stream config snapshot, atomically swapped via setStreamConfigs:count:.
+    // The IOProc reads the snapshot atomically and reports back the epoch it observed.
+    std::atomic<StreamConfigSnapshot*> _streamConfigs;
+    std::atomic<uint64_t> _completedEpoch;
+    std::mutex _retiredSnapshotsMutex;
+    std::vector<StreamConfigSnapshot*> _retiredSnapshots;
 }
 
 @synthesize deviceID = _deviceID;
@@ -49,10 +61,12 @@ static OSStatus RoutingIOProc(AudioObjectID,
     _ioProcID = nullptr;
     _channelsPerStream = 2;
     _engine = [[EqualizerEngine alloc] initWithChannelCount:8 sampleRate:48000.0f];
+    _completedEpoch.store(0, std::memory_order_relaxed);
 
     // Default: single stream, unity gain, not bypassed (legacy behavior).
     auto* defaultConfigs = new std::vector<StreamConfig>(1, {1.0f, NO, NO});
-    _streamConfigs.store(defaultConfigs, std::memory_order_release);
+    auto* defaultSnapshot = new StreamConfigSnapshot{1, defaultConfigs};
+    _streamConfigs.store(defaultSnapshot, std::memory_order_release);
 
     return self;
 }
@@ -98,19 +112,48 @@ static OSStatus RoutingIOProc(AudioObjectID,
         return;
     }
     auto* newConfigs = new std::vector<StreamConfig>(configs, configs + count);
-    auto* oldConfigs = _streamConfigs.exchange(newConfigs, std::memory_order_acq_rel);
-    // The IOProc may still be reading oldConfigs; it will finish before the
-    // next callback reads the new pointer. Delete after a safe delay.
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)),
-                   dispatch_get_main_queue(), ^{
-        delete oldConfigs;
-    });
+    auto* oldSnapshot = _streamConfigs.load(std::memory_order_acquire);
+    uint64_t newEpoch = 1;
+    if (oldSnapshot != nullptr) {
+        newEpoch = oldSnapshot->epoch + 1;
+    }
+    auto* newSnapshot = new StreamConfigSnapshot{newEpoch, newConfigs};
+    auto* retiredSnapshot = _streamConfigs.exchange(newSnapshot, std::memory_order_acq_rel);
+
+    {
+        std::lock_guard<std::mutex> lock(_retiredSnapshotsMutex);
+        _retiredSnapshots.push_back(retiredSnapshot);
+    }
+    [self cleanupRetiredSnapshots];
 }
 
-/// Returns a raw pointer to the current stream configs vector for the IOProc.
+/// Returns the current stream config snapshot for the IOProc.
 /// NOT part of the public header — used only by the static IOProc.
-- (const std::vector<StreamConfig>*)streamConfigsPointer {
+- (const StreamConfigSnapshot*)streamConfigsPointer {
     return _streamConfigs.load(std::memory_order_acquire);
+}
+
+/// Called by the IOProc after it finishes processing a callback.
+/// NOT part of the public header.
+- (void)markEpochCompleted:(uint64_t)epoch {
+    _completedEpoch.store(epoch, std::memory_order_release);
+}
+
+/// Frees snapshots whose epoch has been acknowledged by the IOProc.
+- (void)cleanupRetiredSnapshots {
+    const uint64_t completed = _completedEpoch.load(std::memory_order_acquire);
+    std::lock_guard<std::mutex> lock(_retiredSnapshotsMutex);
+    _retiredSnapshots.erase(
+        std::remove_if(_retiredSnapshots.begin(), _retiredSnapshots.end(),
+            [completed](StreamConfigSnapshot* snapshot) {
+                if (snapshot != nullptr && snapshot->epoch <= completed) {
+                    delete snapshot->configs;
+                    delete snapshot;
+                    return true;
+                }
+                return false;
+            }),
+        _retiredSnapshots.end());
 }
 
 - (BOOL)start {
@@ -161,8 +204,21 @@ static OSStatus RoutingIOProc(AudioObjectID,
 
 - (void)dealloc {
     [self stop];
-    auto* configs = _streamConfigs.load(std::memory_order_acquire);
-    delete configs;
+    auto* snapshot = _streamConfigs.load(std::memory_order_acquire);
+    if (snapshot != nullptr) {
+        delete snapshot->configs;
+        delete snapshot;
+    }
+    {
+        std::lock_guard<std::mutex> lock(_retiredSnapshotsMutex);
+        for (auto* retired : _retiredSnapshots) {
+            if (retired != nullptr) {
+                delete retired->configs;
+                delete retired;
+            }
+        }
+        _retiredSnapshots.clear();
+    }
 }
 
 @end
@@ -195,8 +251,10 @@ static OSStatus RoutingIOProc(AudioObjectID,
 
     const UInt32 maxChannels = 8;
     const UInt32 channelsPerStream = std::max<UInt32>(1, std::min<UInt32>((UInt32)loopback.channelsPerStream, maxChannels));
-    const auto* streamConfigs = [loopback streamConfigsPointer];
+    const auto* snapshot = [loopback streamConfigsPointer];
+    const auto* streamConfigs = snapshot ? snapshot->configs : nullptr;
     const NSUInteger configCount = streamConfigs ? streamConfigs->size() : 0;
+    const uint64_t observedEpoch = snapshot ? snapshot->epoch : 0;
 
     const bool inputBuffersAreStreams = inputData->mBuffers[0].mNumberChannels > 1 || inputBufferCount <= configCount;
     const bool outputBuffersAreStreams = outputData->mBuffers[0].mNumberChannels > 1 || outputBufferCount == 1;
@@ -305,6 +363,8 @@ static OSStatus RoutingIOProc(AudioObjectID,
             }
         }
     }
+
+    [loopback markEpochCompleted:observedEpoch];
 
     return kAudioHardwareNoError;
 }

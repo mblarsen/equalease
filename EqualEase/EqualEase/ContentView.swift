@@ -461,8 +461,8 @@ struct ContentView<Router: AudioRoutingBackend>: View {
 
             let mode = model.appVolumeStore.mode(for: app.bundleID)
             let isMuted = mode == .mute
-            let underlyingMode = model.underlyingMode(for: app.bundleID)
-            let isProcessing = underlyingMode == .on
+            let nonMuteMode = model.appVolumeStore.nonMuteMode(for: app.bundleID)
+            let isProcessing = nonMuteMode == .on
 
             Slider(
                 value: Binding(

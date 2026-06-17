@@ -150,43 +150,24 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         objectWillChange.send()
     }
 
-    /// The mode an app was in before mute was toggled on, so unmuting restores it.
-    private var preMuteModes: [String: AppAudioMode] = [:]
-
-    /// Returns the mode that will be active when unmuted (.on if none saved).
-    func underlyingMode(for bundleID: String) -> AppAudioMode {
-        let stored = appVolumeStore.mode(for: bundleID)
-        if stored == .mute {
-            return preMuteModes[bundleID] ?? .on
-        }
-        return stored
-    }
-
     func setAppMode(_ mode: AppAudioMode, for bundleID: String) {
         appVolumeStore.setMode(mode, for: bundleID)
         objectWillChange.send()
     }
 
     func toggleAppProcessBypass(for bundleID: String) {
-        let underlying = underlyingMode(for: bundleID)
+        let underlying = appVolumeStore.nonMuteMode(for: bundleID)
         let next = underlying == .on ? AppAudioMode.off : .on
         if appVolumeStore.mode(for: bundleID) == .mute {
-            preMuteModes[bundleID] = next
-        } else {
-            setAppMode(next, for: bundleID)
+            appVolumeStore.setMuted(false, for: bundleID)
         }
+        setAppMode(next, for: bundleID)
     }
 
     /// Toggle mute on/off without disturbing the underlying Process/Bypass state.
     func toggleAppMute(for bundleID: String) {
-        let current = appVolumeStore.mode(for: bundleID)
-        if current == .mute {
-            let restore = preMuteModes.removeValue(forKey: bundleID) ?? .on
-            setAppMode(restore, for: bundleID)
-        } else {
-            preMuteModes[bundleID] = current
-            setAppMode(.mute, for: bundleID)
-        }
+        appVolumeStore.setMuted(appVolumeStore.mode(for: bundleID) != .mute, for: bundleID)
+        objectWillChange.send()
     }
 
     func setAppBypassed(_ bypassed: Bool, for bundleID: String) {
