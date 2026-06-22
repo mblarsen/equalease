@@ -35,6 +35,14 @@ final class BrowserPageNormalizerTests: XCTestCase {
 
 @MainActor
 final class BrowserPageObserverTests: XCTestCase {
+    func testDefaultRegistrySupportsSafariAndChrome() {
+        let registry = BrowserPageProviderRegistry.default
+
+        XCTAssertEqual(registry.provider(for: safari)?.browserDisplayName, "Safari")
+        XCTAssertEqual(registry.provider(for: chrome)?.browserDisplayName, "Google Chrome")
+        XCTAssertNil(registry.provider(for: terminal))
+    }
+
     func testForegroundSafariDoesNotQueryPageBeforeUserActionOrAutomaticObservation() {
         let provider = FakeBrowserPageProvider()
         let observer = BrowserPageObserver(provider: provider)
@@ -221,8 +229,42 @@ final class BrowserPageObserverTests: XCTestCase {
         XCTAssertEqual(observer.pageGeneration, 1)
     }
 
+    func testForegroundBrowserChoosesMatchingProviderWhenSafariAndChromeAreSupported() {
+        let safariProvider = FakeBrowserPageProvider(
+            browserDisplayName: "Safari",
+            supportedBundleIdentifier: safari.bundleIdentifier
+        )
+        safariProvider.page = meet
+        let chromeProvider = FakeBrowserPageProvider(
+            browserDisplayName: "Google Chrome",
+            supportedBundleIdentifier: chrome.bundleIdentifier
+        )
+        chromeProvider.page = docs
+        let observer = BrowserPageObserver(
+            providerRegistry: BrowserPageProviderRegistry(providers: [safariProvider, chromeProvider])
+        )
+
+        observer.updateForegroundApp(safari)
+        observer.setAutomaticObservationEnabled(true)
+
+        XCTAssertEqual(observer.activePage?.siteKey, meet.siteKey)
+        XCTAssertEqual(safariProvider.requestCount, 1)
+        XCTAssertEqual(chromeProvider.requestCount, 0)
+
+        observer.updateForegroundApp(chrome)
+
+        XCTAssertEqual(observer.supportedBrowserDisplayName, "Google Chrome")
+        XCTAssertEqual(observer.activePage?.siteKey, docs.siteKey)
+        XCTAssertEqual(safariProvider.requestCount, 1)
+        XCTAssertEqual(chromeProvider.requestCount, 1)
+    }
+
     private var safari: ForegroundAppIdentity {
         ForegroundAppIdentity(bundleIdentifier: "com.apple.Safari", displayName: "Safari")
+    }
+
+    private var chrome: ForegroundAppIdentity {
+        ForegroundAppIdentity(bundleIdentifier: "com.google.Chrome", displayName: "Google Chrome")
     }
 
     private var terminal: ForegroundAppIdentity {
@@ -248,18 +290,37 @@ final class BrowserPageObserverTests: XCTestCase {
             displayName: "youtube.com"
         )
     }
+
+    private var docs: BrowserPageIdentity {
+        BrowserPageIdentity(
+            browserBundleIdentifier: chrome.bundleIdentifier,
+            browserDisplayName: chrome.displayName,
+            url: URL(string: "https://docs.google.com/document/d/abc")!,
+            siteKey: "docs.google.com",
+            displayName: "docs.google.com"
+        )
+    }
 }
 
 @MainActor
 private final class FakeBrowserPageProvider: ActiveBrowserPageProviding {
-    var browserDisplayName = "Safari"
+    var browserDisplayName: String
+    var supportedBundleIdentifier: String
     var page: BrowserPageIdentity?
     var requestCount = 0
     var allowsNonPromptedRead = true
     var permissionPromptRequests: [Bool] = []
 
+    init(
+        browserDisplayName: String = "Safari",
+        supportedBundleIdentifier: String = SafariActivePageProvider.safariBundleIdentifier
+    ) {
+        self.browserDisplayName = browserDisplayName
+        self.supportedBundleIdentifier = supportedBundleIdentifier
+    }
+
     func supports(bundleIdentifier: String) -> Bool {
-        bundleIdentifier == SafariActivePageProvider.safariBundleIdentifier
+        bundleIdentifier == supportedBundleIdentifier
     }
 
     func activePage(for foregroundApp: ForegroundAppIdentity, promptsForPermission: Bool) -> BrowserPageIdentity? {

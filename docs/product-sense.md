@@ -30,7 +30,7 @@ During development, local builds are useful for testing real audio behavior. Tha
 6. Built-in presets that make sense, plus custom presets for the user's own speakers, headphones, and listening setups.
 7. Low microphone volume protection so call input problems are visible before other people cannot hear the user.
 8. Optional local-network remote control for simpler real-time interaction from a phone.
-9. Smart app and Safari website switching that learns from the user's choices.
+9. Smart app and supported-browser website switching that learns from the user's choices.
 10. App Store builds use App Store updates rather than a separate in-app updater.
 
 ## Product principles
@@ -54,15 +54,15 @@ Device-specific preset rules are paused in the product model. Output-device sele
 Preset precedence is:
 
 1. Locked preset / paused preset switching.
-2. Remembered active-website preset when the user has created website rules, Safari is foreground, and the active tab URL can be read.
+2. Remembered active-website preset when the user has created website rules, a supported browser is foreground, and the active tab URL can be read.
 3. Remembered active-app preset.
 4. Selected default preset.
 
 ### Smart switching should be learned, not magical
 
-The app should not ship built-in app or website rules. Instead, when the user selects a preset while an app or explicitly selected website is active, EqualEase may unobtrusively suggest remembering that choice, similar in spirit to macOS remembering keyboard input source per app. Website detection should be user-initiated first: EqualEase should not ask Safari for the active page until the user chooses to select the current web page in Rules.
+The app should not ship built-in app or website rules. Instead, when the user selects a preset while an app or explicitly selected website is active, EqualEase may unobtrusively suggest remembering that choice, similar in spirit to macOS remembering keyboard input source per app. Website detection should be user-initiated first: EqualEase should not ask Safari or Google Chrome for the active page until the user chooses to select the current web page in Rules.
 
-App rules switch the single active EQ based on the foreground app. They do not apply separate EQ curves to simultaneous background audio sources. For example, if Spotify plays in the background while Safari is foreground, Safari's active-app rule can win over Spotify's rule. When no active-app rule matches, EqualEase returns to the selected default preset rather than keeping the previous app's preset active.
+App rules switch the single active EQ based on the foreground app. They do not apply separate EQ curves to simultaneous background audio sources. For example, if Spotify plays in the background while a browser is foreground, the browser's active-app rule can win over Spotify's rule. When no active-app rule matches, EqualEase returns to the selected default preset rather than keeping the previous app's preset active.
 
 The more complete long-term behavior is per-source simultaneous EQ, where different apps can keep different EQ curves at the same time. That requires separate process taps or source-aware mixing and remains outside the current simple preset model.
 
