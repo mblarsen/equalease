@@ -207,6 +207,7 @@ final class BrowserPageObserver: ObservableObject {
     private let providerRegistry: BrowserPageProviderRegistry
     private var foregroundApp: ForegroundAppIdentity?
     private var automaticallyObservesActivePage = false
+    private var automaticPermissionPromptedBundleIdentifiers: Set<String> = []
     private var refreshTimer: Timer?
 
     init() {
@@ -247,9 +248,16 @@ final class BrowserPageObserver: ObservableObject {
             return
         }
 
+        if activePage?.browserBundleIdentifier != foregroundApp?.bundleIdentifier {
+            updateActivePage(nil)
+        }
+
         guard automaticallyObservesActivePage else { return }
         startPolling()
-        refresh()
+        refreshActivePage(
+            promptsForPermission: shouldPromptForAutomaticPermission(),
+            clearOnFailure: true
+        )
     }
 
     func setAutomaticObservationEnabled(_ isEnabled: Bool) {
@@ -259,7 +267,10 @@ final class BrowserPageObserver: ObservableObject {
         if isEnabled, isSupportedBrowserForeground {
             startPolling()
             if activePage == nil {
-                refresh()
+                refreshActivePage(
+                    promptsForPermission: shouldPromptForAutomaticPermission(),
+                    clearOnFailure: true
+                )
             }
         } else if !isEnabled {
             stopPolling()
@@ -280,6 +291,7 @@ final class BrowserPageObserver: ObservableObject {
             return nil
         }
 
+        automaticPermissionPromptedBundleIdentifiers.insert(foregroundApp.bundleIdentifier)
         let page = provider.activePage(for: foregroundApp, promptsForPermission: true)
         didFailLastUserRequest = page == nil
         updateActivePage(page)
@@ -297,6 +309,10 @@ final class BrowserPageObserver: ObservableObject {
     }
 
     func refreshActivePageWithoutPrompt(clearOnFailure: Bool = false) {
+        refreshActivePage(promptsForPermission: false, clearOnFailure: clearOnFailure)
+    }
+
+    private func refreshActivePage(promptsForPermission: Bool, clearOnFailure: Bool = false) {
         guard let foregroundApp,
               let provider = currentProvider
         else {
@@ -306,11 +322,19 @@ final class BrowserPageObserver: ObservableObject {
             return
         }
 
-        if let page = provider.activePage(for: foregroundApp, promptsForPermission: false) {
+        if let page = provider.activePage(for: foregroundApp, promptsForPermission: promptsForPermission) {
             updateActivePage(page)
         } else if clearOnFailure {
             updateActivePage(nil)
         }
+    }
+
+    private func shouldPromptForAutomaticPermission() -> Bool {
+        guard let bundleIdentifier = foregroundApp?.bundleIdentifier,
+              !automaticPermissionPromptedBundleIdentifiers.contains(bundleIdentifier)
+        else { return false }
+        automaticPermissionPromptedBundleIdentifiers.insert(bundleIdentifier)
+        return true
     }
 
     private func startPolling() {

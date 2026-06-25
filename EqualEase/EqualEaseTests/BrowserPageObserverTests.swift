@@ -81,33 +81,35 @@ final class BrowserPageObserverTests: XCTestCase {
 
         XCTAssertEqual(observer.activePage?.siteKey, meet.siteKey)
         XCTAssertEqual(observer.pageGeneration, 1)
-        XCTAssertEqual(provider.permissionPromptRequests, [false])
+        XCTAssertEqual(provider.permissionPromptRequests, [true])
 
         provider.page = youtube
         observer.refresh()
 
         XCTAssertEqual(observer.activePage?.siteKey, youtube.siteKey)
         XCTAssertEqual(observer.pageGeneration, 2)
+        XCTAssertEqual(provider.permissionPromptRequests, [true, false])
     }
 
-    func testAutomaticObservationDoesNotPromptForPermissionWhenReadIsDenied() {
+    func testAutomaticObservationPromptsOnceWhenPermissionIsNeeded() {
         let provider = FakeBrowserPageProvider()
         let observer = BrowserPageObserver(provider: provider)
         provider.page = meet
         provider.allowsNonPromptedRead = false
+        provider.allowsPromptedRead = false
 
         observer.updateForegroundApp(safari)
         observer.setAutomaticObservationEnabled(true)
 
         XCTAssertNil(observer.activePage)
         XCTAssertEqual(observer.pageGeneration, 0)
-        XCTAssertEqual(provider.permissionPromptRequests, [false])
+        XCTAssertEqual(provider.permissionPromptRequests, [true])
 
-        observer.requestActivePageFromUserAction()
+        observer.refresh()
 
-        XCTAssertEqual(observer.activePage?.siteKey, meet.siteKey)
-        XCTAssertEqual(observer.pageGeneration, 1)
-        XCTAssertEqual(provider.permissionPromptRequests, [false, true])
+        XCTAssertNil(observer.activePage)
+        XCTAssertEqual(observer.pageGeneration, 0)
+        XCTAssertEqual(provider.permissionPromptRequests, [true, false])
     }
 
     func testEnablingAutomaticObservationDoesNotClearFreshUserRequestedPage() {
@@ -257,6 +259,8 @@ final class BrowserPageObserverTests: XCTestCase {
         XCTAssertEqual(observer.activePage?.siteKey, docs.siteKey)
         XCTAssertEqual(safariProvider.requestCount, 1)
         XCTAssertEqual(chromeProvider.requestCount, 1)
+        XCTAssertEqual(safariProvider.permissionPromptRequests, [true])
+        XCTAssertEqual(chromeProvider.permissionPromptRequests, [true])
     }
 
     private var safari: ForegroundAppIdentity {
@@ -309,6 +313,7 @@ private final class FakeBrowserPageProvider: ActiveBrowserPageProviding {
     var page: BrowserPageIdentity?
     var requestCount = 0
     var allowsNonPromptedRead = true
+    var allowsPromptedRead = true
     var permissionPromptRequests: [Bool] = []
 
     init(
@@ -326,9 +331,8 @@ private final class FakeBrowserPageProvider: ActiveBrowserPageProviding {
     func activePage(for foregroundApp: ForegroundAppIdentity, promptsForPermission: Bool) -> BrowserPageIdentity? {
         requestCount += 1
         permissionPromptRequests.append(promptsForPermission)
-        guard supports(bundleIdentifier: foregroundApp.bundleIdentifier),
-              promptsForPermission || allowsNonPromptedRead
-        else { return nil }
+        guard supports(bundleIdentifier: foregroundApp.bundleIdentifier) else { return nil }
+        guard promptsForPermission ? allowsPromptedRead : allowsNonPromptedRead else { return nil }
         return page
     }
 }
