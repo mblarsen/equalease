@@ -36,7 +36,7 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSAppleEventsUsageDescription</key>
-	<string>EqualEase reads Safari's active website only when applying or creating website preset rules.</string>
+	<string>EqualEase reads the active website in supported browsers only when applying or creating website preset rules.</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
 	<key>NSAudioCaptureUsageDescription</key>

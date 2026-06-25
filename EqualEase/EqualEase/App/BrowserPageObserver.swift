@@ -67,7 +67,10 @@ protocol ActiveBrowserPageProviding {
 struct BrowserPageProviderRegistry {
     var providers: [ActiveBrowserPageProviding]
 
-    static let `default` = BrowserPageProviderRegistry(providers: [SafariActivePageProvider()])
+    static let `default` = BrowserPageProviderRegistry(providers: [
+        SafariActivePageProvider(),
+        GoogleChromeActivePageProvider()
+    ])
 
     func provider(for foregroundApp: ForegroundAppIdentity?) -> ActiveBrowserPageProviding? {
         guard let foregroundApp else { return nil }
@@ -76,37 +79,30 @@ struct BrowserPageProviderRegistry {
 }
 
 @MainActor
-struct SafariActivePageProvider: ActiveBrowserPageProviding {
-    static let safariBundleIdentifier = "com.apple.Safari"
-
-    var browserDisplayName: String { "Safari" }
+struct ScriptedBrowserPageProvider: ActiveBrowserPageProviding {
+    var browserBundleIdentifier: String
+    var browserDisplayName: String
+    var activePageURLScriptSource: String
 
     func supports(bundleIdentifier: String) -> Bool {
-        bundleIdentifier == Self.safariBundleIdentifier
+        bundleIdentifier == browserBundleIdentifier
     }
 
     func activePage(for foregroundApp: ForegroundAppIdentity, promptsForPermission: Bool) -> BrowserPageIdentity? {
         guard supports(bundleIdentifier: foregroundApp.bundleIdentifier),
-              hasAutomationPermission(promptUserIfNeeded: promptsForPermission)
+              BrowserAutomationPermission.hasPermission(
+                  for: browserBundleIdentifier,
+                  promptUserIfNeeded: promptsForPermission
+              )
         else { return nil }
 
-        var errorInfo: NSDictionary?
-        let script = NSAppleScript(source: """
-        tell application id "com.apple.Safari"
-            if not (exists front document) then return ""
-            set pageURL to URL of front document
-            return pageURL
-        end tell
-        """)
-
-        guard let rawURLString = script?.executeAndReturnError(&errorInfo).stringValue?.trimmingCharacters(in: .whitespacesAndNewlines),
-              !rawURLString.isEmpty,
+        guard let rawURLString = executeActivePageURLScript(),
               let url = URL(string: rawURLString),
               let siteKey = BrowserPageNormalizer.normalizedSiteKey(from: url)
         else { return nil }
 
         return BrowserPageIdentity(
-            browserBundleIdentifier: Self.safariBundleIdentifier,
+            browserBundleIdentifier: browserBundleIdentifier,
             browserDisplayName: foregroundApp.displayName,
             url: url,
             siteKey: siteKey,
@@ -114,8 +110,74 @@ struct SafariActivePageProvider: ActiveBrowserPageProviding {
         )
     }
 
-    private func hasAutomationPermission(promptUserIfNeeded: Bool) -> Bool {
-        guard var targetDescriptor = NSAppleEventDescriptor(bundleIdentifier: Self.safariBundleIdentifier).aeDesc?.pointee else {
+    private func executeActivePageURLScript() -> String? {
+        var errorInfo: NSDictionary?
+        return NSAppleScript(source: activePageURLScriptSource)?
+            .executeAndReturnError(&errorInfo)
+            .stringValue?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .nilIfEmpty
+    }
+}
+
+@MainActor
+struct SafariActivePageProvider: ActiveBrowserPageProviding {
+    static let safariBundleIdentifier = "com.apple.Safari"
+
+    private let provider = ScriptedBrowserPageProvider(
+        browserBundleIdentifier: safariBundleIdentifier,
+        browserDisplayName: "Safari",
+        activePageURLScriptSource: """
+        tell application id "com.apple.Safari"
+            if not (exists front document) then return ""
+            set pageURL to URL of front document
+            return pageURL
+        end tell
+        """
+    )
+
+    var browserDisplayName: String { provider.browserDisplayName }
+
+    func supports(bundleIdentifier: String) -> Bool {
+        provider.supports(bundleIdentifier: bundleIdentifier)
+    }
+
+    func activePage(for foregroundApp: ForegroundAppIdentity, promptsForPermission: Bool) -> BrowserPageIdentity? {
+        provider.activePage(for: foregroundApp, promptsForPermission: promptsForPermission)
+    }
+}
+
+@MainActor
+struct GoogleChromeActivePageProvider: ActiveBrowserPageProviding {
+    static let chromeBundleIdentifier = "com.google.Chrome"
+
+    private let provider = ScriptedBrowserPageProvider(
+        browserBundleIdentifier: chromeBundleIdentifier,
+        browserDisplayName: "Google Chrome",
+        activePageURLScriptSource: """
+        tell application id "com.google.Chrome"
+            if not (exists front window) then return ""
+            if not (exists active tab of front window) then return ""
+            set pageURL to URL of active tab of front window
+            return pageURL
+        end tell
+        """
+    )
+
+    var browserDisplayName: String { provider.browserDisplayName }
+
+    func supports(bundleIdentifier: String) -> Bool {
+        provider.supports(bundleIdentifier: bundleIdentifier)
+    }
+
+    func activePage(for foregroundApp: ForegroundAppIdentity, promptsForPermission: Bool) -> BrowserPageIdentity? {
+        provider.activePage(for: foregroundApp, promptsForPermission: promptsForPermission)
+    }
+}
+
+private enum BrowserAutomationPermission {
+    static func hasPermission(for bundleIdentifier: String, promptUserIfNeeded: Bool) -> Bool {
+        guard var targetDescriptor = NSAppleEventDescriptor(bundleIdentifier: bundleIdentifier).aeDesc?.pointee else {
             return false
         }
         defer { AEDisposeDesc(&targetDescriptor) }
@@ -130,6 +192,12 @@ struct SafariActivePageProvider: ActiveBrowserPageProviding {
     }
 }
 
+private extension String {
+    var nilIfEmpty: String? {
+        isEmpty ? nil : self
+    }
+}
+
 @MainActor
 final class BrowserPageObserver: ObservableObject {
     @Published private(set) var activePage: BrowserPageIdentity?
@@ -139,6 +207,7 @@ final class BrowserPageObserver: ObservableObject {
     private let providerRegistry: BrowserPageProviderRegistry
     private var foregroundApp: ForegroundAppIdentity?
     private var automaticallyObservesActivePage = false
+    private var automaticPermissionPromptedBundleIdentifiers: Set<String> = []
     private var refreshTimer: Timer?
 
     init() {
@@ -179,9 +248,16 @@ final class BrowserPageObserver: ObservableObject {
             return
         }
 
+        if activePage?.browserBundleIdentifier != foregroundApp?.bundleIdentifier {
+            updateActivePage(nil)
+        }
+
         guard automaticallyObservesActivePage else { return }
         startPolling()
-        refresh()
+        refreshActivePage(
+            promptsForPermission: shouldPromptForAutomaticPermission(),
+            clearOnFailure: true
+        )
     }
 
     func setAutomaticObservationEnabled(_ isEnabled: Bool) {
@@ -191,7 +267,10 @@ final class BrowserPageObserver: ObservableObject {
         if isEnabled, isSupportedBrowserForeground {
             startPolling()
             if activePage == nil {
-                refresh()
+                refreshActivePage(
+                    promptsForPermission: shouldPromptForAutomaticPermission(),
+                    clearOnFailure: true
+                )
             }
         } else if !isEnabled {
             stopPolling()
@@ -212,6 +291,7 @@ final class BrowserPageObserver: ObservableObject {
             return nil
         }
 
+        automaticPermissionPromptedBundleIdentifiers.insert(foregroundApp.bundleIdentifier)
         let page = provider.activePage(for: foregroundApp, promptsForPermission: true)
         didFailLastUserRequest = page == nil
         updateActivePage(page)
@@ -229,6 +309,10 @@ final class BrowserPageObserver: ObservableObject {
     }
 
     func refreshActivePageWithoutPrompt(clearOnFailure: Bool = false) {
+        refreshActivePage(promptsForPermission: false, clearOnFailure: clearOnFailure)
+    }
+
+    private func refreshActivePage(promptsForPermission: Bool, clearOnFailure: Bool = false) {
         guard let foregroundApp,
               let provider = currentProvider
         else {
@@ -238,11 +322,19 @@ final class BrowserPageObserver: ObservableObject {
             return
         }
 
-        if let page = provider.activePage(for: foregroundApp, promptsForPermission: false) {
+        if let page = provider.activePage(for: foregroundApp, promptsForPermission: promptsForPermission) {
             updateActivePage(page)
         } else if clearOnFailure {
             updateActivePage(nil)
         }
+    }
+
+    private func shouldPromptForAutomaticPermission() -> Bool {
+        guard let bundleIdentifier = foregroundApp?.bundleIdentifier,
+              !automaticPermissionPromptedBundleIdentifiers.contains(bundleIdentifier)
+        else { return false }
+        automaticPermissionPromptedBundleIdentifiers.insert(bundleIdentifier)
+        return true
     }
 
     private func startPolling() {

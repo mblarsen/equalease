@@ -435,7 +435,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 } else {
-                    ForEach(model.discoveredApps, id: \.bundleID) { app in
+                    ForEach(model.discoveredApps, id: \.processObjectID) { app in
                         appVolumeRow(app: app)
                     }
                 }
