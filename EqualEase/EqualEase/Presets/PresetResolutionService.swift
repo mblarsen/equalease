@@ -44,6 +44,7 @@ struct PresetResolutionService {
         _ = devicePresetIDs
 
         if let activeWebsite,
+           activeWebsiteBelongsToActiveApp(activeWebsite, activeApp: activeApp),
            let presetID = websitePresetIDs[activeWebsite.siteKey],
            let preset = presetsByID[presetID] {
             return PresetResolution(
@@ -72,5 +73,12 @@ struct PresetResolutionService {
         }
 
         return presets.first.map { PresetResolution(preset: $0, source: .selectedPreset) }
+    }
+
+    private static func activeWebsiteBelongsToActiveApp(
+        _ activeWebsite: BrowserPageIdentity,
+        activeApp: ForegroundAppIdentity?
+    ) -> Bool {
+        activeWebsite.browserBundleIdentifier == activeApp?.bundleIdentifier
     }
 }

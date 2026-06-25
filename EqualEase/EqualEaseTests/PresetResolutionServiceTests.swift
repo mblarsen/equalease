@@ -79,6 +79,33 @@ final class PresetResolutionServiceTests: XCTestCase {
         )
     }
 
+    func testActiveAppRuleWinsWhenWebsiteBelongsToDifferentBrowser() {
+        let staleSafariPage = BrowserPageIdentity(
+            browserBundleIdentifier: safari.bundleIdentifier,
+            browserDisplayName: safari.displayName,
+            url: URL(string: "https://github.com/plantura-garden/app/pull/1449")!,
+            siteKey: "github.com",
+            displayName: "github.com"
+        )
+
+        let resolution = PresetResolutionService.resolve(
+            selectedPresetID: flat.id,
+            outputDeviceUID: "speaker",
+            activeApp: chrome,
+            activeWebsite: staleSafariPage,
+            presets: presets,
+            devicePresetIDs: [:],
+            appPresetIDs: [chrome.bundleIdentifier: bass.id],
+            websitePresetIDs: ["github.com": treble.id]
+        )
+
+        XCTAssertEqual(resolution?.preset, bass)
+        XCTAssertEqual(
+            resolution?.source,
+            .activeApp(bundleIdentifier: chrome.bundleIdentifier, displayName: chrome.displayName)
+        )
+    }
+
     func testActiveAppRuleWinsWhenWebsitePresetIDIsMissing() {
         let resolution = PresetResolutionService.resolve(
             selectedPresetID: flat.id,
@@ -272,6 +299,10 @@ final class PresetResolutionServiceTests: XCTestCase {
 
     private var terminal: ForegroundAppIdentity {
         ForegroundAppIdentity(bundleIdentifier: "com.apple.Terminal", displayName: "Terminal")
+    }
+
+    private var chrome: ForegroundAppIdentity {
+        ForegroundAppIdentity(bundleIdentifier: "com.google.Chrome", displayName: "Google Chrome")
     }
 
     private var meet: BrowserPageIdentity {

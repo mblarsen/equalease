@@ -122,9 +122,25 @@ final class AudioProcessDiscovery: AudioProcessDiscovering, ObservableObject {
 
     private func resolveDisplayName(pid: pid_t, bundleID: String) -> String {
         for app in NSWorkspace.shared.runningApplications where app.processIdentifier == pid {
-            return app.localizedName ?? bundleID
+            if let localizedName = cleanedDisplayName(app.localizedName), localizedName != "main" {
+                return localizedName
+            }
         }
-        // Fallback: use the bundle ID's last component.
-        return bundleID.components(separatedBy: ".").last ?? bundleID
+
+        if let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID),
+           let bundle = Bundle(url: appURL) {
+            let displayName = bundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
+            let bundleName = bundle.object(forInfoDictionaryKey: "CFBundleName") as? String
+            if let name = cleanedDisplayName(displayName ?? bundleName), name != "main" {
+                return name
+            }
+        }
+
+        return bundleID
+    }
+
+    private func cleanedDisplayName(_ name: String?) -> String? {
+        let trimmedName = name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return trimmedName.isEmpty ? nil : trimmedName
     }
 }

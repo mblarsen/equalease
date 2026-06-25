@@ -52,44 +52,73 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        TabView(selection: $selectedTab) {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 8) {
+                settingsTabButton(.general, title: "General", systemImage: "gearshape")
+                settingsTabButton(.presets, title: "Presets", systemImage: "slider.horizontal.3")
+                settingsTabButton(.rules, title: "Rules", systemImage: "switch.2")
+                settingsTabButton(.diagnostics, title: "Diagnostics", systemImage: "stethoscope")
+                Spacer()
+            }
+
+            Divider()
+
+            selectedTabContent
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        }
+        .frame(width: 760, height: 540)
+        .padding(20)
+    }
+
+    @ViewBuilder
+    private var selectedTabContent: some View {
+        switch selectedTab {
+        case .general:
             GeneralSettingsView(
                 inputDeviceController: inputDeviceController,
                 localNetworkControlServer: localNetworkControlServer,
                 localNetworkAuthStore: localNetworkControlServer.authStore,
                 setLocalNetworkControlEnabled: setLocalNetworkControlEnabled
             )
-                .tabItem { Label("General", systemImage: "gearshape") }
-                .tag(SettingsTab.general)
-
+        case .presets:
             PresetSettingsView(
                 router: router,
                 presetStore: presetStore,
                 applyPreset: applyPreset
             )
-            .tabItem { Label("Presets", systemImage: "slider.horizontal.3") }
-            .tag(SettingsTab.presets)
-
+        case .rules:
             RulesSettingsView(
                 router: router,
                 presetStore: presetStore,
                 foregroundAppObserver: foregroundAppObserver,
                 browserPageObserver: browserPageObserver
             )
-            .tabItem { Label("Rules", systemImage: "switch.2") }
-            .tag(SettingsTab.rules)
-
+        case .diagnostics:
             DiagnosticsSettingsView(
                 router: router,
                 inputDeviceController: inputDeviceController,
                 appVolumeStore: appVolumeStore,
                 audioProcessDiscovery: audioProcessDiscovery
             )
-                .tabItem { Label("Diagnostics", systemImage: "stethoscope") }
-                .tag(SettingsTab.diagnostics)
         }
-        .frame(width: 760, height: 540)
-        .padding(20)
+    }
+
+    private func settingsTabButton(_ tab: SettingsTab, title: String, systemImage: String) -> some View {
+        Button {
+            selectedTab = tab
+        } label: {
+            Label(title, systemImage: systemImage)
+                .font(.callout.weight(selectedTab == tab ? .semibold : .regular))
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .foregroundStyle(selectedTab == tab ? .white : .primary)
+                .background(
+                    selectedTab == tab ? Color.accentColor : Color.secondary.opacity(0.12),
+                    in: RoundedRectangle(cornerRadius: 8, style: .continuous)
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(selectedTab == tab ? .isSelected : [])
     }
 }
 
