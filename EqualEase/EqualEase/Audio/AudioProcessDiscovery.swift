@@ -20,6 +20,33 @@ struct AudioAppIdentity: Identifiable, Equatable, Sendable {
     let displayName: String
 
     var id: AudioObjectID { processObjectID }
+
+    static func sortedForDisplay(_ apps: [AudioAppIdentity]) -> [AudioAppIdentity] {
+        apps.sorted { lhs, rhs in
+            let nameOrder = lhs.displayName.localizedCaseInsensitiveCompare(rhs.displayName)
+            if nameOrder != .orderedSame {
+                return nameOrder == .orderedAscending
+            }
+
+            let bundleOrder = lhs.bundleID.localizedCaseInsensitiveCompare(rhs.bundleID)
+            if bundleOrder != .orderedSame {
+                return bundleOrder == .orderedAscending
+            }
+
+            if lhs.pid != rhs.pid {
+                return lhs.pid < rhs.pid
+            }
+
+            return lhs.processObjectID < rhs.processObjectID
+        }
+    }
+
+    static func uniqueBundleRepresentativesForDisplay(_ apps: [AudioAppIdentity]) -> [AudioAppIdentity] {
+        var seenBundleIDs: Set<String> = []
+        return sortedForDisplay(apps).filter { app in
+            seenBundleIDs.insert(app.bundleID).inserted
+        }
+    }
 }
 
 @MainActor

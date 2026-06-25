@@ -258,14 +258,9 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
         EqualEaseSettings.showsQuickPanelAppVolume
     }
 
-    /// Audio-emitting apps discovered by CoreAudio, sorted by name.
+    /// Audio-emitting apps discovered by CoreAudio, sorted by name with one stable representative per bundle ID.
     var discoveredApps: [AudioAppIdentity] {
-        var seenBundleIDs: Set<String> = []
-        return audioProcessDiscovery.discoveredApps
-            .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
-            .filter { app in
-                seenBundleIDs.insert(app.bundleID).inserted
-            }
+        AudioAppIdentity.uniqueBundleRepresentativesForDisplay(audioProcessDiscovery.discoveredApps)
     }
 
     /// Whether per-app volume is available (requires audio routing to be active).

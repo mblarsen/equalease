@@ -155,15 +155,16 @@ final class EqualEaseAppModel: ObservableObject {
         .store(in: &cancellables)
 
         router.$state
+            .removeDuplicates()
             .sink { [weak self] state in
                 guard let self else { return }
                 if state == .running || state == .starting {
                     self.audioProcessDiscovery.startPolling()
+                } else {
+                    self.audioProcessDiscovery.stopPolling()
                 }
             }
             .store(in: &cancellables)
-
-        audioProcessDiscovery.startPolling()
 
         installLocalNetworkStateBroadcasts()
         configureWebsiteObservation()

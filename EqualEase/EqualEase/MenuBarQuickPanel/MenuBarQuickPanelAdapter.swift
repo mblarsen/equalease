@@ -25,6 +25,7 @@ final class MenuBarQuickPanelAdapter: NSObject, NSWindowDelegate {
     private var quickPanelLocalEventMonitor: Any?
     private var quickPanelGlobalEventMonitor: Any?
     private var cancellables: Set<AnyCancellable> = []
+    private var quickPanelCancellables: Set<AnyCancellable> = []
     private var isPositioningQuickPanel = false
 
     init(
@@ -44,9 +45,8 @@ final class MenuBarQuickPanelAdapter: NSObject, NSWindowDelegate {
     }
 
     func prewarm() {
-        if quickPanel == nil {
-            quickPanel = makeQuickPanel()
-        }
+        // Keep the hidden quick panel's SwiftUI graph out of the background update path.
+        // The panel is cheap enough to create on first presentation and is rebuilt after hide.
     }
 
     func toggle() {
@@ -80,16 +80,17 @@ final class MenuBarQuickPanelAdapter: NSObject, NSWindowDelegate {
     func hide() {
         quickPanel?.orderOut(nil)
         stopDismissMonitoring()
+        releaseHiddenQuickPanelSoon()
     }
 
     func tearDown() {
         stopDismissMonitoring()
+        destroyQuickPanel()
         cancellables.removeAll()
         if let statusItem {
             NSStatusBar.system.removeStatusItem(statusItem)
         }
         self.statusItem = nil
-        quickPanel?.delegate = nil
     }
 
     func windowWillMove(_ notification: Notification) {
@@ -165,9 +166,25 @@ final class MenuBarQuickPanelAdapter: NSObject, NSWindowDelegate {
                     self?.resizeQuickPanelToFitModel()
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &quickPanelCancellables)
         quickPanelModel = model
         return model
+    }
+
+    private func releaseHiddenQuickPanelSoon() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.quickPanel?.isVisible != true else { return }
+            self.destroyQuickPanel()
+        }
+    }
+
+    private func destroyQuickPanel() {
+        quickPanelCancellables.removeAll()
+        quickPanelModel = nil
+        quickPanel?.delegate = nil
+        quickPanel?.contentViewController = nil
+        quickPanel?.close()
+        quickPanel = nil
     }
 
     private func createStatusItem() {

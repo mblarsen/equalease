@@ -64,7 +64,7 @@ struct DiagnosticsSettingsView: View {
                     Text(router.isRunning ? "No audio-emitting apps detected yet." : "Per-app audio appears when EqualEase Active is on and apps are emitting sound.")
                         .foregroundStyle(.secondary)
                 } else {
-                    ForEach(audioProcessDiscovery.discoveredApps.sorted { $0.displayName < $1.displayName }, id: \.bundleID) { app in
+                    ForEach(AudioAppIdentity.sortedForDisplay(audioProcessDiscovery.discoveredApps)) { app in
                         VStack(alignment: .leading, spacing: 4) {
                             HStack {
                                 Text(app.displayName)
