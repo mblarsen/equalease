@@ -177,17 +177,20 @@ struct GoogleChromeActivePageProvider: ActiveBrowserPageProviding {
 
 private enum BrowserAutomationPermission {
     static func hasPermission(for bundleIdentifier: String, promptUserIfNeeded: Bool) -> Bool {
-        guard var targetDescriptor = NSAppleEventDescriptor(bundleIdentifier: bundleIdentifier).aeDesc?.pointee else {
-            return false
-        }
-        defer { AEDisposeDesc(&targetDescriptor) }
+        let descriptor = NSAppleEventDescriptor(bundleIdentifier: bundleIdentifier)
+        guard let targetDescriptor = descriptor.aeDesc else { return false }
 
-        let status = AEDeterminePermissionToAutomateTarget(
-            &targetDescriptor,
-            typeWildCard,
-            typeWildCard,
-            promptUserIfNeeded
-        )
+        // `aeDesc` is owned by NSAppleEventDescriptor. Borrow it only for the synchronous
+        // permission call and keep the Objective-C wrapper alive for that whole borrow.
+        // Disposing this pointer manually can double-release the descriptor when the wrapper deallocates.
+        let status = withExtendedLifetime(descriptor) {
+            AEDeterminePermissionToAutomateTarget(
+                targetDescriptor,
+                typeWildCard,
+                typeWildCard,
+                promptUserIfNeeded
+            )
+        }
         return status == noErr
     }
 }
