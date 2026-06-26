@@ -131,11 +131,19 @@ final class CoreAudioRouter: AudioRoutingBackend {
             .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
             .compactMap { app -> AudioAppTapConfig? in
                 guard seenProcessObjectIDs.insert(app.processObjectID).inserted else { return nil }
+                let gain = min(max(volumeStore.volume(for: app.bundleID), 0), 1)
+                let mode = volumeStore.mode(for: app.bundleID)
+
+                // The fallback tap already captures default apps at unity gain. Only apps with
+                // explicit per-app audio settings need a dedicated tap. This keeps ordinary audio
+                // process churn from restarting the route and briefly releasing EqualEase control.
+                guard gain != 1 || mode != .on else { return nil }
+
                 return AudioAppTapConfig(
                     processObjectID: app.processObjectID,
                     bundleID: app.bundleID,
-                    gain: min(max(volumeStore.volume(for: app.bundleID), 0), 1),
-                    mode: volumeStore.mode(for: app.bundleID)
+                    gain: gain,
+                    mode: mode
                 )
             }
 

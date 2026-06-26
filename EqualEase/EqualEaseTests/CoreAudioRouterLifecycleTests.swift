@@ -158,6 +158,61 @@ final class CoreAudioRouterLifecycleTests: XCTestCase {
         XCTAssertEqual(router.outputDeviceUID, host.speakers.uid)
     }
 
+    func testDefaultAudioAppChurnDoesNotRestartRunningRouteWhenCustomAppTapIsStable() async throws {
+        let host = TestRoutingHost()
+        let router = CoreAudioRouter(host: host, restartDebounce: .milliseconds(20), cleanupOnLaunch: false)
+        let volumeStoreURL = temporaryAppVolumeStoreURL()
+        let volumeStore = AppVolumeStore(persistenceURL: volumeStoreURL)
+        defer { try? FileManager.default.removeItem(at: volumeStoreURL) }
+
+        let spotify = makeAudioApp(processObjectID: 101, pid: 10_101, bundleID: "com.spotify.client", displayName: "Spotify")
+        let safari = makeAudioApp(processObjectID: 202, pid: 10_202, bundleID: "com.apple.Safari", displayName: "Safari")
+        volumeStore.setVolume(0.25, for: spotify.bundleID)
+
+        router.updateAppTapConfigs(apps: [spotify], volumeStore: volumeStore)
+        router.start()
+
+        XCTAssertEqual(router.appTapConfigs.map(\.bundleID), [spotify.bundleID])
+        XCTAssertEqual(host.startConfigurations.last?.appTapConfigs.map(\.bundleID), [spotify.bundleID])
+
+        let stopCountAfterStart = host.stopCount
+        let startCountAfterStart = host.startConfigurations.count
+
+        router.updateAppTapConfigs(apps: [spotify, safari], volumeStore: volumeStore)
+        try await Task.sleep(for: .milliseconds(80))
+
+        XCTAssertEqual(router.appTapConfigs.map(\.bundleID), [spotify.bundleID])
+        XCTAssertEqual(host.stopCount, stopCountAfterStart)
+        XCTAssertEqual(host.startConfigurations.count, startCountAfterStart)
+        XCTAssertEqual(host.streamConfigCounts.last, 2)
+    }
+
+    func testAddingCustomizedAudioAppRestartsRouteToCreateDedicatedTap() async throws {
+        let host = TestRoutingHost()
+        let router = CoreAudioRouter(host: host, restartDebounce: .milliseconds(20), cleanupOnLaunch: false)
+        let volumeStoreURL = temporaryAppVolumeStoreURL()
+        let volumeStore = AppVolumeStore(persistenceURL: volumeStoreURL)
+        defer { try? FileManager.default.removeItem(at: volumeStoreURL) }
+
+        let spotify = makeAudioApp(processObjectID: 101, pid: 10_101, bundleID: "com.spotify.client", displayName: "Spotify")
+        let safari = makeAudioApp(processObjectID: 202, pid: 10_202, bundleID: "com.apple.Safari", displayName: "Safari")
+        volumeStore.setVolume(0.25, for: spotify.bundleID)
+        volumeStore.setVolume(0.5, for: safari.bundleID)
+
+        router.updateAppTapConfigs(apps: [spotify], volumeStore: volumeStore)
+        router.start()
+        router.updateAppTapConfigs(apps: [spotify, safari], volumeStore: volumeStore)
+
+        XCTAssertTrue(router.isRoutingTransitioning)
+        try await Task.sleep(for: .milliseconds(80))
+
+        XCTAssertEqual(router.state, .running)
+        XCTAssertFalse(router.isRoutingTransitioning)
+        XCTAssertEqual(host.stopCount, 1)
+        XCTAssertEqual(host.startConfigurations.count, 2)
+        XCTAssertEqual(host.startConfigurations.last?.appTapConfigs.map(\.bundleID), [safari.bundleID, spotify.bundleID])
+    }
+
     func testOutputVolumeCapabilityWriteAndExternalRefresh() throws {
         let host = TestRoutingHost()
         host.volumeStates[host.speakers.uid] = AudioOutputVolumeState(canSetVolume: true, volume: 0.35)
@@ -189,6 +244,27 @@ final class CoreAudioRouterLifecycleTests: XCTestCase {
         XCTAssertFalse(router.canSetOutputVolume)
         XCTAssertEqual(router.outputDeviceUID, host.headphones.uid)
     }
+}
+
+private func makeAudioApp(
+    processObjectID: AudioObjectID,
+    pid: pid_t,
+    bundleID: String,
+    displayName: String
+) -> AudioAppIdentity {
+    AudioAppIdentity(
+        processObjectID: processObjectID,
+        pid: pid,
+        bundleID: bundleID,
+        displayName: displayName
+    )
+}
+
+private func temporaryAppVolumeStoreURL() -> URL {
+    FileManager.default.temporaryDirectory
+        .appendingPathComponent("EqualEase-AppVolumeStore-")
+        .appendingPathExtension(UUID().uuidString)
+        .appendingPathExtension("json")
 }
 
 private enum TestRoutingError: LocalizedError {
@@ -223,6 +299,7 @@ private final class TestRoutingHost: CoreAudioRoutingHost {
     var startConfigurations: [AudioRouteStartConfiguration] = []
     var startedOutputUIDs: [String] = []
     var stopCount = 0
+    var streamConfigCounts: [Int] = []
     var bypassed = false
     var outputGain = 1.0
     var equalizerEnabled = false
@@ -304,7 +381,7 @@ private final class TestRoutingHost: CoreAudioRoutingHost {
     }
 
     func setStreamConfigs(_ configs: [StreamConfig]) {
-        // No-op in test host.
+        streamConfigCounts.append(configs.count)
     }
 
     func outputVolumeState(for outputDeviceUID: String?) -> AudioOutputVolumeState {
