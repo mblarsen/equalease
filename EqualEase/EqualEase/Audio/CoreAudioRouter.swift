@@ -55,11 +55,27 @@ final class CoreAudioRouter: AudioRoutingBackend {
     }
     @Published private(set) var appTapConfigs: [AudioAppTapConfig] = []
 
+    private struct AppTapRecord {
+        var config: AudioAppTapConfig
+        var displayName: String
+    }
+
+    private struct PendingAppTapRecord {
+        var config: AudioAppTapConfig
+        var consecutiveDiscoveryUpdates: Int
+    }
+
     private let host: CoreAudioRoutingHost
     private let restartDebounce: Duration
+    private let appTapAddConfirmationUpdates: Int
+    private let appTapRemovalGrace: Duration
     private var outputDeviceObservation: AudioRoutingObservation?
     private var outputVolumeObservation: AudioRoutingObservation?
     private var restartTask: Task<Void, Never>?
+    private var appTapRemovalTasks: [AudioObjectID: Task<Void, Never>] = [:]
+    private var appTapRecords: [AudioObjectID: AppTapRecord] = [:]
+    private var pendingAppTapRecords: [AudioObjectID: PendingAppTapRecord] = [:]
+    private var lastAppTapDiscoveryGeneration: Int?
     private var isRefreshingOutputVolume = false
     private var outputDeviceSnapshot = AudioOutputDeviceSnapshot(devices: [], defaultOutputDeviceUID: nil)
 
@@ -79,10 +95,14 @@ final class CoreAudioRouter: AudioRoutingBackend {
     init(
         host: CoreAudioRoutingHost,
         restartDebounce: Duration = .milliseconds(200),
+        appTapAddConfirmationUpdates: Int = 2,
+        appTapRemovalGrace: Duration = .seconds(8),
         cleanupOnLaunch: Bool = false
     ) {
         self.host = host
         self.restartDebounce = restartDebounce
+        self.appTapAddConfirmationUpdates = max(1, appTapAddConfirmationUpdates)
+        self.appTapRemovalGrace = appTapRemovalGrace
         selectedOutputDeviceUID = nil
         refreshOutputDevice()
         startOutputDeviceObservation()
@@ -125,38 +145,143 @@ final class CoreAudioRouter: AudioRoutingBackend {
         selectedOutputDeviceUID = resolvedPreferredOutputDeviceUID(requestedUID: uid)
     }
 
-    func updateAppTapConfigs(apps: [AudioAppIdentity], volumeStore: AppVolumeStore) {
+    func updateAppTapConfigs(
+        apps: [AudioAppIdentity],
+        volumeStore: AppVolumeStore,
+        discoveryGeneration: Int? = nil
+    ) {
+        let isDiscoveryRefresh = registerAppTapDiscoveryGeneration(discoveryGeneration)
         var seenProcessObjectIDs: Set<AudioObjectID> = []
-        let configs = apps
-            .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
-            .compactMap { app -> AudioAppTapConfig? in
-                guard seenProcessObjectIDs.insert(app.processObjectID).inserted else { return nil }
-                let gain = min(max(volumeStore.volume(for: app.bundleID), 0), 1)
-                let mode = volumeStore.mode(for: app.bundleID)
+        var discoveredProcessObjectIDs: Set<AudioObjectID> = []
+        var customizedRecords: [AudioObjectID: AppTapRecord] = [:]
 
-                // The fallback tap already captures default apps at unity gain. Only apps with
-                // explicit per-app audio settings need a dedicated tap. This keeps ordinary audio
-                // process churn from restarting the route and briefly releasing EqualEase control.
-                guard gain != 1 || mode != .on else { return nil }
+        for app in apps.sorted(by: appTapSort) {
+            guard seenProcessObjectIDs.insert(app.processObjectID).inserted else { continue }
+            discoveredProcessObjectIDs.insert(app.processObjectID)
 
-                return AudioAppTapConfig(
-                    processObjectID: app.processObjectID,
-                    bundleID: app.bundleID,
-                    gain: gain,
-                    mode: mode
-                )
+            let gain = min(max(volumeStore.volume(for: app.bundleID), 0), 1)
+            let mode = volumeStore.mode(for: app.bundleID)
+
+            // The fallback tap already captures default apps at unity gain. Only apps with
+            // explicit per-app audio settings need a dedicated tap. This keeps ordinary audio
+            // process churn from restarting the route and briefly releasing EqualEase control.
+            guard gain != 1 || mode != .on else { continue }
+
+            let config = AudioAppTapConfig(
+                processObjectID: app.processObjectID,
+                bundleID: app.bundleID,
+                gain: gain,
+                mode: mode
+            )
+            customizedRecords[app.processObjectID] = AppTapRecord(config: config, displayName: app.displayName)
+        }
+
+        for (processObjectID, record) in Array(appTapRecords) {
+            if let updatedRecord = customizedRecords[processObjectID] {
+                cancelAppTapRemoval(for: processObjectID)
+                appTapRecords[processObjectID] = updatedRecord
+                pendingAppTapRecords.removeValue(forKey: processObjectID)
+            } else if discoveredProcessObjectIDs.contains(processObjectID) {
+                cancelAppTapRemoval(for: processObjectID)
+                appTapRecords.removeValue(forKey: processObjectID)
+                pendingAppTapRecords.removeValue(forKey: processObjectID)
+            } else {
+                appTapRecords[processObjectID] = record
+                scheduleAppTapRemoval(for: processObjectID)
+            }
+        }
+
+        for (processObjectID, record) in customizedRecords where appTapRecords[processObjectID] == nil {
+            let previousPending = pendingAppTapRecords[processObjectID]
+            let seenCount: Int
+            if isDiscoveryRefresh {
+                seenCount = (previousPending?.consecutiveDiscoveryUpdates ?? 0) + 1
+            } else {
+                seenCount = previousPending?.consecutiveDiscoveryUpdates ?? 0
             }
 
+            if seenCount >= appTapAddConfirmationUpdates {
+                pendingAppTapRecords.removeValue(forKey: processObjectID)
+                appTapRecords[processObjectID] = record
+            } else {
+                pendingAppTapRecords[processObjectID] = PendingAppTapRecord(
+                    config: record.config,
+                    consecutiveDiscoveryUpdates: seenCount
+                )
+            }
+        }
+
+        pendingAppTapRecords = pendingAppTapRecords.filter { processObjectID, pending in
+            if customizedRecords[processObjectID] != nil { return true }
+            guard discoveredProcessObjectIDs.contains(processObjectID) else { return false }
+            return volumeStore.volume(for: pending.config.bundleID) != 1
+                || volumeStore.mode(for: pending.config.bundleID) != .on
+        }
+
+        publishAppTapConfigs(reason: "Audio apps changed")
+    }
+
+    private func registerAppTapDiscoveryGeneration(_ discoveryGeneration: Int?) -> Bool {
+        guard let discoveryGeneration else { return true }
+
+        defer { lastAppTapDiscoveryGeneration = discoveryGeneration }
+        return lastAppTapDiscoveryGeneration != discoveryGeneration
+    }
+
+    private func appTapSort(_ lhs: AudioAppIdentity, _ rhs: AudioAppIdentity) -> Bool {
+        let nameOrder = lhs.displayName.localizedCaseInsensitiveCompare(rhs.displayName)
+        if nameOrder != .orderedSame { return nameOrder == .orderedAscending }
+        let bundleOrder = lhs.bundleID.localizedCaseInsensitiveCompare(rhs.bundleID)
+        if bundleOrder != .orderedSame { return bundleOrder == .orderedAscending }
+        return lhs.processObjectID < rhs.processObjectID
+    }
+
+    private func publishAppTapConfigs(reason: String) {
         let previousProcessObjectIDs = appTapConfigs.map(\.processObjectID)
+        let configs = appTapRecords.values
+            .sorted { lhs, rhs in
+                let nameOrder = lhs.displayName.localizedCaseInsensitiveCompare(rhs.displayName)
+                if nameOrder != .orderedSame { return nameOrder == .orderedAscending }
+                let bundleOrder = lhs.config.bundleID.localizedCaseInsensitiveCompare(rhs.config.bundleID)
+                if bundleOrder != .orderedSame { return bundleOrder == .orderedAscending }
+                return lhs.config.processObjectID < rhs.config.processObjectID
+            }
+            .map(\.config)
         let nextProcessObjectIDs = configs.map(\.processObjectID)
         appTapConfigs = configs
 
         if isRunning, previousProcessObjectIDs != nextProcessObjectIDs {
-            scheduleRestartRouting(reason: "Audio apps changed")
+            scheduleRestartRouting(reason: reason)
         } else if isRunning {
             host.setStreamConfigs(streamConfigs(from: configs))
             refreshRunningStatus()
         }
+    }
+
+    private func scheduleAppTapRemoval(for processObjectID: AudioObjectID) {
+        guard isRunning, appTapRemovalTasks[processObjectID] == nil else { return }
+        appTapRemovalTasks[processObjectID] = Task { @MainActor [weak self] in
+            guard let self else { return }
+            try? await Task.sleep(for: self.appTapRemovalGrace)
+            guard !Task.isCancelled else { return }
+            self.appTapRemovalTasks[processObjectID] = nil
+            guard self.appTapRecords.removeValue(forKey: processObjectID) != nil else { return }
+            self.publishAppTapConfigs(reason: "Audio apps changed")
+        }
+    }
+
+    private func cancelAppTapRemoval(for processObjectID: AudioObjectID) {
+        appTapRemovalTasks[processObjectID]?.cancel()
+        appTapRemovalTasks.removeValue(forKey: processObjectID)
+    }
+
+    private func resetAppTapHysteresis() {
+        for task in appTapRemovalTasks.values { task.cancel() }
+        appTapRemovalTasks = [:]
+        appTapRecords = [:]
+        pendingAppTapRecords = [:]
+        lastAppTapDiscoveryGeneration = nil
+        appTapConfigs = []
     }
 
     func start() {
@@ -193,6 +318,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
     func cleanupAudioState() {
         restartTask?.cancel()
         restartTask = nil
+        resetAppTapHysteresis()
         isRoutingTransitioning = true
         host.stopRoute()
 
@@ -264,6 +390,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
         if cancelPendingRestart {
             restartTask?.cancel()
             restartTask = nil
+            resetAppTapHysteresis()
         }
         host.stopRoute()
         state = .stopped

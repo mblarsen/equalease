@@ -87,6 +87,9 @@ Use this checklist before calling a local MVP build ready. Prefer testing with r
 - [ ] After the current browser page Use Preset action succeeds, Settings > Rules stores `meet.google.com` as a website rule and shows it above app rules.
 - [ ] After granting the browser Automation prompt, the current app row still shows the browser rather than the transient macOS permission helper app.
 - [ ] Assigning separate presets to a browser app and `meet.google.com` stores two rules in the unified Rules list, with the website rule above the app rule.
+- [ ] When a customized audio app starts playing, EqualEase waits for a stable discovery confirmation before adding its dedicated per-app tap and restarting routing.
+- [ ] When a customized audio app briefly stops emitting audio, EqualEase keeps its dedicated tap through the short absence and removes it only after the grace period.
+- [ ] Changing Volume, Process/Bypass, or Mute for an already-tapped app updates the app's stream promptly without waiting for another discovery cycle.
 - [ ] While Safari or Google Chrome is on `meet.google.com`, the website preset wins over the browser app preset.
 - [ ] Switching the browser to an unmatched active tab falls back to the browser app preset.
 - [ ] Switching away from the browser removes website matching and falls back to the foreground app/default preset.

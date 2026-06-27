@@ -62,6 +62,7 @@ protocol AudioProcessDiscovering: AnyObject {
 @MainActor
 final class AudioProcessDiscovery: AudioProcessDiscovering, ObservableObject {
     @Published private(set) var discoveredApps: [AudioAppIdentity] = []
+    @Published private(set) var refreshGeneration = 0
 
     private var pollingTimer: Timer?
     private let pollingInterval: TimeInterval
@@ -93,6 +94,7 @@ final class AudioProcessDiscovery: AudioProcessDiscovering, ObservableObject {
         pollingTimer?.invalidate()
         pollingTimer = nil
         discoveredApps = []
+        refreshGeneration = 0
     }
 
     // MARK: - Internal
@@ -114,6 +116,7 @@ final class AudioProcessDiscovery: AudioProcessDiscovering, ObservableObject {
         if apps != discoveredApps {
             discoveredApps = apps
         }
+        refreshGeneration += 1
     }
 
     private func makeAppIdentity(processObjectID: AudioObjectID) throws -> AudioAppIdentity {
