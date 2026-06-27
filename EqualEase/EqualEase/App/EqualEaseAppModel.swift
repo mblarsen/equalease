@@ -145,8 +145,14 @@ final class EqualEaseAppModel: ObservableObject {
             }
             .store(in: &cancellables)
 
-        Publishers.Merge(
+        let appDiscoveryChanges = Publishers.Merge(
             audioProcessDiscovery.$discoveredApps.map { _ in () },
+            audioProcessDiscovery.$refreshGeneration.dropFirst().map { _ in () }
+        )
+        .eraseToAnyPublisher()
+
+        Publishers.Merge(
+            appDiscoveryChanges,
             appVolumeStore.objectWillChange.map { _ in () }.eraseToAnyPublisher()
         )
         .sink { [weak self] _ in
@@ -337,7 +343,8 @@ final class EqualEaseAppModel: ObservableObject {
     private func applyAppVolumeConfiguration() {
         router.updateAppTapConfigs(
             apps: audioProcessDiscovery.discoveredApps,
-            volumeStore: appVolumeStore
+            volumeStore: appVolumeStore,
+            discoveryGeneration: audioProcessDiscovery.refreshGeneration
         )
     }
 
