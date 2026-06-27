@@ -18,8 +18,8 @@ At a high level:
 
 Starting from EqualEase **1.4**, audio routing uses a multi-tap model that enables per-app volume control. Instead of a single global tap, EqualEase creates:
 
-- **One per-app tap** for each audio-emitting app. Each tap captures only that app's audio stream (`CATapDescription` with `isExclusive = false` and the app's process object ID).
-- **One fallback tap** for all remaining system audio not captured by per-app taps. This is equivalent to the original single global tap (`CATapDescription` with `isExclusive = true`, excluding all per-app PIDs and EqualEase's own PID).
+- **One per-app tap** for each audio-emitting app that has explicit per-app audio settings, such as reduced gain, bypass, or mute. Each tap captures only that app's audio stream (`CATapDescription` with `isExclusive = false` and the app's process object ID).
+- **One fallback tap** for all remaining system audio not captured by per-app taps. This includes default/unmodified apps at unity gain, and is equivalent to the original single global tap (`CATapDescription` with `isExclusive = true`, excluding all per-app PIDs and EqualEase's own PID).
 
 All taps are added to the aggregate device's tap list. The IOProc receives separate audio buffers for each tap, maps them to the correct app, and mixes them according to each app's volume, bypass, and mute settings.
 
@@ -48,8 +48,9 @@ Muted app streams
 ### Tap lifecycle
 
 - **AudioProcessDiscovery** polls `kAudioHardwarePropertyProcessObjectList` every 2 seconds, filtering for processes with `kAudioProcessPropertyIsRunningOutput == true`. This detects apps currently emitting audio.
-- When discovered apps change, the aggregate device is restarted (debounced) with an updated tap list.
-- Apps that stop emitting audio are removed from the tap list; new audio-emitting apps are added.
+- When discovered apps with explicit per-app audio settings change, the aggregate device is restarted (debounced) with an updated tap list.
+- Default/unmodified app churn does not restart the route; those apps remain covered by the fallback tap.
+- Apps that stop emitting audio are removed from the tap list only when they had explicit per-app settings; new customized audio-emitting apps are added.
 - The fallback tap always excludes EqualEase's own process ID.
 
 ### Per-app modes
@@ -62,7 +63,7 @@ Each discovered app has three modes:
 | **Off** (bypass) | Stream copied verbatim to output — no gain, no EQ, no preamp, no clamping. Still goes through EqualEase's output device. |
 | **Mute** | Stream silently dropped. |
 
-Apps in bypass mode are still tapped so their audio routes through EqualEase's selected output device. Untapped apps would play through the system default device instead, which would be confusing if EqualEase routes to a different output.
+Apps in bypass mode are still tapped so their audio routes through EqualEase's selected output device. Default/unmodified apps do not need dedicated taps because the fallback tap captures them through the same selected output path.
 
 ### Persistence
 
