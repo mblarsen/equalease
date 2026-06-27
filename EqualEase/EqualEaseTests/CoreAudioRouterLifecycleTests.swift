@@ -282,6 +282,54 @@ final class CoreAudioRouterLifecycleTests: XCTestCase {
         XCTAssertTrue(latestConfig.muted.boolValue)
     }
 
+    func testStreamMappingLayoutAcceptsInterleavedStreamBuffersWhenCountsMatch() {
+        let diagnostics = classifyStreamMapping(inputChannels: [2, 2, 2], outputChannels: [2], expectedStreams: 3)
+
+        XCTAssertEqual(diagnostics.inputLayout, .interleavedStreams)
+        XCTAssertEqual(diagnostics.observedStreamCount, 3)
+        XCTAssertTrue(diagnostics.inputBuffersAreStreams.boolValue)
+        XCTAssertTrue(diagnostics.canApplyStreamConfigs.boolValue)
+    }
+
+    func testStreamMappingLayoutAcceptsChannelSplitBuffersWhenCountsMatch() {
+        let diagnostics = classifyStreamMapping(inputChannels: [1, 1, 1, 1], outputChannels: [1, 1], expectedStreams: 2)
+
+        XCTAssertEqual(diagnostics.inputLayout, .channelSplitStreams)
+        XCTAssertEqual(diagnostics.observedStreamCount, 2)
+        XCTAssertFalse(diagnostics.inputBuffersAreStreams.boolValue)
+        XCTAssertTrue(diagnostics.canApplyStreamConfigs.boolValue)
+    }
+
+    func testStreamMappingLayoutRejectsFewerObservedStreamsThanExpected() {
+        let diagnostics = classifyStreamMapping(inputChannels: [2, 2], outputChannels: [2], expectedStreams: 3)
+
+        XCTAssertEqual(diagnostics.inputLayout, .interleavedStreams)
+        XCTAssertEqual(diagnostics.observedStreamCount, 2)
+        XCTAssertFalse(diagnostics.canApplyStreamConfigs.boolValue)
+    }
+
+    func testStreamMappingLayoutRejectsNonInterleavedCountThatCannotRepresentStreams() {
+        let diagnostics = classifyStreamMapping(inputChannels: [1, 1, 1], outputChannels: [1, 1], expectedStreams: 2)
+
+        XCTAssertEqual(diagnostics.inputLayout, .ambiguous)
+        XCTAssertEqual(diagnostics.observedStreamCount, 0)
+        XCTAssertFalse(diagnostics.canApplyStreamConfigs.boolValue)
+    }
+
+    func testStreamMappingLayoutRejectsExtraObservedStreamsToAvoidWrongAppConfig() {
+        let diagnostics = classifyStreamMapping(inputChannels: [2, 2, 2], outputChannels: [2], expectedStreams: 2)
+
+        XCTAssertEqual(diagnostics.observedStreamCount, 3)
+        XCTAssertFalse(diagnostics.canApplyStreamConfigs.boolValue)
+    }
+
+    func testStreamMappingLayoutRejectsMixedChannelShapesAsAmbiguous() {
+        let diagnostics = classifyStreamMapping(inputChannels: [2, 1], outputChannels: [2], expectedStreams: 2)
+
+        XCTAssertEqual(diagnostics.inputLayout, .ambiguous)
+        XCTAssertFalse(diagnostics.canApplyStreamConfigs.boolValue)
+    }
+
     func testOutputVolumeCapabilityWriteAndExternalRefresh() throws {
         let host = TestRoutingHost()
         host.volumeStates[host.speakers.uid] = AudioOutputVolumeState(canSetVolume: true, volume: 0.35)
@@ -312,6 +360,26 @@ final class CoreAudioRouterLifecycleTests: XCTestCase {
 
         XCTAssertFalse(router.canSetOutputVolume)
         XCTAssertEqual(router.outputDeviceUID, host.headphones.uid)
+    }
+}
+
+private func classifyStreamMapping(
+    inputChannels: [UInt32],
+    outputChannels: [UInt32],
+    expectedStreams: UInt32,
+    channelsPerStream: UInt32 = 2
+) -> StreamMappingLayoutDiagnostics {
+    inputChannels.withUnsafeBufferPointer { inputBuffer in
+        outputChannels.withUnsafeBufferPointer { outputBuffer in
+            StreamMappingClassifyLayout(
+                UInt32(inputChannels.count),
+                inputBuffer.baseAddress,
+                UInt32(outputChannels.count),
+                outputBuffer.baseAddress,
+                expectedStreams,
+                channelsPerStream
+            )
+        }
     }
 }
 

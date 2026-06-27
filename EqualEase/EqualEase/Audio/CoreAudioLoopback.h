@@ -24,6 +24,42 @@ typedef struct StreamConfig {
     BOOL muted;
 } StreamConfig;
 
+/// Observed aggregate IOProc input layout for stream-to-config mapping.
+typedef NS_ENUM(NSInteger, StreamMappingInputBufferLayout) {
+    StreamMappingInputBufferLayoutEmpty = 0,
+    StreamMappingInputBufferLayoutInterleavedStreams = 1,
+    StreamMappingInputBufferLayoutChannelSplitStreams = 2,
+    StreamMappingInputBufferLayoutAmbiguous = 3,
+};
+
+/// Diagnostics for the route's expected stream configs vs observed IOProc buffers.
+typedef struct StreamMappingLayoutDiagnostics {
+    StreamMappingInputBufferLayout inputLayout;
+    UInt32 inputBufferCount;
+    UInt32 outputBufferCount;
+    UInt32 expectedStreamCount;
+    UInt32 observedStreamCount;
+    UInt32 channelsPerStream;
+    BOOL inputBuffersAreStreams;
+    BOOL outputBuffersAreStreams;
+    BOOL canApplyStreamConfigs;
+} StreamMappingLayoutDiagnostics;
+
+/// Classifies IOProc buffer shape without inspecting audio samples.
+/// Exposed for deterministic tests and used by the realtime callback.
+#ifdef __cplusplus
+extern "C" {
+#endif
+StreamMappingLayoutDiagnostics StreamMappingClassifyLayout(UInt32 inputBufferCount,
+                                                           const UInt32 *inputChannelCounts,
+                                                           UInt32 outputBufferCount,
+                                                           const UInt32 *outputChannelCounts,
+                                                           UInt32 expectedStreamCount,
+                                                           UInt32 channelsPerStream);
+#ifdef __cplusplus
+}
+#endif
+
 /// A tiny Objective-C++ wrapper around an AudioDevice IOProc.
 ///
 /// Swift should not own the real-time audio callback. This class copies

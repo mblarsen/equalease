@@ -145,6 +145,10 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
             aggregateDeviceID = try createAggregateDevice()
             try add(uid: output.device.uid, to: aggregateDeviceID, selector: kAudioAggregateDevicePropertyFullSubDeviceList)
             try add(uid: tapUID, to: aggregateDeviceID, selector: kAudioAggregateDevicePropertyTapList)
+
+            let streamConfigs = [StreamConfig(gain: 1.0, bypassed: ObjCBool(false), muted: ObjCBool(false))]
+            loopback.setStreamConfigs(streamConfigs, count: UInt(streamConfigs.count))
+            logExpectedStreamMapping(["fallback(system)"])
         } else {
             // Per-app taps + fallback tap.
             var tapUIDs: [String] = []
@@ -181,6 +185,11 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
             }
 
             loopback.setStreamConfigs(streamConfigs, count: UInt(streamConfigs.count))
+            logExpectedStreamMapping(
+                configuration.appTapConfigs.map {
+                    "\($0.bundleID)(process:\($0.processObjectID), gain:\(String(format: "%.2f", $0.gain)), mode:\($0.mode))"
+                } + ["fallback(system)"]
+            )
         }
 
         loopback.deviceID = aggregateDeviceID
@@ -337,6 +346,13 @@ final class ProductionCoreAudioRoutingHost: CoreAudioRoutingHost {
             )
             AudioObjectRemovePropertyListenerBlock(deviceID, &address, queue, listener)
         }
+    }
+
+    private func logExpectedStreamMapping(_ entries: [String]) {
+        let tapListOrder = entries.joined(separator: " → ")
+        NSLog(
+            "EqualEase routing stream mapping: expected \(entries.count) stream config(s) in tap-list order: \(tapListOrder)"
+        )
     }
 
     private func selectedOutputDevice(uid selectedOutputDeviceUID: String?) throws -> HostOutputDevice {
