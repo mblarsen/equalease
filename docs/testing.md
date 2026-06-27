@@ -34,6 +34,9 @@ Use this checklist before calling a local MVP build ready. Prefer testing with r
 - [ ] Start/stop can be repeated three times without silence or stale devices.
 - [ ] Restart works while routing is active.
 - [ ] Changing output while routing is active shows a restart status and does not freeze the menu bar UI.
+- [ ] With one customized audio app playing, briefly starting/stopping unmodified app audio does not restart routing or release EqualEase control.
+- [ ] A newly customized audio app does not create a dedicated tap until it remains visible across the discovery stability window.
+- [ ] A customized app that briefly stops emitting audio keeps its dedicated tap during the absence grace period and removes it only after the grace period.
 - [ ] Quit EqualEase while routing is active; audio returns to normal.
 - [ ] Relaunch EqualEase; no stale EqualEase aggregate/tap breaks audio.
 

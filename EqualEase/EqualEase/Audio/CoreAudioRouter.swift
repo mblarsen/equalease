@@ -55,11 +55,20 @@ final class CoreAudioRouter: AudioRoutingBackend {
     }
     @Published private(set) var appTapConfigs: [AudioAppTapConfig] = []
 
+    private struct AppTapDiscoveryState {
+        var firstSeenAt: Date
+        var lastSeenAt: Date
+    }
+
     private let host: CoreAudioRoutingHost
     private let restartDebounce: Duration
+    private let appTapAddStability: TimeInterval
+    private let appTapRemoveGrace: TimeInterval
+    private let now: () -> Date
     private var outputDeviceObservation: AudioRoutingObservation?
     private var outputVolumeObservation: AudioRoutingObservation?
     private var restartTask: Task<Void, Never>?
+    private var appTapDiscoveryStates: [AudioObjectID: AppTapDiscoveryState] = [:]
     private var isRefreshingOutputVolume = false
     private var outputDeviceSnapshot = AudioOutputDeviceSnapshot(devices: [], defaultOutputDeviceUID: nil)
 
@@ -79,10 +88,16 @@ final class CoreAudioRouter: AudioRoutingBackend {
     init(
         host: CoreAudioRoutingHost,
         restartDebounce: Duration = .milliseconds(200),
+        appTapAddStability: TimeInterval = 2.0,
+        appTapRemoveGrace: TimeInterval = 8.0,
+        now: @escaping () -> Date = Date.init,
         cleanupOnLaunch: Bool = false
     ) {
         self.host = host
         self.restartDebounce = restartDebounce
+        self.appTapAddStability = appTapAddStability
+        self.appTapRemoveGrace = appTapRemoveGrace
+        self.now = now
         selectedOutputDeviceUID = nil
         refreshOutputDevice()
         startOutputDeviceObservation()
@@ -126,35 +141,58 @@ final class CoreAudioRouter: AudioRoutingBackend {
     }
 
     func updateAppTapConfigs(apps: [AudioAppIdentity], volumeStore: AppVolumeStore) {
-        var seenProcessObjectIDs: Set<AudioObjectID> = []
-        let configs = apps
-            .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
-            .compactMap { app -> AudioAppTapConfig? in
-                guard seenProcessObjectIDs.insert(app.processObjectID).inserted else { return nil }
-                let gain = min(max(volumeStore.volume(for: app.bundleID), 0), 1)
-                let mode = volumeStore.mode(for: app.bundleID)
+        let currentTime = now()
+        let discoveredConfigs = customizedAppTapConfigs(apps: apps, volumeStore: volumeStore)
+        let discoveredByProcessObjectID = Dictionary(
+            uniqueKeysWithValues: discoveredConfigs.map { ($0.processObjectID, $0) }
+        )
+        var nextConfigs: [AudioAppTapConfig] = []
+        var nextProcessObjectIDs: Set<AudioObjectID> = []
 
-                // The fallback tap already captures default apps at unity gain. Only apps with
-                // explicit per-app audio settings need a dedicated tap. This keeps ordinary audio
-                // process churn from restarting the route and briefly releasing EqualEase control.
-                guard gain != 1 || mode != .on else { return nil }
+        for config in discoveredConfigs {
+            let previousState = appTapDiscoveryStates[config.processObjectID]
+            let state = AppTapDiscoveryState(
+                firstSeenAt: previousState?.firstSeenAt ?? currentTime,
+                lastSeenAt: currentTime
+            )
+            appTapDiscoveryStates[config.processObjectID] = state
 
-                return AudioAppTapConfig(
-                    processObjectID: app.processObjectID,
-                    bundleID: app.bundleID,
-                    gain: gain,
-                    mode: mode
-                )
+            let isAlreadyTapped = appTapConfigs.contains { $0.processObjectID == config.processObjectID }
+            let hasBeenStableLongEnough = currentTime.timeIntervalSince(state.firstSeenAt) >= appTapAddStability
+            if isAlreadyTapped || hasBeenStableLongEnough {
+                nextConfigs.append(config)
+                nextProcessObjectIDs.insert(config.processObjectID)
             }
+        }
+
+        for config in appTapConfigs where discoveredByProcessObjectID[config.processObjectID] == nil {
+            let lastSeenAt = appTapDiscoveryStates[config.processObjectID]?.lastSeenAt ?? currentTime
+            if currentTime.timeIntervalSince(lastSeenAt) < appTapRemoveGrace {
+                let updatedConfig = updatedAppTapConfig(config, volumeStore: volumeStore)
+                nextConfigs.append(updatedConfig)
+                nextProcessObjectIDs.insert(updatedConfig.processObjectID)
+            } else {
+                appTapDiscoveryStates.removeValue(forKey: config.processObjectID)
+            }
+        }
+
+        appTapDiscoveryStates = appTapDiscoveryStates.filter { entry in
+            discoveredByProcessObjectID[entry.key] != nil || nextProcessObjectIDs.contains(entry.key)
+        }
 
         let previousProcessObjectIDs = appTapConfigs.map(\.processObjectID)
-        let nextProcessObjectIDs = configs.map(\.processObjectID)
-        appTapConfigs = configs
+        if Set(previousProcessObjectIDs) == Set(nextConfigs.map(\.processObjectID)) {
+            let nextByProcessObjectID = Dictionary(uniqueKeysWithValues: nextConfigs.map { ($0.processObjectID, $0) })
+            nextConfigs = previousProcessObjectIDs.compactMap { nextByProcessObjectID[$0] }
+        }
 
-        if isRunning, previousProcessObjectIDs != nextProcessObjectIDs {
+        let nextProcessObjectIDsInOrder = nextConfigs.map(\.processObjectID)
+        appTapConfigs = nextConfigs
+
+        if isRunning, previousProcessObjectIDs != nextProcessObjectIDsInOrder {
             scheduleRestartRouting(reason: "Audio apps changed")
         } else if isRunning {
-            host.setStreamConfigs(streamConfigs(from: configs))
+            host.setStreamConfigs(streamConfigs(from: nextConfigs))
             refreshRunningStatus()
         }
     }
@@ -193,6 +231,8 @@ final class CoreAudioRouter: AudioRoutingBackend {
     func cleanupAudioState() {
         restartTask?.cancel()
         restartTask = nil
+        appTapConfigs = []
+        appTapDiscoveryStates = [:]
         isRoutingTransitioning = true
         host.stopRoute()
 
@@ -236,6 +276,38 @@ final class CoreAudioRouter: AudioRoutingBackend {
         }
     }
 
+    private func customizedAppTapConfigs(
+        apps: [AudioAppIdentity],
+        volumeStore: AppVolumeStore
+    ) -> [AudioAppTapConfig] {
+        var seenProcessObjectIDs: Set<AudioObjectID> = []
+        return AudioAppIdentity.sortedForDisplay(apps).compactMap { app -> AudioAppTapConfig? in
+            guard seenProcessObjectIDs.insert(app.processObjectID).inserted else { return nil }
+            let config = updatedAppTapConfig(
+                AudioAppTapConfig(processObjectID: app.processObjectID, bundleID: app.bundleID, gain: 1, mode: .on),
+                volumeStore: volumeStore
+            )
+
+            // The fallback tap already captures default apps at unity gain. Only apps with
+            // explicit per-app audio settings need a dedicated tap. This keeps ordinary audio
+            // process churn from restarting the route and briefly releasing EqualEase control.
+            guard config.gain != 1 || config.mode != .on else { return nil }
+            return config
+        }
+    }
+
+    private func updatedAppTapConfig(
+        _ config: AudioAppTapConfig,
+        volumeStore: AppVolumeStore
+    ) -> AudioAppTapConfig {
+        AudioAppTapConfig(
+            processObjectID: config.processObjectID,
+            bundleID: config.bundleID,
+            gain: min(max(volumeStore.volume(for: config.bundleID), 0), 1),
+            mode: volumeStore.mode(for: config.bundleID)
+        )
+    }
+
     private var startConfiguration: AudioRouteStartConfiguration {
         AudioRouteStartConfiguration(
             selectedOutputDeviceUID: selectedOutputDeviceUID,
@@ -264,6 +336,8 @@ final class CoreAudioRouter: AudioRoutingBackend {
         if cancelPendingRestart {
             restartTask?.cancel()
             restartTask = nil
+            appTapConfigs = []
+            appTapDiscoveryStates = [:]
         }
         host.stopRoute()
         state = .stopped

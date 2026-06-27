@@ -160,7 +160,12 @@ final class CoreAudioRouterLifecycleTests: XCTestCase {
 
     func testDefaultAudioAppChurnDoesNotRestartRunningRouteWhenCustomAppTapIsStable() async throws {
         let host = TestRoutingHost()
-        let router = CoreAudioRouter(host: host, restartDebounce: .milliseconds(20), cleanupOnLaunch: false)
+        let router = CoreAudioRouter(
+            host: host,
+            restartDebounce: .milliseconds(20),
+            appTapAddStability: 0,
+            cleanupOnLaunch: false
+        )
         let volumeStoreURL = temporaryAppVolumeStoreURL()
         let volumeStore = AppVolumeStore(persistenceURL: volumeStoreURL)
         defer { try? FileManager.default.removeItem(at: volumeStoreURL) }
@@ -187,9 +192,53 @@ final class CoreAudioRouterLifecycleTests: XCTestCase {
         XCTAssertEqual(host.streamConfigCounts.last, 2)
     }
 
-    func testAddingCustomizedAudioAppRestartsRouteToCreateDedicatedTap() async throws {
+    func testAddingCustomizedAudioAppWaitsForStabilityBeforeRestartingRoute() async throws {
         let host = TestRoutingHost()
-        let router = CoreAudioRouter(host: host, restartDebounce: .milliseconds(20), cleanupOnLaunch: false)
+        var now = Date(timeIntervalSinceReferenceDate: 0)
+        let router = CoreAudioRouter(
+            host: host,
+            restartDebounce: .milliseconds(1),
+            appTapAddStability: 5,
+            now: { now },
+            cleanupOnLaunch: false
+        )
+        let volumeStoreURL = temporaryAppVolumeStoreURL()
+        let volumeStore = AppVolumeStore(persistenceURL: volumeStoreURL)
+        defer { try? FileManager.default.removeItem(at: volumeStoreURL) }
+
+        let safari = makeAudioApp(processObjectID: 202, pid: 10_202, bundleID: "com.apple.Safari", displayName: "Safari")
+        volumeStore.setVolume(0.5, for: safari.bundleID)
+
+        router.start()
+        router.updateAppTapConfigs(apps: [safari], volumeStore: volumeStore)
+        now = now.addingTimeInterval(4.9)
+        router.updateAppTapConfigs(apps: [safari], volumeStore: volumeStore)
+
+        XCTAssertEqual(router.appTapConfigs, [])
+        XCTAssertFalse(router.isRoutingTransitioning)
+        XCTAssertEqual(host.startConfigurations.count, 1)
+
+        now = now.addingTimeInterval(0.1)
+        router.updateAppTapConfigs(apps: [safari], volumeStore: volumeStore)
+
+        XCTAssertTrue(router.isRoutingTransitioning)
+        try await Task.sleep(for: .milliseconds(20))
+
+        XCTAssertEqual(router.state, .running)
+        XCTAssertFalse(router.isRoutingTransitioning)
+        XCTAssertEqual(host.stopCount, 1)
+        XCTAssertEqual(host.startConfigurations.count, 2)
+        XCTAssertEqual(host.startConfigurations.last?.appTapConfigs.map(\.bundleID), [safari.bundleID])
+    }
+
+    func testMultipleCustomizedAudioAppDiscoveryChangesCoalesceIntoOneRestart() async throws {
+        let host = TestRoutingHost()
+        let router = CoreAudioRouter(
+            host: host,
+            restartDebounce: .milliseconds(20),
+            appTapAddStability: 0,
+            cleanupOnLaunch: false
+        )
         let volumeStoreURL = temporaryAppVolumeStoreURL()
         let volumeStore = AppVolumeStore(persistenceURL: volumeStoreURL)
         defer { try? FileManager.default.removeItem(at: volumeStoreURL) }
@@ -199,18 +248,89 @@ final class CoreAudioRouterLifecycleTests: XCTestCase {
         volumeStore.setVolume(0.25, for: spotify.bundleID)
         volumeStore.setVolume(0.5, for: safari.bundleID)
 
-        router.updateAppTapConfigs(apps: [spotify], volumeStore: volumeStore)
         router.start()
+        router.updateAppTapConfigs(apps: [spotify], volumeStore: volumeStore)
         router.updateAppTapConfigs(apps: [spotify, safari], volumeStore: volumeStore)
-
-        XCTAssertTrue(router.isRoutingTransitioning)
         try await Task.sleep(for: .milliseconds(80))
 
-        XCTAssertEqual(router.state, .running)
-        XCTAssertFalse(router.isRoutingTransitioning)
         XCTAssertEqual(host.stopCount, 1)
         XCTAssertEqual(host.startConfigurations.count, 2)
         XCTAssertEqual(host.startConfigurations.last?.appTapConfigs.map(\.bundleID), [safari.bundleID, spotify.bundleID])
+    }
+
+    func testRemovingCustomizedAudioAppWaitsForGracePeriodBeforeRestartingRoute() async throws {
+        let host = TestRoutingHost()
+        var now = Date(timeIntervalSinceReferenceDate: 0)
+        let router = CoreAudioRouter(
+            host: host,
+            restartDebounce: .milliseconds(1),
+            appTapAddStability: 0,
+            appTapRemoveGrace: 8,
+            now: { now },
+            cleanupOnLaunch: false
+        )
+        let volumeStoreURL = temporaryAppVolumeStoreURL()
+        let volumeStore = AppVolumeStore(persistenceURL: volumeStoreURL)
+        defer { try? FileManager.default.removeItem(at: volumeStoreURL) }
+
+        let spotify = makeAudioApp(processObjectID: 101, pid: 10_101, bundleID: "com.spotify.client", displayName: "Spotify")
+        volumeStore.setVolume(0.25, for: spotify.bundleID)
+
+        router.updateAppTapConfigs(apps: [spotify], volumeStore: volumeStore)
+        router.start()
+        router.updateAppTapConfigs(apps: [], volumeStore: volumeStore)
+        now = now.addingTimeInterval(7.9)
+        router.updateAppTapConfigs(apps: [], volumeStore: volumeStore)
+
+        XCTAssertEqual(router.appTapConfigs.map(\.bundleID), [spotify.bundleID])
+        XCTAssertFalse(router.isRoutingTransitioning)
+        XCTAssertEqual(host.startConfigurations.count, 1)
+
+        now = now.addingTimeInterval(0.1)
+        router.updateAppTapConfigs(apps: [], volumeStore: volumeStore)
+
+        XCTAssertTrue(router.isRoutingTransitioning)
+        try await Task.sleep(for: .milliseconds(20))
+
+        XCTAssertEqual(router.state, .running)
+        XCTAssertFalse(router.isRoutingTransitioning)
+        XCTAssertEqual(router.appTapConfigs, [])
+        XCTAssertEqual(host.stopCount, 1)
+        XCTAssertEqual(host.startConfigurations.count, 2)
+        XCTAssertEqual(host.startConfigurations.last?.appTapConfigs, [])
+    }
+
+    func testAlreadyKnownCustomizedAudioAppConfigUpdatesPromptlyWithoutRestart() async throws {
+        let host = TestRoutingHost()
+        let router = CoreAudioRouter(
+            host: host,
+            restartDebounce: .milliseconds(20),
+            appTapAddStability: 0,
+            cleanupOnLaunch: false
+        )
+        let volumeStoreURL = temporaryAppVolumeStoreURL()
+        let volumeStore = AppVolumeStore(persistenceURL: volumeStoreURL)
+        defer { try? FileManager.default.removeItem(at: volumeStoreURL) }
+
+        let spotify = makeAudioApp(processObjectID: 101, pid: 10_101, bundleID: "com.spotify.client", displayName: "Spotify")
+        volumeStore.setVolume(0.25, for: spotify.bundleID)
+        router.updateAppTapConfigs(apps: [spotify], volumeStore: volumeStore)
+        router.start()
+
+        let stopCountAfterStart = host.stopCount
+        let startCountAfterStart = host.startConfigurations.count
+        volumeStore.setVolume(0.5, for: spotify.bundleID)
+        volumeStore.setMode(.off, for: spotify.bundleID)
+        router.updateAppTapConfigs(apps: [spotify], volumeStore: volumeStore)
+        try await Task.sleep(for: .milliseconds(80))
+
+        XCTAssertEqual(host.stopCount, stopCountAfterStart)
+        XCTAssertEqual(host.startConfigurations.count, startCountAfterStart)
+        let configs = try XCTUnwrap(host.streamConfigSnapshots.last)
+        XCTAssertEqual(configs.count, 2)
+        XCTAssertEqual(configs[0].gain, 0.5, accuracy: 0.001)
+        XCTAssertTrue(configs[0].bypassed.boolValue)
+        XCTAssertFalse(configs[0].muted.boolValue)
     }
 
     func testOutputVolumeCapabilityWriteAndExternalRefresh() throws {
@@ -300,6 +420,7 @@ private final class TestRoutingHost: CoreAudioRoutingHost {
     var startedOutputUIDs: [String] = []
     var stopCount = 0
     var streamConfigCounts: [Int] = []
+    var streamConfigSnapshots: [[StreamConfig]] = []
     var bypassed = false
     var outputGain = 1.0
     var equalizerEnabled = false
@@ -382,6 +503,7 @@ private final class TestRoutingHost: CoreAudioRoutingHost {
 
     func setStreamConfigs(_ configs: [StreamConfig]) {
         streamConfigCounts.append(configs.count)
+        streamConfigSnapshots.append(configs)
     }
 
     func outputVolumeState(for outputDeviceUID: String?) -> AudioOutputVolumeState {

@@ -48,9 +48,11 @@ Muted app streams
 ### Tap lifecycle
 
 - **AudioProcessDiscovery** polls `kAudioHardwarePropertyProcessObjectList` every 2 seconds, filtering for processes with `kAudioProcessPropertyIsRunningOutput == true`. This detects apps currently emitting audio.
-- When discovered apps with explicit per-app audio settings change, the aggregate device is restarted (debounced) with an updated tap list.
+- When discovered apps with explicit per-app audio settings change, the aggregate device is restarted with an updated tap list after a short restart debounce coalesces multiple discovery changes.
 - Default/unmodified app churn does not restart the route; those apps remain covered by the fallback tap.
-- Apps that stop emitting audio are removed from the tap list only when they had explicit per-app settings; new customized audio-emitting apps are added.
+- Newly discovered customized apps must remain visible for a short stability window before EqualEase adds a dedicated tap, avoiding restarts for one-poll process churn.
+- Existing customized app taps are sticky during short absences and are removed only after an 8-second absence grace period.
+- Gain, bypass, and mute changes for already-tapped customized apps update the running stream configuration promptly without waiting for discovery hysteresis.
 - The fallback tap always excludes EqualEase's own process ID.
 
 ### Per-app modes
