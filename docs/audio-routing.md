@@ -21,7 +21,7 @@ Starting from EqualEase **1.4**, audio routing uses a multi-tap model that enabl
 - **One per-app tap** for each audio-emitting app that has explicit per-app audio settings, such as reduced gain, bypass, or mute. Each tap captures only that app's audio stream (`CATapDescription` with `isExclusive = false` and the app's process object ID).
 - **One fallback tap** for all remaining system audio not captured by per-app taps. This includes default/unmodified apps at unity gain, and is equivalent to the original single global tap (`CATapDescription` with `isExclusive = true`, excluding all per-app PIDs and EqualEase's own PID).
 
-All taps are added to the aggregate device's tap list. The IOProc receives separate audio buffers for each tap, maps them to the correct app, and mixes them according to each app's volume, bypass, and mute settings.
+All taps are added to the aggregate device's tap list. The IOProc expects Core Audio's input buffers to preserve the aggregate tap-list order: customized app taps first in deterministic app order, then the fallback system tap. On route start EqualEase logs the expected stream-config order, and on the first callback for each stream-config epoch it logs the observed input/output buffer count and classified layout. Supported layouts are one interleaved buffer per stream or one mono buffer per stream channel. If the observed layout cannot clearly represent the expected stream count after a route restart, EqualEase fails safe by ignoring per-app stream configs for that callback and processing observed audio at unity rather than applying the wrong app gain, bypass, or mute to an ambiguous stream.
 
 ### Signal path
 

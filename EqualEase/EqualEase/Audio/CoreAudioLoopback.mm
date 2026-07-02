@@ -39,6 +39,7 @@ static OSStatus RoutingIOProc(AudioObjectID,
     // The IOProc reads the snapshot atomically and reports back the epoch it observed.
     std::atomic<StreamConfigSnapshot*> _streamConfigs;
     std::atomic<uint64_t> _completedEpoch;
+    std::atomic<uint64_t> _diagnosticsLoggedEpoch;
     std::mutex _retiredSnapshotsMutex;
     std::vector<StreamConfigSnapshot*> _retiredSnapshots;
     // Scratch buffers for accumulating non-bypassed audio before EQ processing.
@@ -65,6 +66,7 @@ static OSStatus RoutingIOProc(AudioObjectID,
     _channelsPerStream = 2;
     _engine = [[EqualizerEngine alloc] initWithChannelCount:8 sampleRate:48000.0f];
     _completedEpoch.store(0, std::memory_order_relaxed);
+    _diagnosticsLoggedEpoch.store(0, std::memory_order_relaxed);
 
     // Default: single stream, unity gain, not bypassed (legacy behavior).
     auto* defaultConfigs = new std::vector<StreamConfig>(1, {1.0f, NO, NO});
@@ -158,6 +160,22 @@ static OSStatus RoutingIOProc(AudioObjectID,
     _completedEpoch.store(epoch, std::memory_order_release);
 }
 
+/// Returns YES once for each stream-config epoch so the IOProc can emit
+/// first-callback route diagnostics without logging on every callback.
+/// NOT part of the public header.
+- (BOOL)shouldLogStreamMappingDiagnosticsForEpoch:(uint64_t)epoch {
+    if (epoch == 0) {
+        return NO;
+    }
+    uint64_t previous = _diagnosticsLoggedEpoch.load(std::memory_order_acquire);
+    while (previous != epoch) {
+        if (_diagnosticsLoggedEpoch.compare_exchange_weak(previous, epoch, std::memory_order_acq_rel)) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 /// Frees retired snapshots once a newer snapshot has also been retired,
 /// guaranteeing no in-flight IOProc is still using the old one.
 ///
@@ -249,6 +267,76 @@ static OSStatus RoutingIOProc(AudioObjectID,
 
 @end
 
+static const char* streamMappingLayoutName(StreamMappingInputBufferLayout layout) noexcept {
+    switch (layout) {
+        case StreamMappingInputBufferLayoutEmpty:
+            return "empty";
+        case StreamMappingInputBufferLayoutInterleavedStreams:
+            return "interleaved-streams";
+        case StreamMappingInputBufferLayoutChannelSplitStreams:
+            return "channel-split-streams";
+        case StreamMappingInputBufferLayoutAmbiguous:
+            return "ambiguous";
+    }
+}
+
+extern "C" StreamMappingLayoutDiagnostics StreamMappingClassifyLayout(UInt32 inputBufferCount,
+                                                                        const UInt32 *inputChannelCounts,
+                                                                        UInt32 outputBufferCount,
+                                                                        const UInt32 *outputChannelCounts,
+                                                                        UInt32 expectedStreamCount,
+                                                                        UInt32 channelsPerStream) {
+    const UInt32 safeChannelsPerStream = std::max<UInt32>(1, channelsPerStream);
+    StreamMappingLayoutDiagnostics diagnostics = {
+        StreamMappingInputBufferLayoutEmpty,
+        inputBufferCount,
+        outputBufferCount,
+        expectedStreamCount,
+        0,
+        safeChannelsPerStream,
+        NO,
+        outputBufferCount == 1 ? YES : NO,
+        NO,
+    };
+
+    if (outputBufferCount > 0 && outputChannelCounts != nullptr) {
+        diagnostics.outputBuffersAreStreams = (outputChannelCounts[0] > 1 || outputBufferCount == 1) ? YES : NO;
+    }
+
+    if (inputBufferCount == 0 || inputChannelCounts == nullptr) {
+        return diagnostics;
+    }
+
+    bool allSingleChannel = true;
+    bool allMultiChannel = true;
+    for (UInt32 idx = 0; idx < inputBufferCount; ++idx) {
+        const UInt32 channelCount = std::max<UInt32>(1, inputChannelCounts[idx]);
+        allSingleChannel = allSingleChannel && channelCount == 1;
+        allMultiChannel = allMultiChannel && channelCount > 1;
+    }
+
+    if (allMultiChannel) {
+        diagnostics.inputLayout = StreamMappingInputBufferLayoutInterleavedStreams;
+        diagnostics.inputBuffersAreStreams = YES;
+        diagnostics.observedStreamCount = inputBufferCount;
+    } else if (allSingleChannel && inputBufferCount % safeChannelsPerStream == 0) {
+        diagnostics.inputLayout = StreamMappingInputBufferLayoutChannelSplitStreams;
+        diagnostics.inputBuffersAreStreams = NO;
+        diagnostics.observedStreamCount = inputBufferCount / safeChannelsPerStream;
+    } else {
+        diagnostics.inputLayout = StreamMappingInputBufferLayoutAmbiguous;
+        diagnostics.inputBuffersAreStreams = NO;
+        diagnostics.observedStreamCount = 0;
+    }
+
+    diagnostics.canApplyStreamConfigs = (
+        diagnostics.inputLayout != StreamMappingInputBufferLayoutAmbiguous
+        && diagnostics.observedStreamCount == expectedStreamCount
+        && expectedStreamCount > 0
+    ) ? YES : NO;
+    return diagnostics;
+}
+
 /// Adds `sample` to every output buffer location that corresponds to
 /// `channelIdx` at `sampleIndex`. Handles both stream-shaped (interleaved)
 /// and channel-shaped output buffer lists.
@@ -314,12 +402,60 @@ static OSStatus RoutingIOProc(AudioObjectID,
     const NSUInteger configCount = streamConfigs ? streamConfigs->size() : 0;
     const uint64_t observedEpoch = snapshot ? snapshot->epoch : 0;
 
-    const bool inputBuffersAreStreams = inputData->mBuffers[0].mNumberChannels > 1 || inputBufferCount <= configCount;
-    const bool outputBuffersAreStreams = outputData->mBuffers[0].mNumberChannels > 1 || outputBufferCount == 1;
+    constexpr UInt32 maxDiagnosticBuffers = 64;
+    UInt32 inputChannelCounts[maxDiagnosticBuffers] = {0};
+    UInt32 outputChannelCounts[maxDiagnosticBuffers] = {0};
+    const bool diagnosticsBufferOverflow = inputBufferCount > maxDiagnosticBuffers || outputBufferCount > maxDiagnosticBuffers;
+    for (UInt32 idx = 0; idx < std::min(inputBufferCount, maxDiagnosticBuffers); ++idx) {
+        inputChannelCounts[idx] = inputData->mBuffers[idx].mNumberChannels;
+    }
+    for (UInt32 idx = 0; idx < std::min(outputBufferCount, maxDiagnosticBuffers); ++idx) {
+        outputChannelCounts[idx] = outputData->mBuffers[idx].mNumberChannels;
+    }
+
+    StreamMappingLayoutDiagnostics diagnostics;
+    if (diagnosticsBufferOverflow) {
+        diagnostics = {
+            StreamMappingInputBufferLayoutAmbiguous,
+            inputBufferCount,
+            outputBufferCount,
+            (UInt32)configCount,
+            0,
+            channelsPerStream,
+            NO,
+            outputData->mBuffers[0].mNumberChannels > 1 || outputBufferCount == 1,
+            NO,
+        };
+    } else {
+        diagnostics = StreamMappingClassifyLayout(
+            inputBufferCount,
+            inputChannelCounts,
+            outputBufferCount,
+            outputChannelCounts,
+            (UInt32)configCount,
+            channelsPerStream
+        );
+    }
+
+    const bool inputBuffersAreStreams = diagnostics.inputBuffersAreStreams;
+    const bool outputBuffersAreStreams = diagnostics.outputBuffersAreStreams;
     const UInt32 firstOutputChannels = std::max<UInt32>(1, outputData->mBuffers[0].mNumberChannels);
     const UInt32 sampleCount = (outputData->mBuffers[0].mDataByteSize > 0 && outputData->mBuffers[0].mData != nullptr)
         ? outputData->mBuffers[0].mDataByteSize / (sizeof(Float32) * (outputBuffersAreStreams ? firstOutputChannels : 1))
         : 0;
+
+    if ([loopback shouldLogStreamMappingDiagnosticsForEpoch:observedEpoch]) {
+        const char* safeAction = diagnostics.canApplyStreamConfigs ? "applying stream configs" : "using unity per-stream fallback";
+        NSLog(@"EqualEase routing stream mapping: epoch=%llu expectedStreams=%u observedStreams=%u inputBuffers=%u outputBuffers=%u channelsPerStream=%u inputLayout=%s action=%s",
+              observedEpoch,
+              diagnostics.expectedStreamCount,
+              diagnostics.observedStreamCount,
+              diagnostics.inputBufferCount,
+              diagnostics.outputBufferCount,
+              diagnostics.channelsPerStream,
+              streamMappingLayoutName(diagnostics.inputLayout),
+              safeAction);
+    }
 
     if (sampleCount == 0) {
         return kAudioHardwareNoError;
@@ -364,7 +500,7 @@ static OSStatus RoutingIOProc(AudioObjectID,
                     bool isBypassed = globalBypassed;
                     bool isMuted = false;
                     float gain = 1.0f;
-                    if (streamIdx < configCount) {
+                    if (diagnostics.canApplyStreamConfigs && streamIdx < configCount) {
                         const StreamConfig& cfg = (*streamConfigs)[streamIdx];
                         isBypassed = isBypassed || cfg.bypassed;
                         isMuted = cfg.muted;
@@ -391,7 +527,7 @@ static OSStatus RoutingIOProc(AudioObjectID,
                 bool isBypassed = globalBypassed;
                 bool isMuted = false;
                 float gain = 1.0f;
-                if (streamIdx < configCount) {
+                if (diagnostics.canApplyStreamConfigs && streamIdx < configCount) {
                     const StreamConfig& cfg = (*streamConfigs)[streamIdx];
                     isBypassed = isBypassed || cfg.bypassed;
                     isMuted = cfg.muted;
