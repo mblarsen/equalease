@@ -278,7 +278,7 @@ final class InputDeviceControllerTests: XCTestCase {
 
         host.volumeStates[host.builtInMicrophone.uid] = AudioInputVolumeState(canReadVolume: true, canSetVolume: true, volume: 0.3)
         host.triggerInputVolumeChanged()
-        await Task.yield()
+        await notifier.waitForAttemptedNotifications(count: 1)
         XCTAssertEqual(notifier.attemptedNotifications, 1)
 
         currentTime = currentTime.addingTimeInterval(1)
@@ -287,7 +287,7 @@ final class InputDeviceControllerTests: XCTestCase {
         XCTAssertEqual(notifier.attemptedNotifications, 1)
 
         notifier.resumeBlockedPost(result: true)
-        await Task.yield()
+        await notifier.waitForPostedNotifications(count: 1)
         XCTAssertEqual(notifier.postedNotifications.count, 1)
     }
 
@@ -417,6 +417,8 @@ final class TestInputVolumeProtectionNotifier: InputVolumeProtectionNotifying {
     var postedNotifications: [(deviceName: String, volume: Double, threshold: Double)] = []
 
     private var blockedPostContinuation: CheckedContinuation<Bool, Never>?
+    private var attemptedNotificationWaiters: [(count: Int, continuation: CheckedContinuation<Void, Never>)] = []
+    private var postedNotificationWaiters: [(count: Int, continuation: CheckedContinuation<Void, Never>)] = []
 
     func refreshAuthorizationStatus() async -> InputVolumeProtectionNotificationStatus {
         status
@@ -429,23 +431,52 @@ final class TestInputVolumeProtectionNotifier: InputVolumeProtectionNotifying {
 
     func postLowInputVolumeNotification(deviceName: String, volume: Double, threshold: Double) async -> Bool {
         attemptedNotifications += 1
+        resumeAttemptedNotificationWaiters()
         if shouldBlockPost {
             let posted = await withCheckedContinuation { continuation in
                 blockedPostContinuation = continuation
             }
             if posted {
                 postedNotifications.append((deviceName: deviceName, volume: volume, threshold: threshold))
+                resumePostedNotificationWaiters()
             }
             return posted
         }
         guard status == .authorized else { return false }
         postedNotifications.append((deviceName: deviceName, volume: volume, threshold: threshold))
+        resumePostedNotificationWaiters()
         return true
+    }
+
+    func waitForAttemptedNotifications(count: Int) async {
+        guard attemptedNotifications < count else { return }
+        await withCheckedContinuation { continuation in
+            attemptedNotificationWaiters.append((count: count, continuation: continuation))
+        }
+    }
+
+    func waitForPostedNotifications(count: Int) async {
+        guard postedNotifications.count < count else { return }
+        await withCheckedContinuation { continuation in
+            postedNotificationWaiters.append((count: count, continuation: continuation))
+        }
     }
 
     func resumeBlockedPost(result: Bool) {
         shouldBlockPost = false
         blockedPostContinuation?.resume(returning: result)
         blockedPostContinuation = nil
+    }
+
+    private func resumeAttemptedNotificationWaiters() {
+        let ready = attemptedNotificationWaiters.filter { attemptedNotifications >= $0.count }
+        attemptedNotificationWaiters.removeAll { attemptedNotifications >= $0.count }
+        ready.forEach { $0.continuation.resume() }
+    }
+
+    private func resumePostedNotificationWaiters() {
+        let ready = postedNotificationWaiters.filter { postedNotifications.count >= $0.count }
+        postedNotificationWaiters.removeAll { postedNotifications.count >= $0.count }
+        ready.forEach { $0.continuation.resume() }
     }
 }
