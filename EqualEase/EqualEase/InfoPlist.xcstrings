@@ -1,0 +1,54 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "CFBundleName": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase"
+          }
+        }
+      },
+      "comment": "Bundle name"
+    },
+    "NSAppleEventsUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase reads the active website in supported browsers only when applying or creating website preset rules."
+          }
+        }
+      },
+      "comment": "Privacy - AppleEvents Sending Usage Description"
+    },
+    "NSAudioCaptureUsageDescription": {
+      "extractionState": "manual",
+      "comment": "Privacy - Audio Capture Usage Description. Explain that EqualEase captures system output audio locally to apply EQ before playback.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase needs to capture system audio so it can apply equalizer processing before playing audio to your selected output device."
+          }
+        }
+      }
+    },
+    "NSLocalNetworkUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase uses the local network to let your phone control Volume, Preamp, and presets while staying on your trusted Wi-Fi."
+          }
+        }
+      },
+      "comment": "Privacy - Local Network Usage Description"
+    }
+  },
+  "version": "1.0"
+}

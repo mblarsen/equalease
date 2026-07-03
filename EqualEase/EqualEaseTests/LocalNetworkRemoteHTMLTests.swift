@@ -45,7 +45,7 @@ final class LocalNetworkRemoteHTMLTests: XCTestCase {
     func testRemoteHTMLIncludesPairingAndTokenReconnectFlow() {
         let html = LocalNetworkControlServer.remoteHTML(webSocketPath: "/ws")
 
-        XCTAssertTrue(html.contains("EqualEase Settings > General > Local Network Remote"))
+        XCTAssertTrue(html.contains("EqualEase Settings &gt; General &gt; Local Network Remote"))
         XCTAssertTrue(html.contains("equalEaseRemoteCredentialV1"))
         XCTAssertTrue(html.contains("send('auth', { clientID: credential.clientID, token: credential.token }, 'auth')"))
         XCTAssertTrue(html.contains("send('pair', { code, clientName: clientName.value || 'Phone Remote' }, 'pair')"))

@@ -13,7 +13,7 @@ final class LaunchAtLoginSettings: ObservableObject {
     @Published private(set) var canChange = true
     @Published private(set) var needsSystemApproval = false
     @Published private(set) var isUnavailable = false
-    @Published private(set) var statusText = "Off"
+    @Published private(set) var statusText = String(localized: "Launch at Login: Off", defaultValue: "Off", comment: "Launch-at-login status when EqualEase will not launch automatically.")
     @Published var errorMessage: String?
 
     init() {
@@ -50,15 +50,15 @@ final class LaunchAtLoginSettings: ObservableObject {
     private static func description(for status: SMAppService.Status) -> String {
         switch status {
         case .enabled:
-            return "On"
+            return String(localized: "Launch at Login: On", defaultValue: "On", comment: "Launch-at-login status when EqualEase will launch automatically.")
         case .notRegistered:
-            return "Off"
+            return String(localized: "Launch at Login: Off", defaultValue: "Off", comment: "Launch-at-login status when EqualEase will not launch automatically.")
         case .requiresApproval:
-            return "Needs approval"
+            return String(localized: "Needs approval", comment: "Launch-at-login status when macOS requires user approval in System Settings.")
         case .notFound:
-            return "Unavailable in this build"
+            return String(localized: "Unavailable in this build", comment: "Launch-at-login status for development builds that cannot be registered as login items.")
         @unknown default:
-            return "Unknown"
+            return String(localized: "Launch at Login: Unknown", defaultValue: "Unknown", comment: "Fallback status when launch-at-login state cannot be determined.")
         }
     }
 }
@@ -272,9 +272,12 @@ struct GeneralSettingsView: View {
         case let (version?, _) where !version.isEmpty:
             return version
         case let (_, build?) where !build.isEmpty:
-            return "build \(build)"
+            return String(
+                localized: "build \(build)",
+                comment: "Version label when only the build number is known. Interpolation is CFBundleVersion."
+            )
         default:
-            return "development build"
+            return String(localized: "development build", comment: "Version label when no app version/build metadata is available.")
         }
     }
 }

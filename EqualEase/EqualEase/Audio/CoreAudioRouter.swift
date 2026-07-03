@@ -9,8 +9,8 @@ import Foundation
 @MainActor
 final class CoreAudioRouter: AudioRoutingBackend {
     @Published private(set) var state: AudioRoutingState = .stopped
-    @Published private(set) var statusText = "Stopped"
-    @Published private(set) var outputDeviceName = "Unknown output device"
+    @Published private(set) var statusText = String(localized: "Audio routing status: Stopped", defaultValue: "Stopped", comment: "Audio routing status when EqualEase is not routing system audio.")
+    @Published private(set) var outputDeviceName = String(localized: "Unknown output device", comment: "Fallback output device name when macOS does not report a device.")
     @Published private(set) var outputDeviceUID: String?
     @Published private(set) var outputDevices: [AudioOutputDevice] = []
     @Published private(set) var isRoutingTransitioning = false
@@ -18,7 +18,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
         didSet {
             refreshSelectedOutputDevice()
             if isRunning, oldValue != selectedOutputDeviceUID {
-                scheduleRestartRouting(reason: "Output changed")
+                scheduleRestartRouting(reason: String(localized: "Output changed", comment: "Audio routing restart reason after the selected output device changes."))
             }
         }
     }
@@ -122,15 +122,23 @@ final class CoreAudioRouter: AudioRoutingBackend {
 
     private var processingSummary: String {
         if isBypassed {
-            return "DSP bypassed"
+            return String(localized: "DSP bypassed", comment: "Audio routing processing summary when global equalizer processing is bypassed.")
         }
-        let eqState = equalizerEnabled ? "EQ on" : "EQ off"
-        return "\(eqState), \(Int(clampedOutputGain * 100))% preamp"
+        let eqState = equalizerEnabled
+            ? String(localized: "EQ on", comment: "Audio routing processing summary when equalizer filters are enabled.")
+            : String(localized: "EQ off", comment: "Audio routing processing summary when equalizer filters are disabled.")
+        return String(
+            localized: "\(eqState), \(Int(clampedOutputGain * 100))% preamp",
+            comment: "Audio routing processing summary. First interpolation is EQ on/off text; second is preamp percentage."
+        )
     }
 
     private func refreshRunningStatus() {
         guard isRunning else { return }
-        statusText = "Active: routing processed system audio to \(outputDeviceName) (\(processingSummary))."
+        statusText = String(
+            localized: "Active: routing processed system audio to \(outputDeviceName) (\(processingSummary)).",
+            comment: "Audio routing status. Interpolations are output device name and a processing summary including EQ/bypass/preamp."
+        )
     }
 
     func setBandGain(_ gain: Double, at index: Int) {
@@ -218,7 +226,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
                 || volumeStore.mode(for: pending.config.bundleID) != .on
         }
 
-        publishAppTapConfigs(reason: "Audio apps changed")
+        publishAppTapConfigs(reason: String(localized: "Audio apps changed", comment: "Audio routing restart reason after discovered per-app audio taps change."))
     }
 
     private func registerAppTapDiscoveryGeneration(_ discoveryGeneration: Int?) -> Bool {
@@ -266,7 +274,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
             guard !Task.isCancelled else { return }
             self.appTapRemovalTasks[processObjectID] = nil
             guard self.appTapRecords.removeValue(forKey: processObjectID) != nil else { return }
-            self.publishAppTapConfigs(reason: "Audio apps changed")
+            self.publishAppTapConfigs(reason: String(localized: "Audio apps changed", comment: "Audio routing restart reason after discovered per-app audio taps change."))
         }
     }
 
@@ -288,7 +296,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
         guard !isRunning, !isRoutingTransitioning else { return }
         isRoutingTransitioning = true
         state = .starting
-        statusText = "Starting audio routing…"
+        statusText = String(localized: "Starting audio routing…", comment: "Audio routing status while EqualEase starts capturing and rendering system audio.")
 
         do {
             _ = try cleanupOwnedAudioStateBeforeExplicitRouting()
@@ -299,7 +307,10 @@ final class CoreAudioRouter: AudioRoutingBackend {
         } catch {
             host.stopRoute()
             state = .failed(error.localizedDescription)
-            statusText = "Could not start audio routing: \(error.localizedDescription)"
+            statusText = String(
+                localized: "Could not start audio routing: \(error.localizedDescription)",
+                comment: "Audio routing failure status. Interpolation is the underlying system error."
+            )
         }
         isRoutingTransitioning = false
     }
@@ -307,12 +318,12 @@ final class CoreAudioRouter: AudioRoutingBackend {
     func stop() {
         guard state != .stopped || isRoutingTransitioning else { return }
         isRoutingTransitioning = true
-        statusText = "Stopping audio routing…"
+        statusText = String(localized: "Stopping audio routing…", comment: "Audio routing status while EqualEase stops routing system audio.")
         stop(cancelPendingRestart: true)
     }
 
     func restart() {
-        scheduleRestartRouting(reason: "Manual restart requested")
+        scheduleRestartRouting(reason: String(localized: "Manual restart requested", comment: "Audio routing restart reason after the user clicks Restart in Diagnostics."))
     }
 
     func cleanupAudioState() {
@@ -328,7 +339,10 @@ final class CoreAudioRouter: AudioRoutingBackend {
             statusText = result.summary
         } catch {
             state = .failed(error.localizedDescription)
-            statusText = "Could not clean up audio state: \(error.localizedDescription)"
+            statusText = String(
+                localized: "Could not clean up audio state: \(error.localizedDescription)",
+                comment: "Audio cleanup failure status. Interpolation is the underlying system error."
+            )
         }
         isRoutingTransitioning = false
     }
@@ -354,7 +368,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
         } catch {
             outputDeviceSnapshot = AudioOutputDeviceSnapshot(devices: [], defaultOutputDeviceUID: nil)
             outputDevices = []
-            outputDeviceName = "Unknown output device"
+            outputDeviceName = String(localized: "Unknown output device", comment: "Fallback output device name when macOS does not report a device.")
             outputDeviceUID = nil
             canSetOutputVolume = false
             outputVolumeObservation?.invalidate()
@@ -394,7 +408,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
         }
         host.stopRoute()
         state = .stopped
-        statusText = "Stopped"
+        statusText = String(localized: "Audio routing status: Stopped", defaultValue: "Stopped", comment: "Audio routing status when EqualEase is not routing system audio.")
         isRoutingTransitioning = false
     }
 
@@ -403,7 +417,10 @@ final class CoreAudioRouter: AudioRoutingBackend {
         restartTask?.cancel()
         isRoutingTransitioning = true
         let target = selectedOutputDevice?.name ?? outputDeviceName
-        statusText = "\(reason). Restarting audio routing to \(target)…"
+        statusText = String(
+            localized: "\(reason). Restarting audio routing to \(target)…",
+            comment: "Audio routing restart status. First interpolation is the restart reason; second is the output device name."
+        )
         restartTask = Task { @MainActor [weak self] in
             guard let self else { return }
             try? await Task.sleep(for: self.restartDebounce)
@@ -417,7 +434,10 @@ final class CoreAudioRouter: AudioRoutingBackend {
 
     private func restartRouting(reason: String) {
         let target = selectedOutputDevice?.name ?? outputDeviceName
-        statusText = "\(reason). Restarting audio routing to \(target)…"
+        statusText = String(
+            localized: "\(reason). Restarting audio routing to \(target)…",
+            comment: "Audio routing restart status. First interpolation is the restart reason; second is the output device name."
+        )
         stop(cancelPendingRestart: false)
         start()
     }
@@ -440,7 +460,8 @@ final class CoreAudioRouter: AudioRoutingBackend {
 
     private func refreshSelectedOutputDevice() {
         outputDeviceUID = selectedOutputDeviceUID
-        outputDeviceName = selectedOutputDevice?.name ?? "Unknown output device"
+        outputDeviceName = selectedOutputDevice?.name
+            ?? String(localized: "Unknown output device", comment: "Fallback output device name when macOS does not report a device.")
         startSelectedOutputVolumeObservation()
         refreshSelectedOutputVolume()
     }
@@ -485,7 +506,7 @@ final class CoreAudioRouter: AudioRoutingBackend {
             self?.refreshOutputDevice()
         }
         if outputDeviceObservation == nil {
-            statusText = "Output device change observation unavailable; refresh occurs when the menu opens or routing starts."
+            statusText = String(localized: "Output device change observation unavailable; refresh occurs when the menu opens or routing starts.", comment: "Audio routing diagnostic status when Core Audio output-device observation cannot be installed.")
         }
     }
 

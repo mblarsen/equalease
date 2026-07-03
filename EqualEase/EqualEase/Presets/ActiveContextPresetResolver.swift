@@ -29,11 +29,20 @@ struct ActivePresetContext: Equatable {
     var sourceSummary: String {
         switch source {
         case .lockedPreset:
-            "\(preset.name) · paused"
+            String(
+                localized: "\(preset.name) · paused",
+                comment: "Compact preset status. Interpolation is a preset name; 'paused' means app/website preset switching is paused."
+            )
         case let .activeWebsite(_, displayName):
-            "\(preset.name) for \(displayName)"
+            String(
+                localized: "\(preset.name) for \(displayName)",
+                comment: "Compact preset status. First interpolation is a preset name; second is an app name or website display name/host."
+            )
         case let .activeApp(_, displayName):
-            "\(preset.name) for \(displayName)"
+            String(
+                localized: "\(preset.name) for \(displayName)",
+                comment: "Compact preset status. First interpolation is a preset name; second is an app name or website display name/host."
+            )
         case .selectedPreset:
             preset.name
         }
@@ -42,13 +51,25 @@ struct ActivePresetContext: Equatable {
     var sourceExplanation: String {
         switch source {
         case .lockedPreset:
-            "Preset rules are paused. EqualEase stays on \(preset.name) until preset switching resumes."
+            String(
+                localized: "Preset rules are paused. EqualEase stays on \(preset.name) until preset switching resumes.",
+                comment: "Preset resolution explanation. Interpolation is a preset name."
+            )
         case let .activeWebsite(siteKey, displayName):
-            "Active website \(displayName) (\(siteKey)) remembers \(preset.name)."
+            String(
+                localized: "Active website \(displayName) (\(siteKey)) remembers \(preset.name).",
+                comment: "Preset resolution explanation. Interpolations are website display name, website host/key, and preset name."
+            )
         case let .activeApp(bundleIdentifier, displayName):
-            "Active app \(displayName) (\(bundleIdentifier)) remembers \(preset.name)."
+            String(
+                localized: "Active app \(displayName) (\(bundleIdentifier)) remembers \(preset.name).",
+                comment: "Preset resolution explanation. Interpolations are app name, bundle identifier, and preset name."
+            )
         case .selectedPreset:
-            "Using the selected default preset \(preset.name)."
+            String(
+                localized: "Using the selected default preset \(preset.name).",
+                comment: "Preset resolution explanation. Interpolation is a preset name."
+            )
         }
     }
 }

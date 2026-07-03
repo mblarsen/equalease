@@ -68,10 +68,14 @@ enum InputVolumeProtectionNotificationStatus: Equatable {
 
     var summary: String {
         switch self {
-        case .notRequested: "Not requested"
-        case .authorized: "Allowed"
-        case .denied: "Denied in macOS"
-        case .unavailable: "Unavailable"
+        case .notRequested:
+            String(localized: "Not requested", comment: "Notification permission status before EqualEase has asked macOS for permission.")
+        case .authorized:
+            String(localized: "Allowed", comment: "Notification permission status when macOS allows EqualEase notifications.")
+        case .denied:
+            String(localized: "Denied in macOS", comment: "Notification permission status when macOS notification permission has been denied.")
+        case .unavailable:
+            String(localized: "Notification permission: Unavailable", defaultValue: "Unavailable", comment: "Notification permission status when EqualEase cannot read notification permission.")
         }
     }
 }
@@ -162,8 +166,11 @@ final class UserNotificationInputVolumeProtectionNotifier: InputVolumeProtection
         guard status == .authorized else { return false }
 
         let content = UNMutableNotificationContent()
-        content.title = "Microphone input volume is low"
-        content.body = "\(deviceName) is at \(Int(volume * 100))%, below your \(Int(threshold * 100))% low-volume threshold."
+        content.title = String(localized: "Microphone input volume is low", comment: "Local notification title for low microphone input volume.")
+        content.body = String(
+            localized: "\(deviceName) is at \(Int(volume * 100))%, below your \(Int(threshold * 100))% low-volume threshold.",
+            comment: "Local notification body. Interpolations are input device name, current input volume percentage, and configured low-volume threshold percentage."
+        )
         content.sound = .default
 
         let request = UNNotificationRequest(

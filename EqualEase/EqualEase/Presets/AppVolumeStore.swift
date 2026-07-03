@@ -13,9 +13,12 @@ enum AppAudioMode: String, Codable, CaseIterable, Sendable {
 
     var label: String {
         switch self {
-        case .on: "On"
-        case .off: "Off"
-        case .mute: "Mute"
+        case .on:
+            String(localized: "App audio mode: On", defaultValue: "On", comment: "Per-app audio mode label: app audio is processed normally.")
+        case .off:
+            String(localized: "App audio mode: Off", defaultValue: "Off", comment: "Per-app audio mode label: app audio bypasses EqualEase processing but still routes through EqualEase.")
+        case .mute:
+            String(localized: "App audio mode: Mute", defaultValue: "Mute", comment: "Per-app audio mode label: app audio is silenced.")
         }
     }
 }

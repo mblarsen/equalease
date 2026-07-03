@@ -33,15 +33,24 @@ struct AppPresetSuggestion: Equatable {
     var preset: EQPreset
 
     var title: String {
-        "Remember \(preset.name) for \(target.displayName)?"
+        String(
+            localized: "Remember \(preset.name) for \(target.displayName)?",
+            comment: "Smart-switching prompt title. First interpolation is a preset name; second is an app name or website host."
+        )
     }
 
     var explanation: String {
         switch target {
         case let .app(app):
-            "EqualEase can switch to this preset whenever \(app.displayName) becomes the active app, then return to your selected default preset when you switch away."
+            String(
+                localized: "EqualEase can switch to this preset whenever \(app.displayName) becomes the active app, then return to your selected default preset when you switch away.",
+                comment: "Smart-switching prompt body for app rules. Interpolation is the active app name."
+            )
         case let .website(page):
-            "EqualEase can switch to this preset whenever \(page.displayName) is the active website in a supported browser, then fall back to your app or default preset when you switch away."
+            String(
+                localized: "EqualEase can switch to this preset whenever \(page.displayName) is the active website in a supported browser, then fall back to your app or default preset when you switch away.",
+                comment: "Smart-switching prompt body for website rules. Interpolation is a website display name or host."
+            )
         }
     }
 }

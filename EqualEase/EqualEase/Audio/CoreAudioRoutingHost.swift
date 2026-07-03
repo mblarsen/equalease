@@ -51,9 +51,12 @@ struct AudioRoutingCleanupResult: Equatable {
 
     var summary: String {
         if destroyedTaps == 0 && destroyedAggregates == 0 {
-            return "No stale EqualEase audio objects found."
+            return String(localized: "No stale EqualEase audio objects found.", comment: "Diagnostics cleanup result when no stale Core Audio taps or aggregate devices are found.")
         }
-        return "Cleaned up \(destroyedTaps) stale tap(s) and \(destroyedAggregates) aggregate device(s)."
+        return String(
+            localized: "Cleaned up \(destroyedTaps) stale tap(s) and \(destroyedAggregates) aggregate device(s).",
+            comment: "Diagnostics cleanup result. Interpolations are counts of stale Core Audio taps and aggregate devices removed."
+        )
     }
 }
 

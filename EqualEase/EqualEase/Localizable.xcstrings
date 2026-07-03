@@ -1,0 +1,3385 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%.1f dB": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%.1f dB"
+          }
+        }
+      },
+      "comment": "Decibel gain value. Keep the dB unit with the numeric value."
+    },
+    "%@ Copy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Copy"
+          }
+        }
+      },
+      "comment": "Default name for a duplicated custom preset. Interpolation is the original preset name."
+    },
+    "%@ decibels": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ decibels"
+          }
+        }
+      },
+      "comment": "VoiceOver value for decibel gain. Interpolation is a formatted gain value."
+    },
+    "%@ for %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ for %2$@"
+          }
+        }
+      },
+      "comment": "Compact preset status. First interpolation is a preset name; second is an app name or website display name/host."
+    },
+    "%@ hertz band": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ hertz band"
+          }
+        }
+      },
+      "comment": "VoiceOver label for an EQ frequency band. Interpolation is the band frequency label."
+    },
+    "%@ is at %lld%%, below your %lld%% low-volume threshold.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ is at %2$lld%%, below your %3$lld%% low-volume threshold."
+          }
+        }
+      },
+      "comment": "Local notification body. Interpolations are input device name, current input volume percentage, and configured low-volume threshold percentage."
+    },
+    "%@ volume": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ volume"
+          }
+        }
+      },
+      "comment": "Accessibility label for per-app volume. Interpolation is an app name."
+    },
+    "%@ · PID %d · process object %u": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · PID %2$d · process object %3$u"
+          }
+        }
+      }
+    },
+    "%@ · paused": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · paused"
+          }
+        }
+      },
+      "comment": "Compact preset status. Interpolation is a preset name; 'paused' means app/website preset switching is paused."
+    },
+    "%@, %lld%% preamp": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$lld%% preamp"
+          }
+        }
+      },
+      "comment": "Audio routing processing summary. First interpolation is EQ on/off text; second is preamp percentage."
+    },
+    "%@. Restarting audio routing to %@…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@. Restarting audio routing to %2$@…"
+          }
+        }
+      },
+      "comment": "Audio routing restart status. First interpolation is the restart reason; second is the output device name."
+    },
+    "%lld percent": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld percent"
+          }
+        }
+      }
+    },
+    "%lld%%": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%%"
+          }
+        }
+      },
+      "comment": "Percentage value. Keep the percent sign with the numeric value."
+    },
+    "10-band EQ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-band EQ"
+          }
+        }
+      }
+    },
+    "10-band equalizer graph": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-band equalizer graph"
+          }
+        }
+      }
+    },
+    "About EqualEase": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About EqualEase"
+          }
+        }
+      }
+    },
+    "Active": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
+          }
+        }
+      }
+    },
+    "Active app %@ (%@) remembers %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active app %1$@ (%2$@) remembers %3$@."
+          }
+        }
+      },
+      "comment": "Preset resolution explanation. Interpolations are app name, bundle identifier, and preset name."
+    },
+    "Active website %@ (%@) remembers %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active website %1$@ (%2$@) remembers %3$@."
+          }
+        }
+      },
+      "comment": "Preset resolution explanation. Interpolations are website display name, website host/key, and preset name."
+    },
+    "Active: routing processed system audio to %@ (%@).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active: routing processed system audio to %1$@ (%2$@)."
+          }
+        }
+      },
+      "comment": "Audio routing status. Interpolations are output device name and a processing summary including EQ/bypass/preamp."
+    },
+    "Allow Notifications…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Notifications…"
+          }
+        }
+      }
+    },
+    "Allow automation to change sound settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow automation to change sound settings"
+          }
+        }
+      }
+    },
+    "Allow phone remote control on the local network": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow phone remote control on the local network"
+          }
+        }
+      }
+    },
+    "Allowed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allowed"
+          }
+        }
+      },
+      "comment": "Notification permission status when macOS allows EqualEase notifications."
+    },
+    "App audio mode: Mute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mute"
+          }
+        }
+      },
+      "comment": "Per-app audio mode label: app audio is silenced."
+    },
+    "App audio mode: Off": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        }
+      },
+      "comment": "Per-app audio mode label: app audio bypasses EqualEase processing but still routes through EqualEase."
+    },
+    "App audio mode: On": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On"
+          }
+        }
+      },
+      "comment": "Per-app audio mode label: app audio is processed normally."
+    },
+    "Approve EqualEase in System Settings > General > Login Items to finish enabling launch at login.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approve EqualEase in System Settings > General > Login Items to finish enabling launch at login."
+          }
+        }
+      }
+    },
+    "Audio apps changed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio apps changed"
+          }
+        }
+      },
+      "comment": "Audio routing restart reason after discovered per-app audio taps change."
+    },
+    "Audio routing status: Stopped": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopped"
+          }
+        }
+      },
+      "comment": "Audio routing status when EqualEase is not routing system audio."
+    },
+    "Audio stays on this Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio stays on this Mac"
+          }
+        }
+      }
+    },
+    "Auth payload must include clientID and token.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auth payload must include clientID and token."
+          }
+        }
+      },
+      "comment": "Remote-control protocol error for missing authentication fields."
+    },
+    "Automatically raise supported microphones to a minimum": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatically raise supported microphones to a minimum"
+          }
+        }
+      }
+    },
+    "Available outputs": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available outputs"
+          }
+        }
+      }
+    },
+    "Band": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Band"
+          }
+        }
+      }
+    },
+    "Bass Boost": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bass Boost"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name; emphasizes low frequencies."
+    },
+    "Bypass": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bypass"
+          }
+        }
+      },
+      "comment": "Audio control label. Means pass audio through EqualEase without EQ processing; it does not turn EqualEase off."
+    },
+    "Bypass EQ processing": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bypass EQ processing"
+          }
+        }
+      },
+      "comment": "Diagnostics toggle. Global bypass still routes audio through EqualEase but skips EQ processing."
+    },
+    "Bypass: pass through unprocessed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bypass: pass through unprocessed."
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Cancel Pairing": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel Pairing"
+          }
+        }
+      }
+    },
+    "Choose the preset to hear and edit in this workbench.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the preset to hear and edit in this workbench."
+          }
+        }
+      }
+    },
+    "Choose where processed audio is sent. Follow system output keeps it matched to your Mac’s current output.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose where processed audio is sent. Follow system output keeps it matched to your Mac’s current output."
+          }
+        }
+      }
+    },
+    "Cleaned up %lld stale tap(s) and %lld aggregate device(s).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cleaned up %1$lld stale tap(s) and %2$lld aggregate device(s)."
+          }
+        }
+      },
+      "comment": "Diagnostics cleanup result. Interpolations are counts of stale Core Audio taps and aggregate devices removed."
+    },
+    "Cleanup Audio State": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cleanup Audio State"
+          }
+        }
+      }
+    },
+    "Clear": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
+          }
+        }
+      }
+    },
+    "Command payload is missing a numeric value.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Command payload is missing a numeric value."
+          }
+        }
+      },
+      "comment": "Remote-control protocol error for volume/preamp commands without a number."
+    },
+    "Command payload must include command/name/action.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Command payload must include command/name/action."
+          }
+        }
+      },
+      "comment": "Remote-control protocol error for missing command name."
+    },
+    "Configured app taps": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configured app taps"
+          }
+        }
+      }
+    },
+    "Connected — authenticating…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected — authenticating…"
+          }
+        }
+      },
+      "comment": "Phone web remote status after WebSocket connects while auth is pending."
+    },
+    "Connecting…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting…"
+          }
+        }
+      },
+      "comment": "Phone web remote connection status before WebSocket connects."
+    },
+    "Connection error": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connection error"
+          }
+        }
+      },
+      "comment": "Phone web remote status when WebSocket reports an error."
+    },
+    "Could not clean up audio state: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not clean up audio state: %@"
+          }
+        }
+      },
+      "comment": "Audio cleanup failure status. Interpolation is the underlying system error."
+    },
+    "Could not start audio routing: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not start audio routing: %@"
+          }
+        }
+      },
+      "comment": "Audio routing failure status. Interpolation is the underlying system error."
+    },
+    "Create a new custom preset from the current live EQ and gain settings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a new custom preset from the current live EQ and gain settings."
+          }
+        }
+      }
+    },
+    "Current": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current"
+          }
+        }
+      }
+    },
+    "Current focus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current focus"
+          }
+        }
+      }
+    },
+    "Current input": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current input"
+          }
+        }
+      }
+    },
+    "Current input device: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current input device: %@"
+          }
+        }
+      }
+    },
+    "Current preset": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current preset"
+          }
+        }
+      }
+    },
+    "Current status": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current status"
+          }
+        }
+      }
+    },
+    "Custom": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom"
+          }
+        }
+      }
+    },
+    "DSP bypass": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DSP bypass"
+          }
+        }
+      }
+    },
+    "DSP bypassed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DSP bypassed"
+          }
+        }
+      },
+      "comment": "Audio routing processing summary when global equalizer processing is bypassed."
+    },
+    "De-Mud": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De-Mud"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name; reduces muddy low-mid frequencies."
+    },
+    "Default threshold is 35% and default cap minimum is 50%. EqualEase only watches macOS input volume and posts local notifications on this Mac; it does not capture, route, process, boost, EQ, save, or upload microphone audio.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default threshold is 35% and default cap minimum is 50%. EqualEase only watches macOS input volume and posts local notifications on this Mac; it does not capture, route, process, boost, EQ, save, or upload microphone audio."
+          }
+        }
+      }
+    },
+    "Delete": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "Delete \"%@\"? This cannot be undone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete \"%@\"? This cannot be undone."
+          }
+        }
+      }
+    },
+    "Delete Preset?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Preset?"
+          }
+        }
+      }
+    },
+    "Denied in macOS": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denied in macOS"
+          }
+        }
+      },
+      "comment": "Notification permission status when macOS notification permission has been denied."
+    },
+    "Diagnostic control only: global bypass still routes audio through EqualEase. Per-app bypass is shown below and keeps that app tapped so it can still follow EqualEase’s selected output.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnostic control only: global bypass still routes audio through EqualEase. Per-app bypass is shown below and keeps that app tapped so it can still follow EqualEase’s selected output."
+          }
+        }
+      }
+    },
+    "Disconnected — retrying…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disconnected — retrying…"
+          }
+        }
+      },
+      "comment": "Phone web remote status while reconnecting after WebSocket close."
+    },
+    "Discovered audio apps": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discovered audio apps"
+          }
+        }
+      }
+    },
+    "EQ off": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EQ off"
+          }
+        }
+      },
+      "comment": "Audio routing processing summary when equalizer filters are disabled."
+    },
+    "EQ on": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EQ on"
+          }
+        }
+      },
+      "comment": "Audio routing processing summary when equalizer filters are enabled."
+    },
+    "Enable 10-band EQ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable 10-band EQ"
+          }
+        }
+      }
+    },
+    "Enter the code from your Mac to pair this remote.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the code from your Mac to pair this remote."
+          }
+        }
+      },
+      "comment": "Phone web remote prompt shown when pairing is required."
+    },
+    "Enter the six-digit code shown on your Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter the six-digit code shown on your Mac."
+          }
+        }
+      },
+      "comment": "Phone web remote validation message for an incomplete pairing code."
+    },
+    "Enter this code on the phone remote. It expires at %@ and is used only once.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter this code on the phone remote. It expires at %@ and is used only once."
+          }
+        }
+      }
+    },
+    "Envelope is missing a supported type.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envelope is missing a supported type."
+          }
+        }
+      },
+      "comment": "Remote-control protocol error for missing message type."
+    },
+    "Envelope must be a JSON object.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envelope must be a JSON object."
+          }
+        }
+      },
+      "comment": "Remote-control protocol error for malformed WebSocket JSON."
+    },
+    "EqualEase": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase"
+          }
+        }
+      }
+    },
+    "EqualEase Remote": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase Remote"
+          }
+        }
+      },
+      "comment": "Browser title for the paired phone web remote."
+    },
+    "EqualEase can launch quietly in the menu bar. Audio routing stays off until you turn it on, unless you explicitly enable automatic routing here. Audio processing happens locally on this Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase can launch quietly in the menu bar. Audio routing stays off until you turn it on, unless you explicitly enable automatic routing here. Audio processing happens locally on this Mac."
+          }
+        }
+      }
+    },
+    "EqualEase can switch to this preset whenever %@ becomes the active app, then return to your selected default preset when you switch away.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase can switch to this preset whenever %@ becomes the active app, then return to your selected default preset when you switch away."
+          }
+        }
+      },
+      "comment": "Smart-switching prompt body for app rules. Interpolation is the active app name."
+    },
+    "EqualEase can switch to this preset whenever %@ is the active website in a supported browser, then fall back to your app or default preset when you switch away.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase can switch to this preset whenever %@ is the active website in a supported browser, then fall back to your app or default preset when you switch away."
+          }
+        }
+      },
+      "comment": "Smart-switching prompt body for website rules. Interpolation is a website display name or host."
+    },
+    "EqualEase couldn't read %@'s current page. Check macOS Automation permission for EqualEase, then try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase couldn't read %@'s current page. Check macOS Automation permission for EqualEase, then try again."
+          }
+        }
+      }
+    },
+    "EqualEase processes audio locally on this Mac. It does not record, save, upload, sell, or share audio.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase processes audio locally on this Mac. It does not record, save, upload, sell, or share audio."
+          }
+        }
+      }
+    },
+    "EqualEase shows input state for convenience only. Input-device selection, microphone routing, and microphone EQ are intentionally out of scope.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase shows input state for convenience only. Input-device selection, microphone routing, and microphone EQ are intentionally out of scope."
+          }
+        }
+      }
+    },
+    "External Automation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "External Automation"
+          }
+        }
+      }
+    },
+    "Failed to set input volume": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed to set input volume"
+          }
+        }
+      },
+      "comment": "Microphone protection cap-attempt summary when setting input volume failed."
+    },
+    "Failed: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed: %@"
+          }
+        }
+      },
+      "comment": "Local-network remote status when startup failed. Interpolation is the underlying error message."
+    },
+    "Flat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flat"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name; neutral equalizer with no boosts or cuts."
+    },
+    "Follow system output": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow system output"
+          }
+        }
+      }
+    },
+    "Gain": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gain"
+          }
+        }
+      }
+    },
+    "Hide": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide"
+          }
+        }
+      }
+    },
+    "Hide %@ controls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide %@ controls"
+          }
+        }
+      }
+    },
+    "Hide input volume controls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide input volume controls"
+          }
+        }
+      }
+    },
+    "Hide routing controls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide routing controls"
+          }
+        }
+      }
+    },
+    "If development audio gets stuck silent, stop routing and clean up EqualEase-owned Core Audio taps and aggregate devices.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If development audio gets stuck silent, stop routing and clean up EqualEase-owned Core Audio taps and aggregate devices."
+          }
+        }
+      }
+    },
+    "Ignores app and website preset rules and keeps the current preset while you switch focus.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignores app and website preset rules and keeps the current preset while you switch focus."
+          }
+        }
+      },
+      "comment": "Help text for pausing preset switching based on the active app or website."
+    },
+    "Input": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input"
+          }
+        }
+      }
+    },
+    "Input Volume": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input Volume"
+          }
+        }
+      },
+      "comment": "Microphone input volume control label; not system output volume."
+    },
+    "Input volume": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input volume"
+          }
+        }
+      }
+    },
+    "Input volume capability: Unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unavailable"
+          }
+        }
+      },
+      "comment": "Input volume capability: macOS does not expose this microphone volume."
+    },
+    "Input volume is OK.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input volume is OK."
+          }
+        }
+      },
+      "comment": "Microphone protection status when the input volume is above the low-volume threshold."
+    },
+    "Input volume is low.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input volume is low."
+          }
+        }
+      },
+      "comment": "Microphone protection status when the current input volume is below the configured threshold."
+    },
+    "Input volume is low; EqualEase could not set this device's input volume.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input volume is low; EqualEase could not set this device's input volume."
+          }
+        }
+      },
+      "comment": "Microphone protection status when an automatic cap attempt failed."
+    },
+    "Input volume is low; automatic capping is unavailable for this device.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input volume is low; automatic capping is unavailable for this device."
+          }
+        }
+      },
+      "comment": "Microphone protection status when volume is low and EqualEase cannot automatically raise this device."
+    },
+    "Input volume is low; cap attempt is rate-limited.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input volume is low; cap attempt is rate-limited."
+          }
+        }
+      },
+      "comment": "Microphone protection status when EqualEase recently tried to raise input volume and is waiting before retrying."
+    },
+    "Input volume summary: Unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unavailable"
+          }
+        }
+      },
+      "comment": "Status value for unavailable input volume data."
+    },
+    "Input volume was low and EqualEase raised it to %lld%%.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input volume was low and EqualEase raised it to %lld%%."
+          }
+        }
+      },
+      "comment": "Microphone protection status after automatically raising input volume. Interpolation is the configured minimum percentage."
+    },
+    "Keep EqualEase off and show the normal controls.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep EqualEase off and show the normal controls."
+          }
+        }
+      }
+    },
+    "Last cap attempt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last cap attempt"
+          }
+        }
+      }
+    },
+    "Last notification": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last notification"
+          }
+        }
+      }
+    },
+    "Launch EqualEase when you log in": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launch EqualEase when you log in"
+          }
+        }
+      }
+    },
+    "Launch at Login: Off": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        }
+      },
+      "comment": "Launch-at-login status when EqualEase will not launch automatically."
+    },
+    "Launch at Login: On": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On"
+          }
+        }
+      },
+      "comment": "Launch-at-login status when EqualEase will launch automatically."
+    },
+    "Launch at Login: Unknown": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown"
+          }
+        }
+      },
+      "comment": "Fallback status when launch-at-login state cannot be determined."
+    },
+    "Local Network Remote": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local Network Remote"
+          }
+        }
+      }
+    },
+    "Local-network remote status: Stopped": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopped"
+          }
+        }
+      },
+      "comment": "Local-network remote status when the server is not running."
+    },
+    "Login": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Login"
+          }
+        }
+      }
+    },
+    "Loudness": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loudness"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name; boosts perceived fullness at low listening levels."
+    },
+    "Low": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
+          }
+        }
+      }
+    },
+    "Low Microphone Volume Protection": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low Microphone Volume Protection"
+          }
+        }
+      }
+    },
+    "Low-volume detection unavailable for this input device.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low-volume detection unavailable for this input device."
+          }
+        }
+      },
+      "comment": "Microphone protection status when EqualEase cannot read the current input volume."
+    },
+    "Low-volume threshold": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low-volume threshold"
+          }
+        }
+      }
+    },
+    "Manage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage"
+          }
+        }
+      }
+    },
+    "Manage EqualEase…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage EqualEase…"
+          }
+        }
+      }
+    },
+    "Manage presets": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage presets"
+          }
+        }
+      }
+    },
+    "Manual restart requested": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manual restart requested"
+          }
+        }
+      },
+      "comment": "Audio routing restart reason after the user clicks Restart in Diagnostics."
+    },
+    "Menu bar routing status: Active": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
+          }
+        }
+      },
+      "comment": "Short menu-bar status when EqualEase audio routing is running."
+    },
+    "Menu bar routing status: Failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed"
+          }
+        }
+      },
+      "comment": "Short menu-bar status when audio routing failed."
+    },
+    "Menu bar routing status: Off": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        }
+      },
+      "comment": "Short menu-bar status when EqualEase audio routing is inactive."
+    },
+    "Menu bar routing status: Starting": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting…"
+          }
+        }
+      },
+      "comment": "Short menu-bar status while audio routing is starting."
+    },
+    "Message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Message"
+          }
+        }
+      }
+    },
+    "Microphone input volume is low": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone input volume is low"
+          }
+        }
+      },
+      "comment": "Local notification title for low microphone input volume."
+    },
+    "Minimum cap": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minimum cap"
+          }
+        }
+      }
+    },
+    "Monitoring current input volume.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monitoring current input volume."
+          }
+        }
+      },
+      "comment": "Microphone low-volume protection status while monitoring is healthy."
+    },
+    "More": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More"
+          }
+        }
+      }
+    },
+    "Muffled": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muffled"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name; deliberately subdued/background sound for less prominent audio."
+    },
+    "Music": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Music"
+          }
+        }
+      }
+    },
+    "Mute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mute"
+          }
+        }
+      },
+      "comment": "Per-app audio button label. Means silence this app stream."
+    },
+    "Muted: silence this app.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muted: silence this app."
+          }
+        }
+      }
+    },
+    "Needs approval": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Needs approval"
+          }
+        }
+      },
+      "comment": "Launch-at-login status when macOS requires user approval in System Settings."
+    },
+    "Never": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never"
+          }
+        }
+      },
+      "comment": "Status value meaning an event has not happened yet."
+    },
+    "Night Mode": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night Mode"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name for quieter listening with reduced extremes."
+    },
+    "No active app detected.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No active app detected."
+          }
+        }
+      }
+    },
+    "No audio-emitting apps detected yet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No audio-emitting apps detected yet."
+          }
+        }
+      }
+    },
+    "No audio-emitting apps detected.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No audio-emitting apps detected."
+          }
+        }
+      }
+    },
+    "No input device": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No input device"
+          }
+        }
+      },
+      "comment": "Input device fallback shown when macOS reports no microphone/input device."
+    },
+    "No paired remotes yet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No paired remotes yet."
+          }
+        }
+      }
+    },
+    "No preset": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No preset"
+          }
+        }
+      },
+      "comment": "Fallback status when no preset is currently selected."
+    },
+    "No preset rules yet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No preset rules yet."
+          }
+        }
+      }
+    },
+    "No stale EqualEase audio objects found.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No stale EqualEase audio objects found."
+          }
+        }
+      },
+      "comment": "Diagnostics cleanup result when no stale Core Audio taps or aggregate devices are found."
+    },
+    "Not Now": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not Now"
+          }
+        }
+      }
+    },
+    "Not requested": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not requested"
+          }
+        }
+      },
+      "comment": "Notification permission status before EqualEase has asked macOS for permission."
+    },
+    "Notification permission": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notification permission"
+          }
+        }
+      }
+    },
+    "Notification permission: Unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unavailable"
+          }
+        }
+      },
+      "comment": "Notification permission status when EqualEase cannot read notification permission."
+    },
+    "Notifications": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications"
+          }
+        }
+      }
+    },
+    "Notify me when microphone input volume is low": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notify me when microphone input volume is low"
+          }
+        }
+      }
+    },
+    "OK": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "Open Presets settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Presets settings"
+          }
+        }
+      }
+    },
+    "Output changed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Output changed"
+          }
+        }
+      },
+      "comment": "Audio routing restart reason after the selected output device changes."
+    },
+    "Output device": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Output device"
+          }
+        }
+      },
+      "comment": "Accessibility label for the selected real macOS output device; device names are runtime values."
+    },
+    "Output device change observation unavailable; refresh occurs when the menu opens or routing starts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Output device change observation unavailable; refresh occurs when the menu opens or routing starts."
+          }
+        }
+      },
+      "comment": "Audio routing diagnostic status when Core Audio output-device observation cannot be installed."
+    },
+    "Pair New Remote…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair New Remote…"
+          }
+        }
+      }
+    },
+    "Pair Remote": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair Remote"
+          }
+        }
+      },
+      "comment": "Button title for submitting the six-digit phone remote pairing code."
+    },
+    "Pair or authenticate before using remote control.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair or authenticate before using remote control."
+          }
+        }
+      },
+      "comment": "Remote-control message shown before the phone has paired or authenticated."
+    },
+    "Pair payload must include a pairing code.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair payload must include a pairing code."
+          }
+        }
+      },
+      "comment": "Remote-control protocol error for missing pairing code."
+    },
+    "Pair remote": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair remote"
+          }
+        }
+      },
+      "comment": "Accessibility label for the phone web remote pairing section."
+    },
+    "Pair this remote before changing EqualEase.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair this remote before changing EqualEase."
+          }
+        }
+      },
+      "comment": "Phone web remote prompt when an unauthenticated client tries to change Volume, Preamp, or Preset."
+    },
+    "Paired %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paired %@"
+          }
+        }
+      }
+    },
+    "Paired access protects remote control on your trusted local network. Traffic stays local but is not internet-grade encrypted.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paired access protects remote control on your trusted local network. Traffic stays local but is not internet-grade encrypted."
+          }
+        }
+      },
+      "comment": "Phone web remote footer explaining same-LAN pairing security."
+    },
+    "Paired as": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paired as"
+          }
+        }
+      },
+      "comment": "Phone web remote status prefix before the paired client name."
+    },
+    "Pairing is not active. Start pairing from EqualEase Settings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pairing is not active. Start pairing from EqualEase Settings."
+          }
+        }
+      },
+      "comment": "Local-network remote pairing error when no temporary pairing session exists."
+    },
+    "Pairing is not active. Start pairing from Settings > General > Local Network Remote.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pairing is not active. Start pairing from Settings > General > Local Network Remote."
+          }
+        }
+      },
+      "comment": "Local-network remote pairing error when no temporary pairing session exists."
+    },
+    "Pairing or authentication failed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pairing or authentication failed."
+          }
+        }
+      },
+      "comment": "Phone web remote fallback error when pairing/authentication fails without a specific message."
+    },
+    "Pairing required": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pairing required"
+          }
+        }
+      },
+      "comment": "Phone web remote status when the client must pair again."
+    },
+    "Pause app preset switching": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause app preset switching"
+          }
+        }
+      }
+    },
+    "Per-app audio": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per-app audio"
+          }
+        }
+      }
+    },
+    "Per-app audio appears when EqualEase Active is on and apps are emitting sound.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per-app audio appears when EqualEase Active is on and apps are emitting sound."
+          }
+        }
+      }
+    },
+    "Per-app mute: tapped but silenced": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per-app mute: tapped but silenced"
+          }
+        }
+      }
+    },
+    "Per-app off: verbatim pass-through, no volume, no EQ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per-app off: verbatim pass-through, no volume, no EQ"
+          }
+        }
+      }
+    },
+    "Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost."
+          }
+        }
+      }
+    },
+    "Per-app volume uses one tap per audio-emitting app plus a fallback tap for everything else. Off apps remain tapped but pass through verbatim; muted apps are tapped but silenced.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per-app volume uses one tap per audio-emitting app plus a fallback tap for everything else. Off apps remain tapped but pass through verbatim; muted apps are tapped but silenced."
+          }
+        }
+      }
+    },
+    "Phone Remote": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phone Remote"
+          }
+        }
+      },
+      "comment": "Default display name for a newly paired local-network remote client."
+    },
+    "Podcast": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Podcast"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name for spoken-word podcast listening."
+    },
+    "Posted at %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Posted at %@"
+          }
+        }
+      },
+      "comment": "Microphone protection notification summary. Interpolation is a localized time."
+    },
+    "Preamp": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preamp"
+          }
+        }
+      },
+      "comment": "Audio gain control label for EqualEase global output gain before playback."
+    },
+    "Preamp %lld percent": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preamp %lld percent"
+          }
+        }
+      }
+    },
+    "Preamp / Gain": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preamp / Gain"
+          }
+        }
+      }
+    },
+    "Preset": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset"
+          }
+        }
+      },
+      "comment": "Saved EQ curve and preamp level."
+    },
+    "Preset Rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset Rules"
+          }
+        }
+      }
+    },
+    "Preset command must include presetID or presetName.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset command must include presetID or presetName."
+          }
+        }
+      },
+      "comment": "Remote-control protocol error for selecting a preset without a preset identifier or name."
+    },
+    "Preset name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset name"
+          }
+        }
+      }
+    },
+    "Preset rules are paused. EqualEase stays on %@ until preset switching resumes.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset rules are paused. EqualEase stays on %@ until preset switching resumes."
+          }
+        }
+      },
+      "comment": "Preset resolution explanation. Interpolation is a preset name."
+    },
+    "Preset rules are paused; %@ stays active while you switch apps or websites.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset rules are paused; %@ stays active while you switch apps or websites."
+          }
+        }
+      },
+      "comment": "Help text for locked preset mode. Interpolation is a preset name; keep 'preset rules' as the app/website switching feature."
+    },
+    "Presets": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presets"
+          }
+        }
+      },
+      "comment": "Saved EQ curves and preamp levels."
+    },
+    "Privacy Policy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        }
+      }
+    },
+    "Process": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Process"
+          }
+        }
+      },
+      "comment": "Per-app audio button label. Means apply per-app volume plus global EQ/preamp processing."
+    },
+    "Process: app volume then global EQ.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Process: app volume then global EQ."
+          }
+        }
+      }
+    },
+    "Protection keeps running even when EqualEase Active is off because it observes the macOS input-volume property, not the system-audio routing path.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protection keeps running even when EqualEase Active is off because it observes the macOS input-volume property, not the system-audio routing path."
+          }
+        }
+      }
+    },
+    "Protocol error": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protocol error"
+          }
+        }
+      },
+      "comment": "Phone web remote fallback status when the server returns a protocol error without a message."
+    },
+    "Quick Panel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick Panel"
+          }
+        }
+      }
+    },
+    "Quit EqualEase": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit EqualEase"
+          }
+        }
+      }
+    },
+    "Raised to %lld%%": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raised to %lld%%"
+          }
+        }
+      },
+      "comment": "Microphone protection cap-attempt summary. Interpolation is the configured minimum input volume percentage."
+    },
+    "Read-only": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read-only"
+          }
+        }
+      },
+      "comment": "Input volume capability: EqualEase can read but not change this microphone volume."
+    },
+    "Recovery": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recovery"
+          }
+        }
+      }
+    },
+    "Reduce Rumble": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reduce Rumble"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name; cuts very low frequencies and rumble."
+    },
+    "Remember": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remember"
+          }
+        }
+      }
+    },
+    "Remember %@ for %@?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remember %1$@ for %2$@?"
+          }
+        }
+      },
+      "comment": "Smart-switching prompt title. First interpolation is a preset name; second is an app name or website host."
+    },
+    "Remote active preset: Unknown": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown"
+          }
+        }
+      },
+      "comment": "Fallback preset name when the local-network remote state has no active preset."
+    },
+    "Remote control label: Preamp": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preamp"
+          }
+        }
+      },
+      "comment": "Phone web remote card label for EqualEase preamp/output gain."
+    },
+    "Remote control label: Presets": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presets"
+          }
+        }
+      },
+      "comment": "Phone web remote preset button section accessibility label."
+    },
+    "Remote control label: Volume": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volume"
+          }
+        }
+      },
+      "comment": "Phone web remote card label for Mac output volume."
+    },
+    "Remote credentials were not recognized. Pair this device again from EqualEase Settings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote credentials were not recognized. Pair this device again from EqualEase Settings."
+          }
+        }
+      },
+      "comment": "Remote-control authentication error when stored phone credentials are invalid or revoked."
+    },
+    "Remote name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote name"
+          }
+        }
+      },
+      "comment": "Placeholder for naming a paired phone remote."
+    },
+    "Remote routing status: Active": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
+          }
+        }
+      },
+      "comment": "Phone web remote routing status when EqualEase is active."
+    },
+    "Remote routing status: Off": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        }
+      },
+      "comment": "Phone web remote routing status when EqualEase is off."
+    },
+    "Rename": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename"
+          }
+        }
+      }
+    },
+    "Reset Pairings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Pairings"
+          }
+        }
+      }
+    },
+    "Restart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart"
+          }
+        }
+      }
+    },
+    "Restore the live EQ and gain to the selected preset's saved values.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore the live EQ and gain to the selected preset's saved values."
+          }
+        }
+      }
+    },
+    "Revert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revert"
+          }
+        }
+      }
+    },
+    "Revoke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revoke"
+          }
+        }
+      }
+    },
+    "Route system audio locally through this Mac so EqualEase can apply EQ before playback.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Route system audio locally through this Mac so EqualEase can apply EQ before playback."
+          }
+        }
+      }
+    },
+    "Routing": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routing"
+          }
+        }
+      },
+      "comment": "Section label for choosing where processed system audio is sent; not network routing."
+    },
+    "Routing status": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routing status"
+          }
+        }
+      }
+    },
+    "Rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rules"
+          }
+        }
+      }
+    },
+    "Rules temporarily switch EqualEase based on what you're focused on. Website rules apply when that website is the active tab in a supported browser. When no rule matches, EqualEase returns to the selected default preset.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rules temporarily switch EqualEase based on what you're focused on. Website rules apply when that website is the active tab in a supported browser. When no rule matches, EqualEase returns to the selected default preset."
+          }
+        }
+      }
+    },
+    "Running at %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Running at %@"
+          }
+        }
+      },
+      "comment": "Local-network remote status with one or more LAN URLs. Interpolation is a comma-separated list of URLs for pairing."
+    },
+    "Running on port %u": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Running on port %u"
+          }
+        }
+      },
+      "comment": "Local-network remote status when running but no LAN URL is known. Interpolation is the TCP port."
+    },
+    "Save": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "Save As…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save As…"
+          }
+        }
+      }
+    },
+    "Save the live EQ and gain into this custom preset.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the live EQ and gain into this custom preset."
+          }
+        }
+      }
+    },
+    "Saved with presets": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved with presets"
+          }
+        }
+      }
+    },
+    "Saved with the preset. Lower it if boosted bands distort.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved with the preset. Lower it if boosted bands distort."
+          }
+        }
+      }
+    },
+    "Selected Band": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected Band"
+          }
+        }
+      }
+    },
+    "Selected output": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected output"
+          }
+        }
+      }
+    },
+    "Settable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settable"
+          }
+        }
+      },
+      "comment": "Input volume capability: EqualEase can change this microphone volume."
+    },
+    "Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "Show app volume in the quick panel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show app volume in the quick panel"
+          }
+        }
+      }
+    },
+    "Show input volume in the quick panel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show input volume in the quick panel"
+          }
+        }
+      }
+    },
+    "Show preamp in the quick panel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show preamp in the quick panel"
+          }
+        }
+      }
+    },
+    "Show routing controls in the quick panel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show routing controls in the quick panel"
+          }
+        }
+      }
+    },
+    "Show volume in the quick panel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show volume in the quick panel"
+          }
+        }
+      }
+    },
+    "Skipped: input volume is read-only or unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skipped: input volume is read-only or unavailable"
+          }
+        }
+      },
+      "comment": "Microphone protection cap-attempt summary when input volume cannot be changed."
+    },
+    "Small Speakers": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Small Speakers"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name for laptop or compact speakers."
+    },
+    "Speech": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech"
+          }
+        }
+      }
+    },
+    "Start Routing": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start Routing"
+          }
+        }
+      }
+    },
+    "Start audio routing automatically after launch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start audio routing automatically after launch"
+          }
+        }
+      }
+    },
+    "Start audio routing automatically on future launches": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start audio routing automatically on future launches"
+          }
+        }
+      }
+    },
+    "Start pairing in EqualEase Settings > General > Local Network Remote, then enter the six-digit code shown on your Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start pairing in EqualEase Settings > General > Local Network Remote, then enter the six-digit code shown on your Mac."
+          }
+        }
+      },
+      "comment": "Phone web remote pairing instructions. The code is displayed in the Mac Settings window."
+    },
+    "Starting audio routing…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting audio routing…"
+          }
+        }
+      },
+      "comment": "Audio routing status while EqualEase starts capturing and rendering system audio."
+    },
+    "Starting local-network remote control…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting local-network remote control…"
+          }
+        }
+      },
+      "comment": "Local-network remote status while the server starts."
+    },
+    "Starts local system audio routing and may show the macOS audio capture permission prompt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starts local system audio routing and may show the macOS audio capture permission prompt."
+          }
+        }
+      }
+    },
+    "State": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "State"
+          }
+        }
+      }
+    },
+    "Status": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        }
+      }
+    },
+    "Stop Routing": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop Routing"
+          }
+        }
+      }
+    },
+    "Stopping audio routing…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopping audio routing…"
+          }
+        }
+      },
+      "comment": "Audio routing status while EqualEase stops routing system audio."
+    },
+    "Stopping…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopping…"
+          }
+        }
+      },
+      "comment": "Short menu-bar status while audio routing is stopping."
+    },
+    "Support & Privacy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support & Privacy"
+          }
+        }
+      }
+    },
+    "Support / Contact": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support / Contact"
+          }
+        }
+      }
+    },
+    "Swipe up or down with VoiceOver to adjust in half-decibel steps.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe up or down with VoiceOver to adjust in half-decibel steps."
+          }
+        }
+      }
+    },
+    "Switching…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switching…"
+          }
+        }
+      },
+      "comment": "Short menu-bar status while EqualEase switches output routing."
+    },
+    "The pairing code is invalid or expired.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The pairing code is invalid or expired."
+          }
+        }
+      },
+      "comment": "Local-network remote pairing error for a wrong or expired six-digit code."
+    },
+    "Threshold": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold"
+          }
+        }
+      }
+    },
+    "Too many pairing attempts. Wait a few minutes before trying again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many pairing attempts. Wait a few minutes before trying again."
+          }
+        }
+      },
+      "comment": "Local-network remote pairing error after too many failed six-digit code attempts."
+    },
+    "Treble Boost": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Treble Boost"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name; emphasizes high frequencies."
+    },
+    "Turn On EqualEase": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn On EqualEase"
+          }
+        }
+      }
+    },
+    "Unavailable in this build": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unavailable in this build"
+          }
+        }
+      },
+      "comment": "Launch-at-login status for development builds that cannot be registered as login items."
+    },
+    "Unavailable: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unavailable: %@"
+          }
+        }
+      },
+      "comment": "Microphone protection notification summary when notifications cannot be posted. Interpolation is a notification permission status."
+    },
+    "Unknown output device": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown output device"
+          }
+        }
+      },
+      "comment": "Fallback output device name when macOS does not report a device."
+    },
+    "Unknown preset: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown preset: %@"
+          }
+        }
+      },
+      "comment": "Local-network remote command error. Interpolation is the requested preset name or ID."
+    },
+    "Unsupported message type: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unsupported message type: %@"
+          }
+        }
+      },
+      "comment": "Remote-control protocol error. Interpolation is the unsupported WebSocket message type."
+    },
+    "Unsupported remote command: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unsupported remote command: %@"
+          }
+        }
+      },
+      "comment": "Remote-control protocol error. Interpolation is the unsupported command name."
+    },
+    "Using the selected default preset %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Using the selected default preset %@."
+          }
+        }
+      },
+      "comment": "Preset resolution explanation. Interpolation is a preset name."
+    },
+    "Utility": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utility"
+          }
+        }
+      }
+    },
+    "Version": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
+          }
+        }
+      }
+    },
+    "Voice Boost": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice Boost"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name for making speech clearer in calls or videos."
+    },
+    "Volume control": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volume control"
+          }
+        }
+      }
+    },
+    "Warm": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm"
+          }
+        }
+      },
+      "comment": "Built-in EQ preset name; warmer, less bright sound."
+    },
+    "WebSocket messages must be UTF-8 JSON.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WebSocket messages must be UTF-8 JSON."
+          }
+        }
+      },
+      "comment": "Remote-control protocol error for non-JSON WebSocket text."
+    },
+    "When Active is off, EqualEase stops routing audio instead of only bypassing processing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When Active is off, EqualEase stops routing audio instead of only bypassing processing."
+          }
+        }
+      }
+    },
+    "When enabled, EqualEase may restore audio routing after you launch the app.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When enabled, EqualEase may restore audio routing after you launch the app."
+          }
+        }
+      }
+    },
+    "When enabled, EqualEase requires a paired remote before it sends detailed state or accepts control commands. Keep this for trusted local networks: traffic is same-LAN only and not internet-grade encrypted. Pairing codes and tokens are never exposed through /health, /info, logs, or Settings after initial pairing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When enabled, EqualEase requires a paired remote before it sends detailed state or accepts control commands. Keep this for trusted local networks: traffic is same-LAN only and not internet-grade encrypted. Pairing codes and tokens are never exposed through /health, /info, logs, or Settings after initial pairing."
+          }
+        }
+      }
+    },
+    "When these are off, the quick panel hides the matching section and shrinks to fit. Diagnostics still shows routing, input state, and discovered app audio state.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When these are off, the quick panel hides the matching section and shrinks to fit. Diagnostics still shows routing, input state, and discovered app audio state."
+          }
+        }
+      }
+    },
+    "When this is off, equalease:// links and AppleScript can still read EqualEase state and select built-in presets, but they cannot change Active, Volume, Preamp, Bypass, whether app preset switching is paused, or custom presets.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When this is off, equalease:// links and AppleScript can still read EqualEase state and select built-in presets, but they cannot change Active, Volume, Preamp, Bypass, whether app preset switching is paused, or custom presets."
+          }
+        }
+      }
+    },
+    "You can turn EqualEase off anytime": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can turn EqualEase off anytime"
+          }
+        }
+      }
+    },
+    "build %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "build %@"
+          }
+        }
+      },
+      "comment": "Version label when only the build number is known. Interpolation is CFBundleVersion."
+    },
+    "development build": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "development build"
+          }
+        }
+      },
+      "comment": "Version label when no app version/build metadata is available."
+    },
+    "macOS asks for capture permission when routing starts": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS asks for capture permission when routing starts"
+          }
+        }
+      }
+    },
+    "macOS cannot register this build as a login item. Copy EqualEase to Applications or use a packaged build, then reopen Settings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS cannot register this build as a login item. Copy EqualEase to Applications or use a packaged build, then reopen Settings."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

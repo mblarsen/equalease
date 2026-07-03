@@ -22,7 +22,8 @@ final class LocalNetworkControlBridge {
             outputVolume: clamped(appModel.router.outputVolume, lowerBound: 0, upperBound: 1),
             preamp: clamped(appModel.router.outputGain, lowerBound: 0, upperBound: 2),
             activePresetID: appModel.activeContext?.preset.id,
-            activePresetName: appModel.activeContext?.preset.name ?? "Unknown",
+            activePresetName: appModel.activeContext?.preset.name
+                ?? String(localized: "Remote active preset: Unknown", defaultValue: "Unknown", comment: "Fallback preset name when the local-network remote state has no active preset."),
             presets: appModel.presetStore.presets.map { preset in
                 LocalNetworkRemotePreset(id: preset.id, name: preset.name, source: preset.source.rawValue)
             },
@@ -72,7 +73,10 @@ final class LocalNetworkControlBridge {
         var errorDescription: String? {
             switch self {
             case let .unknownPreset(value):
-                "Unknown preset: \(value)"
+                String(
+                    localized: "Unknown preset: \(value)",
+                    comment: "Local-network remote command error. Interpolation is the requested preset name or ID."
+                )
             }
         }
     }

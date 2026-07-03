@@ -38,7 +38,7 @@ protocol InputDeviceControlHost: AnyObject {
 
 @MainActor
 final class InputDeviceController: ObservableObject {
-    @Published private(set) var inputDeviceName = "No input device"
+    @Published private(set) var inputDeviceName = String(localized: "No input device", comment: "Input device fallback shown when macOS reports no microphone/input device.")
     @Published private(set) var inputDeviceUID: String?
     @Published private(set) var canReadInputVolume = false
     @Published private(set) var canSetInputVolume = false
@@ -60,10 +60,10 @@ final class InputDeviceController: ObservableObject {
         }
     }
     @Published private(set) var isInputVolumeLow = false
-    @Published private(set) var lowVolumeProtectionStatus = "Monitoring current input volume."
+    @Published private(set) var lowVolumeProtectionStatus = String(localized: "Monitoring current input volume.", comment: "Microphone low-volume protection status while monitoring is healthy.")
     @Published private(set) var notificationAuthorizationStatus: InputVolumeProtectionNotificationStatus = .notRequested
-    @Published private(set) var lastLowVolumeNotificationSummary = "Never"
-    @Published private(set) var lastCapAttemptSummary = "Never"
+    @Published private(set) var lastLowVolumeNotificationSummary = String(localized: "Never", comment: "Status value meaning an event has not happened yet.")
+    @Published private(set) var lastCapAttemptSummary = String(localized: "Never", comment: "Status value meaning an event has not happened yet.")
 
     private let host: InputDeviceControlHost
     private let notifier: InputVolumeProtectionNotifying
@@ -102,29 +102,35 @@ final class InputDeviceController: ObservableObject {
     }
 
     var inputVolumeSummary: String {
-        guard canReadInputVolume else { return "Unavailable" }
-        return "\(Int(inputVolume * 100))%"
+        guard canReadInputVolume else {
+            return String(localized: "Input volume summary: Unavailable", defaultValue: "Unavailable", comment: "Status value for unavailable input volume data.")
+        }
+        return String(
+            localized: "\(Int(inputVolume * 100))%",
+            comment: "Input volume percentage. Interpolation is an integer from 0 to 100."
+        )
     }
 
     var inputVolumeCapabilitySummary: String {
         if canSetInputVolume {
-            return "Settable"
+            return String(localized: "Settable", comment: "Input volume capability: EqualEase can change this microphone volume.")
         }
         if canReadInputVolume {
-            return "Read-only"
+            return String(localized: "Read-only", comment: "Input volume capability: EqualEase can read but not change this microphone volume.")
         }
-        return "Unavailable"
+        return String(localized: "Input volume capability: Unavailable", defaultValue: "Unavailable", comment: "Input volume capability: macOS does not expose this microphone volume.")
     }
 
     func refreshInputDevice() {
         do {
             let snapshot = try host.loadCurrentInputDevice()
-            inputDeviceName = snapshot.device?.name ?? "No input device"
+            inputDeviceName = snapshot.device?.name
+                ?? String(localized: "No input device", comment: "Input device fallback shown when macOS reports no microphone/input device.")
             inputDeviceUID = snapshot.device?.uid
             startCurrentInputVolumeObservation()
             refreshCurrentInputVolume()
         } catch {
-            inputDeviceName = "No input device"
+            inputDeviceName = String(localized: "No input device", comment: "Input device fallback shown when macOS reports no microphone/input device.")
             inputDeviceUID = nil
             canReadInputVolume = false
             canSetInputVolume = false
@@ -139,7 +145,7 @@ final class InputDeviceController: ObservableObject {
         canSetInputVolume = volumeState.canSetVolume
         guard let volume = volumeState.volume else {
             isInputVolumeLow = false
-            lowVolumeProtectionStatus = "Low-volume detection unavailable for this input device."
+            lowVolumeProtectionStatus = String(localized: "Low-volume detection unavailable for this input device.", comment: "Microphone protection status when EqualEase cannot read the current input volume.")
             return
         }
         isRefreshingInputVolume = true
@@ -164,7 +170,7 @@ final class InputDeviceController: ObservableObject {
     private func evaluateLowVolumeProtection() {
         guard canReadInputVolume else {
             isInputVolumeLow = false
-            lowVolumeProtectionStatus = "Low-volume detection unavailable for this input device."
+            lowVolumeProtectionStatus = String(localized: "Low-volume detection unavailable for this input device.", comment: "Microphone protection status when EqualEase cannot read the current input volume.")
             return
         }
 
@@ -176,7 +182,7 @@ final class InputDeviceController: ObservableObject {
 
         guard isLow else {
             notificationPolicy.recordHealthyVolume(at: currentDate)
-            lowVolumeProtectionStatus = "Input volume is OK."
+            lowVolumeProtectionStatus = String(localized: "Input volume is OK.", comment: "Microphone protection status when the input volume is above the low-volume threshold.")
             return
         }
 
@@ -185,9 +191,9 @@ final class InputDeviceController: ObservableObject {
         if settings.capEnabled {
             attemptCapIfNeeded(settings: settings, currentVolume: currentVolume)
         } else if !canSetInputVolume {
-            lowVolumeProtectionStatus = "Input volume is low; automatic capping is unavailable for this device."
+            lowVolumeProtectionStatus = String(localized: "Input volume is low; automatic capping is unavailable for this device.", comment: "Microphone protection status when volume is low and EqualEase cannot automatically raise this device.")
         } else {
-            lowVolumeProtectionStatus = "Input volume is low."
+            lowVolumeProtectionStatus = String(localized: "Input volume is low.", comment: "Microphone protection status when the current input volume is below the configured threshold.")
         }
 
         if settings.notificationsEnabled,
@@ -199,14 +205,14 @@ final class InputDeviceController: ObservableObject {
 
     private func attemptCapIfNeeded(settings: InputVolumeProtectionSettings, currentVolume: Double) {
         guard canSetInputVolume else {
-            lowVolumeProtectionStatus = "Input volume is low; automatic capping is unavailable for this device."
-            lastCapAttemptSummary = "Skipped: input volume is read-only or unavailable"
+            lowVolumeProtectionStatus = String(localized: "Input volume is low; automatic capping is unavailable for this device.", comment: "Microphone protection status when volume is low and EqualEase cannot automatically raise this device.")
+            lastCapAttemptSummary = String(localized: "Skipped: input volume is read-only or unavailable", comment: "Microphone protection cap-attempt summary when input volume cannot be changed.")
             return
         }
         guard settings.capMinimum > currentVolume else { return }
         let currentDate = now()
         if let lastCapAttemptDate, currentDate.timeIntervalSince(lastCapAttemptDate) < capAttemptInterval {
-            lowVolumeProtectionStatus = "Input volume is low; cap attempt is rate-limited."
+            lowVolumeProtectionStatus = String(localized: "Input volume is low; cap attempt is rate-limited.", comment: "Microphone protection status when EqualEase recently tried to raise input volume and is waiting before retrying.")
             return
         }
         lastCapAttemptDate = currentDate
@@ -216,15 +222,21 @@ final class InputDeviceController: ObservableObject {
             inputVolume = settings.capMinimum
             isRefreshingInputVolume = false
             isInputVolumeLow = inputVolume < settings.threshold
-            lastCapAttemptSummary = "Raised to \(Int(settings.capMinimum * 100))%"
-            lowVolumeProtectionStatus = "Input volume was low and EqualEase raised it to \(Int(settings.capMinimum * 100))%."
+            lastCapAttemptSummary = String(
+                localized: "Raised to \(Int(settings.capMinimum * 100))%",
+                comment: "Microphone protection cap-attempt summary. Interpolation is the configured minimum input volume percentage."
+            )
+            lowVolumeProtectionStatus = String(
+                localized: "Input volume was low and EqualEase raised it to \(Int(settings.capMinimum * 100))%.",
+                comment: "Microphone protection status after automatically raising input volume. Interpolation is the configured minimum percentage."
+            )
             Task { [weak self] in
                 try? await Task.sleep(nanoseconds: 250_000_000)
                 self?.refreshCurrentInputVolume()
             }
         } else {
-            lastCapAttemptSummary = "Failed to set input volume"
-            lowVolumeProtectionStatus = "Input volume is low; EqualEase could not set this device's input volume."
+            lastCapAttemptSummary = String(localized: "Failed to set input volume", comment: "Microphone protection cap-attempt summary when setting input volume failed.")
+            lowVolumeProtectionStatus = String(localized: "Input volume is low; EqualEase could not set this device's input volume.", comment: "Microphone protection status when an automatic cap attempt failed.")
         }
     }
 
@@ -241,7 +253,15 @@ final class InputDeviceController: ObservableObject {
                 notificationPolicy.recordNotificationSent(at: currentDate)
             }
             notificationAuthorizationStatus = await notifier.refreshAuthorizationStatus()
-            lastLowVolumeNotificationSummary = posted ? "Posted at \(Self.shortTimeFormatter.string(from: now()))" : "Unavailable: \(notificationAuthorizationStatus.summary)"
+            lastLowVolumeNotificationSummary = posted
+                ? String(
+                    localized: "Posted at \(Self.shortTimeFormatter.string(from: now()))",
+                    comment: "Microphone protection notification summary. Interpolation is a localized time."
+                )
+                : String(
+                    localized: "Unavailable: \(notificationAuthorizationStatus.summary)",
+                    comment: "Microphone protection notification summary when notifications cannot be posted. Interpolation is a notification permission status."
+                )
             isLowVolumeNotificationInFlight = false
         }
     }

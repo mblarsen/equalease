@@ -226,7 +226,9 @@ final class LocalNetworkAuthStore: ObservableObject {
 
     private static func cleanedClientName(_ value: String?) -> String {
         let trimmed = value?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        return trimmed.isEmpty ? "Phone Remote" : String(trimmed.prefix(80))
+        return trimmed.isEmpty
+            ? String(localized: "Phone Remote", comment: "Default display name for a newly paired local-network remote client.")
+            : String(trimmed.prefix(80))
     }
 
     private static func normalizedPairingCode(_ value: String) -> String {
@@ -278,11 +280,11 @@ final class LocalNetworkAuthStore: ObservableObject {
         var errorDescription: String? {
             switch self {
             case .pairingUnavailable:
-                "Pairing is not active. Start pairing from Settings > General > Local Network Remote."
+                String(localized: "Pairing is not active. Start pairing from Settings > General > Local Network Remote.", comment: "Local-network remote pairing error when no temporary pairing session exists.")
             case .invalidPairingCode:
-                "The pairing code is invalid or expired."
+                String(localized: "The pairing code is invalid or expired.", comment: "Local-network remote pairing error for a wrong or expired six-digit code.")
             case .pairingRateLimited:
-                "Too many pairing attempts. Wait a few minutes before trying again."
+                String(localized: "Too many pairing attempts. Wait a few minutes before trying again.", comment: "Local-network remote pairing error after too many failed six-digit code attempts.")
             }
         }
     }

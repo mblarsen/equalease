@@ -188,7 +188,14 @@ final class LocalNetworkControlServer: NSObject, ObservableObject {
     private func installWebSocket(_ connection: NWConnection) {
         let client = LocalNetworkWebSocketClient(connection: connection, server: self)
         clients[client.id] = client
-        client.send(type: "auth_required", id: nil, payload: LocalNetworkAuthRequired(message: "Pair or authenticate before using remote control.", protocolVersion: configuration.protocolVersion))
+        client.send(
+            type: "auth_required",
+            id: nil,
+            payload: LocalNetworkAuthRequired(
+                message: String(localized: "Pair or authenticate before using remote control.", comment: "Remote-control message shown before the phone has paired or authenticated."),
+                protocolVersion: configuration.protocolVersion
+            )
+        )
         client.receiveNextFrame()
     }
 
@@ -199,7 +206,7 @@ final class LocalNetworkControlServer: NSObject, ObservableObject {
 
     fileprivate func handleWebSocketText(_ text: String, from client: LocalNetworkWebSocketClient) {
         guard let data = text.data(using: .utf8) else {
-            client.sendError(code: "invalid_text", message: "WebSocket messages must be UTF-8 JSON.", id: nil)
+            client.sendError(code: "invalid_text", message: String(localized: "WebSocket messages must be UTF-8 JSON.", comment: "Remote-control protocol error for non-JSON WebSocket text."), id: nil)
             return
         }
 
@@ -213,7 +220,7 @@ final class LocalNetworkControlServer: NSObject, ObservableObject {
                 let auth = try LocalNetworkProtocolParser.parseAuth(payload: envelope.payload)
                 guard let pairedClient = authStore.authenticate(clientID: auth.clientID, token: auth.token) else {
                     client.clearAuthentication()
-                    client.sendAuthError(code: "invalid_credentials", message: "Remote credentials were not recognized. Pair this device again from EqualEase Settings.", id: envelope.id)
+                    client.sendAuthError(code: "invalid_credentials", message: String(localized: "Remote credentials were not recognized. Pair this device again from EqualEase Settings.", comment: "Remote-control authentication error when stored phone credentials are invalid or revoked."), id: envelope.id)
                     return
                 }
                 client.markAuthenticated(clientID: pairedClient.id)
@@ -227,11 +234,11 @@ final class LocalNetworkControlServer: NSObject, ObservableObject {
                     client.send(type: "auth_ok", id: envelope.id, payload: LocalNetworkAuthOK(clientID: credential.clientID, clientName: credential.clientName, token: credential.token))
                     client.send(type: "state_snapshot", id: nil, payload: bridge.snapshot())
                 } catch LocalNetworkAuthStore.AuthError.pairingUnavailable {
-                    client.sendAuthError(code: "pairing_unavailable", message: "Pairing is not active. Start pairing from EqualEase Settings.", id: envelope.id)
+                    client.sendAuthError(code: "pairing_unavailable", message: String(localized: "Pairing is not active. Start pairing from EqualEase Settings.", comment: "Local-network remote pairing error when no temporary pairing session exists."), id: envelope.id)
                 } catch LocalNetworkAuthStore.AuthError.pairingRateLimited {
-                    client.sendAuthError(code: "pairing_rate_limited", message: "Too many pairing attempts. Wait a few minutes before trying again.", id: envelope.id)
+                    client.sendAuthError(code: "pairing_rate_limited", message: String(localized: "Too many pairing attempts. Wait a few minutes before trying again.", comment: "Local-network remote pairing error after too many failed six-digit code attempts."), id: envelope.id)
                 } catch LocalNetworkAuthStore.AuthError.invalidPairingCode {
-                    client.sendAuthError(code: "invalid_pairing_code", message: "The pairing code is invalid or expired.", id: envelope.id)
+                    client.sendAuthError(code: "invalid_pairing_code", message: String(localized: "The pairing code is invalid or expired.", comment: "Local-network remote pairing error for a wrong or expired six-digit code."), id: envelope.id)
                 }
             case "get_state":
                 guard requireAuthentication(for: client, id: envelope.id) else { return }
@@ -251,7 +258,7 @@ final class LocalNetworkControlServer: NSObject, ObservableObject {
                 client.send(type: "command_result", id: envelope.id, payload: LocalNetworkCommandResult(ok: true, message: "ok", stateVersion: state.stateVersion))
                 broadcast(type: "state_patch", payload: state)
             default:
-                client.sendError(code: "unsupported_type", message: "Unsupported message type: \(envelope.type)", id: envelope.id)
+                client.sendError(code: "unsupported_type", message: String(localized: "Unsupported message type: \(envelope.type)", comment: "Remote-control protocol error. Interpolation is the unsupported WebSocket message type."), id: envelope.id)
             }
         } catch {
             client.sendError(code: "protocol_error", message: error.localizedDescription, id: nil)
@@ -261,7 +268,7 @@ final class LocalNetworkControlServer: NSObject, ObservableObject {
     private func requireAuthentication(for client: LocalNetworkWebSocketClient, id: String?) -> Bool {
         guard client.isAuthenticated, authStore.containsClient(id: client.authenticatedClientID) else {
             client.clearAuthentication()
-            client.sendAuthError(code: "authentication_required", message: "Pair or authenticate before using remote control.", id: id)
+            client.sendAuthError(code: "authentication_required", message: String(localized: "Pair or authenticate before using remote control.", comment: "Remote-control message shown before the phone has paired or authenticated."), id: id)
             return false
         }
         return true
@@ -746,18 +753,62 @@ extension LocalNetworkControlServer {
         return bitmap.representation(using: .png, properties: [:])
     }
 
+    private static func htmlEscaped(_ value: String) -> String {
+        value
+            .replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "\"", with: "&quot;")
+            .replacingOccurrences(of: "'", with: "&#39;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
+    }
+
+    private static func javaScriptEscaped(_ value: String) -> String {
+        value
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "'", with: "\\'")
+            .replacingOccurrences(of: "\n", with: "\\n")
+            .replacingOccurrences(of: "\r", with: "\\r")
+            .replacingOccurrences(of: "</", with: "<\\/")
+    }
+
     static func remoteHTML(webSocketPath: String) -> String {
-        """
+        let languageCode = htmlEscaped(Locale.current.language.languageCode?.identifier ?? "en")
+        let title = htmlEscaped(String(localized: "EqualEase Remote", comment: "Browser title for the paired phone web remote."))
+        let connecting = htmlEscaped(String(localized: "Connecting…", comment: "Phone web remote connection status before WebSocket connects."))
+        let pairRemoteLabel = htmlEscaped(String(localized: "Pair remote", comment: "Accessibility label for the phone web remote pairing section."))
+        let pairingInstructions = htmlEscaped(String(localized: "Start pairing in EqualEase Settings > General > Local Network Remote, then enter the six-digit code shown on your Mac.", comment: "Phone web remote pairing instructions. The code is displayed in the Mac Settings window."))
+        let remoteNamePlaceholder = htmlEscaped(String(localized: "Remote name", comment: "Placeholder for naming a paired phone remote."))
+        let phoneRemoteName = htmlEscaped(String(localized: "Phone Remote", comment: "Default display name for a newly paired local-network remote client."))
+        let pairButtonTitle = htmlEscaped(String(localized: "Pair Remote", comment: "Button title for submitting the six-digit phone remote pairing code."))
+        let volumeLabel = htmlEscaped(String(localized: "Remote control label: Volume", defaultValue: "Volume", comment: "Phone web remote card label for Mac output volume."))
+        let preampLabel = htmlEscaped(String(localized: "Remote control label: Preamp", defaultValue: "Preamp", comment: "Phone web remote card label for EqualEase preamp/output gain."))
+        let presetsLabel = htmlEscaped(String(localized: "Remote control label: Presets", defaultValue: "Presets", comment: "Phone web remote preset button section accessibility label."))
+        let footer = htmlEscaped(String(localized: "Paired access protects remote control on your trusted local network. Traffic stays local but is not internet-grade encrypted.", comment: "Phone web remote footer explaining same-LAN pairing security."))
+        let connectedAuthenticating = javaScriptEscaped(String(localized: "Connected — authenticating…", comment: "Phone web remote status after WebSocket connects while auth is pending."))
+        let enterCode = javaScriptEscaped(String(localized: "Enter the code from your Mac to pair this remote.", comment: "Phone web remote prompt shown when pairing is required."))
+        let disconnectedRetrying = javaScriptEscaped(String(localized: "Disconnected — retrying…", comment: "Phone web remote status while reconnecting after WebSocket close."))
+        let connectionError = javaScriptEscaped(String(localized: "Connection error", comment: "Phone web remote status when WebSocket reports an error."))
+        let pairedAs = javaScriptEscaped(String(localized: "Paired as", comment: "Phone web remote status prefix before the paired client name."))
+        let pairingFailed = javaScriptEscaped(String(localized: "Pairing or authentication failed.", comment: "Phone web remote fallback error when pairing/authentication fails without a specific message."))
+        let pairingRequired = javaScriptEscaped(String(localized: "Pairing required", comment: "Phone web remote status when the client must pair again."))
+        let protocolError = javaScriptEscaped(String(localized: "Protocol error", comment: "Phone web remote fallback status when the server returns a protocol error without a message."))
+        let pairBeforeChanging = javaScriptEscaped(String(localized: "Pair this remote before changing EqualEase.", comment: "Phone web remote prompt when an unauthenticated client tries to change Volume, Preamp, or Preset."))
+        let activeStatus = javaScriptEscaped(String(localized: "Remote routing status: Active", defaultValue: "Active", comment: "Phone web remote routing status when EqualEase is active."))
+        let offStatus = javaScriptEscaped(String(localized: "Remote routing status: Off", defaultValue: "Off", comment: "Phone web remote routing status when EqualEase is off."))
+        let sixDigitCodePrompt = javaScriptEscaped(String(localized: "Enter the six-digit code shown on your Mac.", comment: "Phone web remote validation message for an incomplete pairing code."))
+        let phoneRemoteNameJS = javaScriptEscaped(String(localized: "Phone Remote", comment: "Default display name for a newly paired local-network remote client."))
+
+        return """
         <!doctype html>
-        <html lang="en">
+        <html lang="\(languageCode)">
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-          <meta name="apple-mobile-web-app-title" content="EqualEase Remote">
+          <meta name="apple-mobile-web-app-title" content="\(title)">
           <meta name="theme-color" content="#f97316">
           <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
           <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-          <title>EqualEase Remote</title>
+          <title>\(title)</title>
           <style>
             :root { color-scheme: dark; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: #15120f; color: #fff7ed; }
             * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -786,20 +837,20 @@ extension LocalNetworkControlServer {
         </head>
         <body>
           <main>
-            <header><h1>EqualEase</h1><div id="status">Connecting…</div></header>
-            <section id="pairing" class="pairing hidden" aria-label="Pair remote">
-              <p>Start pairing in EqualEase Settings > General > Local Network Remote, then enter the six-digit code shown on your Mac.</p>
-              <input id="clientName" autocomplete="off" placeholder="Remote name" value="Phone Remote">
+            <header><h1>EqualEase</h1><div id="status">\(connecting)</div></header>
+            <section id="pairing" class="pairing hidden" aria-label="\(pairRemoteLabel)">
+              <p>\(pairingInstructions)</p>
+              <input id="clientName" autocomplete="off" placeholder="\(remoteNamePlaceholder)" value="\(phoneRemoteName)">
               <input id="pairingCode" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" placeholder="••••••">
-              <button id="pairButton" class="primary" type="button">Pair Remote</button>
+              <button id="pairButton" class="primary" type="button">\(pairButtonTitle)</button>
               <p id="authMessage"></p>
             </section>
             <section id="controls" class="cards controls hidden">
-              <div id="volumeCard" class="card"><div class="label">Volume</div><div class="value"><span id="volumeValue">--</span>%</div><input id="volume" type="range" min="0" max="100" value="100"></div>
-              <div id="preampCard" class="card"><div class="label">Preamp</div><div class="value"><span id="preampValue">--</span>%</div><input id="preamp" type="range" min="0" max="200" value="100"></div>
+              <div id="volumeCard" class="card"><div class="label">\(volumeLabel)</div><div class="value"><span id="volumeValue">--</span>%</div><input id="volume" type="range" min="0" max="100" value="100"></div>
+              <div id="preampCard" class="card"><div class="label">\(preampLabel)</div><div class="value"><span id="preampValue">--</span>%</div><input id="preamp" type="range" min="0" max="200" value="100"></div>
             </section>
-            <section id="presets" class="hidden" aria-label="Presets"></section>
-            <footer>Paired access protects remote control on your trusted local network. Traffic stays local but is not internet-grade encrypted.</footer>
+            <section id="presets" class="hidden" aria-label="\(presetsLabel)"></section>
+            <footer>\(footer)</footer>
           </main>
           <script>
             const STORAGE_KEY = 'equalEaseRemoteCredentialV1';
@@ -839,31 +890,31 @@ extension LocalNetworkControlServer {
               const url = `ws://${location.host}${'\(webSocketPath)'}`;
               ws = new WebSocket(url);
               ws.onopen = () => {
-                statusEl.textContent = 'Connected — authenticating…';
+                statusEl.textContent = '\(connectedAuthenticating)';
                 const credential = loadCredential();
                 if (credential && credential.clientID && credential.token) {
                   send('auth', { clientID: credential.clientID, token: credential.token }, 'auth');
                 } else {
-                  showPairing('Enter the code from your Mac to pair this remote.');
+                  showPairing('\(enterCode)');
                 }
               };
-              ws.onclose = () => { statusEl.textContent = 'Disconnected — retrying…'; setTimeout(connect, 1200); };
-              ws.onerror = () => { statusEl.textContent = 'Connection error'; };
+              ws.onclose = () => { statusEl.textContent = '\(disconnectedRetrying)'; setTimeout(connect, 1200); };
+              ws.onerror = () => { statusEl.textContent = '\(connectionError)'; };
               ws.onmessage = event => {
                 const message = JSON.parse(event.data);
-                if (message.type === 'auth_required') showPairing('Enter the code from your Mac to pair this remote.');
+                if (message.type === 'auth_required') showPairing('\(enterCode)');
                 if (message.type === 'auth_ok') {
                   if (message.payload.token) saveCredential({ clientID: message.payload.clientID, clientName: message.payload.clientName, token: message.payload.token });
                   showControls();
-                  statusEl.textContent = `Paired as ${message.payload.clientName}`;
+                  statusEl.textContent = `\(pairedAs) ${message.payload.clientName}`;
                 }
                 if (message.type === 'auth_error') {
                   if (message.payload.code === 'invalid_credentials') clearCredential();
-                  showPairing(message.payload.message || 'Pairing or authentication failed.');
-                  statusEl.textContent = 'Pairing required';
+                  showPairing(message.payload.message || '\(pairingFailed)');
+                  statusEl.textContent = '\(pairingRequired)';
                 }
                 if (message.type === 'state_snapshot' || message.type === 'state_patch') render(message.payload);
-                if (message.type === 'error') statusEl.textContent = message.payload.message || 'Protocol error';
+                if (message.type === 'error') statusEl.textContent = message.payload.message || '\(protocolError)';
               };
             }
             function requestId() {
@@ -874,7 +925,7 @@ extension LocalNetworkControlServer {
               if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type, id, payload }));
             }
             function command(payload) {
-              if (!authenticated) { showPairing('Pair this remote before changing EqualEase.'); return; }
+              if (!authenticated) { showPairing('\(pairBeforeChanging)'); return; }
               send('command', payload);
             }
             function pressPreset(event, preset) {
@@ -888,7 +939,7 @@ extension LocalNetworkControlServer {
             function render(next) {
               state = next;
               showControls();
-              statusEl.textContent = `${next.activePresetName} • ${next.isActive ? 'Active' : 'Off'}`;
+              statusEl.textContent = `${next.activePresetName} • ${next.isActive ? '\(activeStatus)' : '\(offStatus)'}`;
               volume.value = Math.round(next.outputVolume * 100); volumeValue.textContent = volume.value;
               preamp.value = Math.round(next.preamp * 100); preampValue.textContent = preamp.value;
               presetsEl.innerHTML = '';
@@ -927,8 +978,8 @@ extension LocalNetworkControlServer {
             }
             pairButton.addEventListener('click', () => {
               const code = pairingCode.value.replace(/\\D/g, '');
-              if (code.length !== 6) { authMessage.textContent = 'Enter the six-digit code shown on your Mac.'; return; }
-              send('pair', { code, clientName: clientName.value || 'Phone Remote' }, 'pair');
+              if (code.length !== 6) { authMessage.textContent = '\(sixDigitCodePrompt)'; return; }
+              send('pair', { code, clientName: clientName.value || '\(phoneRemoteNameJS)' }, 'pair');
             });
             for (const control of [volume, preamp]) {
               control.addEventListener('touchmove', event => event.preventDefault(), { passive: false });

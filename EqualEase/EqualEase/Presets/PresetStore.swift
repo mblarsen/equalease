@@ -209,7 +209,9 @@ final class PresetStore: ObservableObject {
         let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
         let preset = EQPreset(
             id: "custom-\(UUID().uuidString)",
-            name: trimmedName.isEmpty ? suggestedCopyName(for: "Preset") : trimmedName,
+            name: trimmedName.isEmpty
+                ? suggestedCopyName(for: String(localized: "Preset", comment: "Generic fallback preset name when no specific preset is available."))
+                : trimmedName,
             source: .custom,
             bandGains: Self.normalizedBandGains(bandGains),
             outputGain: min(max(outputGain, 0), 2)
@@ -222,7 +224,10 @@ final class PresetStore: ObservableObject {
 
     func saveCurrentPreset(bandGains: [Double], outputGain: Double) -> EQPreset {
         saveCurrentPreset(
-            name: suggestedCopyName(for: preset(id: selectedPresetID)?.name ?? "Preset"),
+            name: suggestedCopyName(
+                for: preset(id: selectedPresetID)?.name
+                    ?? String(localized: "Preset", comment: "Generic fallback preset name when no specific preset is available.")
+            ),
             bandGains: bandGains,
             outputGain: outputGain
         )
@@ -243,7 +248,10 @@ final class PresetStore: ObservableObject {
     }
 
     private func nextDuplicateName(for name: String) -> String {
-        let baseName = "\(name) Copy"
+        let baseName = String(
+            localized: "\(name) Copy",
+            comment: "Default name for a duplicated custom preset. Interpolation is the original preset name."
+        )
         let existingNames = Set(presets.map(\.name))
         guard existingNames.contains(baseName) else { return baseName }
 
@@ -351,84 +359,84 @@ final class PresetStore: ObservableObject {
     private static let defaultBuiltInPresets: [EQPreset] = [
         EQPreset(
             id: "built-in-flat",
-            name: "Flat",
+            name: String(localized: "Flat", comment: "Built-in EQ preset name; neutral equalizer with no boosts or cuts."),
             source: .builtIn,
             bandGains: Array(repeating: 0, count: 10),
             outputGain: 1.0
         ),
         EQPreset(
             id: "built-in-voice-boost",
-            name: "Voice Boost",
+            name: String(localized: "Voice Boost", comment: "Built-in EQ preset name for making speech clearer in calls or videos."),
             source: .builtIn,
             bandGains: [-5, -4, -2, 0, 2, 3.5, 4, 2, -1, -3],
             outputGain: 0.9
         ),
         EQPreset(
             id: "built-in-podcast",
-            name: "Podcast",
+            name: String(localized: "Podcast", comment: "Built-in EQ preset name for spoken-word podcast listening."),
             source: .builtIn,
             bandGains: [-4, -3, -1, 1, 2, 2.5, 3, 1.5, -1, -3],
             outputGain: 0.9
         ),
         EQPreset(
             id: "built-in-de-mud",
-            name: "De-Mud",
+            name: String(localized: "De-Mud", comment: "Built-in EQ preset name; reduces muddy low-mid frequencies."),
             source: .builtIn,
             bandGains: [-2, -3, -5, -4, -2, 1, 2, 1, 0, -1],
             outputGain: 0.95
         ),
         EQPreset(
             id: "built-in-bass-boost",
-            name: "Bass Boost",
+            name: String(localized: "Bass Boost", comment: "Built-in EQ preset name; emphasizes low frequencies."),
             source: .builtIn,
             bandGains: [5, 4, 3, 1.5, 0, 0, -1, -1.5, -2, -2],
             outputGain: 0.85
         ),
         EQPreset(
             id: "built-in-treble-boost",
-            name: "Treble Boost",
+            name: String(localized: "Treble Boost", comment: "Built-in EQ preset name; emphasizes high frequencies."),
             source: .builtIn,
             bandGains: [-2, -2, -1, 0, 0, 1, 2.5, 4, 5, 5],
             outputGain: 0.85
         ),
         EQPreset(
             id: "built-in-loudness",
-            name: "Loudness",
+            name: String(localized: "Loudness", comment: "Built-in EQ preset name; boosts perceived fullness at low listening levels."),
             source: .builtIn,
             bandGains: [4, 3, 2, 0, -1, -1, 0, 2, 3, 3],
             outputGain: 0.85
         ),
         EQPreset(
             id: "built-in-night-mode",
-            name: "Night Mode",
+            name: String(localized: "Night Mode", comment: "Built-in EQ preset name for quieter listening with reduced extremes."),
             source: .builtIn,
             bandGains: [-5, -4, -3, -1, 1, 2, 1, -2, -5, -6],
             outputGain: 0.75
         ),
         EQPreset(
             id: "built-in-small-speakers",
-            name: "Small Speakers",
+            name: String(localized: "Small Speakers", comment: "Built-in EQ preset name for laptop or compact speakers."),
             source: .builtIn,
             bandGains: [-4, -2, 2, 3, 1, 0, 1, 2, 1, -1],
             outputGain: 0.9
         ),
         EQPreset(
             id: "built-in-reduce-rumble",
-            name: "Reduce Rumble",
+            name: String(localized: "Reduce Rumble", comment: "Built-in EQ preset name; cuts very low frequencies and rumble."),
             source: .builtIn,
             bandGains: [-12, -10, -7, -3, 0, 0, 0, 0, 0, 0],
             outputGain: 0.95
         ),
         EQPreset(
             id: "built-in-warm",
-            name: "Warm",
+            name: String(localized: "Warm", comment: "Built-in EQ preset name; warmer, less bright sound."),
             source: .builtIn,
             bandGains: [2, 2.5, 2, 1, 0, -0.5, -1, -1.5, -2, -2],
             outputGain: 0.95
         ),
         EQPreset(
             id: "built-in-muffled",
-            name: "Muffled",
+            name: String(localized: "Muffled", comment: "Built-in EQ preset name; deliberately subdued/background sound for less prominent audio."),
             source: .builtIn,
             bandGains: [0, 0, -1, -2, -4, -6, -8, -10, -12, -12],
             outputGain: 0.5

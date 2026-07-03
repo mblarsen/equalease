@@ -212,7 +212,7 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
     var selectedPresetName: String {
         activeContextResolver.context?.preset.name
             ?? presetStore.presets.first { $0.id == presetStore.selectedPresetID }?.name
-            ?? "Preset"
+            ?? String(localized: "Preset", comment: "Generic fallback preset name when no specific preset is available.")
     }
 
     var isPresetLocked: Bool {
@@ -221,9 +221,15 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
 
     var presetLockHelpText: String {
         if let context = activeContextResolver.context, context.source == .lockedPreset {
-            return "Preset rules are paused; \(context.preset.name) stays active while you switch apps or websites."
+            return String(
+                localized: "Preset rules are paused; \(context.preset.name) stays active while you switch apps or websites.",
+                comment: "Help text for locked preset mode. Interpolation is a preset name; keep 'preset rules' as the app/website switching feature."
+            )
         }
-        return "Ignores app and website preset rules and keeps the current preset while you switch focus."
+        return String(
+            localized: "Ignores app and website preset rules and keeps the current preset while you switch focus.",
+            comment: "Help text for pausing preset switching based on the active app or website."
+        )
     }
 
     var currentInputDeviceName: String {
@@ -304,7 +310,8 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
     }
 
     var effectivePresetSummary: String {
-        activeContextResolver.context?.sourceSummary ?? "No preset"
+        activeContextResolver.context?.sourceSummary
+            ?? String(localized: "No preset", comment: "Fallback status when no preset is currently selected.")
     }
 
     var appLearningPrompt: AppPresetSuggestion? {
@@ -317,17 +324,21 @@ final class QuickPanelModel<Router: AudioRoutingBackend>: ObservableObject {
 
     var statusTitle: String {
         if router.isRoutingTransitioning && router.statusText.localizedCaseInsensitiveContains("stopping") {
-            return "Stopping…"
+            return String(localized: "Stopping…", comment: "Short menu-bar status while audio routing is stopping.")
         }
         if router.isRoutingTransitioning && router.isRunning {
-            return "Switching…"
+            return String(localized: "Switching…", comment: "Short menu-bar status while EqualEase switches output routing.")
         }
 
         return switch router.state {
-        case .stopped: "Off"
-        case .starting: "Starting…"
-        case .running: "Active"
-        case .failed: "Failed"
+        case .stopped:
+            String(localized: "Menu bar routing status: Off", defaultValue: "Off", comment: "Short menu-bar status when EqualEase audio routing is inactive.")
+        case .starting:
+            String(localized: "Menu bar routing status: Starting", defaultValue: "Starting…", comment: "Short menu-bar status while audio routing is starting.")
+        case .running:
+            String(localized: "Menu bar routing status: Active", defaultValue: "Active", comment: "Short menu-bar status when EqualEase audio routing is running.")
+        case .failed:
+            String(localized: "Menu bar routing status: Failed", defaultValue: "Failed", comment: "Short menu-bar status when audio routing failed.")
         }
     }
 
