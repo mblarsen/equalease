@@ -6,8 +6,16 @@
 
 import SwiftUI
 
+private let applyLanguageOverrideAtStartup: Void = {
+    EqualEaseSettings.applyStoredLanguageOverrideForLaunch()
+}()
+
 @main
 struct EqualEaseApp: App {
+    init() {
+        _ = applyLanguageOverrideAtStartup
+    }
+
     @NSApplicationDelegateAdaptor(EqualEaseAppDelegate.self) private var appDelegate
 
     var body: some Scene {

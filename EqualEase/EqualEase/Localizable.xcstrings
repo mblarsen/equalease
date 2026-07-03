@@ -712,6 +712,18 @@
       },
       "comment": "Notification permission status when macOS allows EqualEase notifications."
     },
+    "App Language": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Language"
+          }
+        }
+      },
+      "comment": "Label for the Settings picker that chooses the app language override."
+    },
     "App audio mode: Mute": {
       "extractionState": "manual",
       "localizations": {
@@ -1213,6 +1225,30 @@
           }
         }
       }
+    },
+    "Choose System Default to follow your macOS language order. Language changes apply after you quit and reopen EqualEase.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose System Default to follow your macOS language order. Language changes apply after you quit and reopen EqualEase."
+          }
+        }
+      },
+      "comment": "Helper text explaining system default behavior and that language changes require relaunch."
+    },
+    "Choose the language EqualEase should use after the next launch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the language EqualEase should use after the next launch."
+          }
+        }
+      },
+      "comment": "Accessibility hint for the Settings language picker."
     },
     "Choose the preset to hear and edit in this workbench.": {
       "extractionState": "manual",
@@ -3335,6 +3371,18 @@
           }
         }
       }
+    },
+    "Language": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        }
+      },
+      "comment": "Settings section title for choosing the app language override."
     },
     "Last cap attempt": {
       "extractionState": "manual",
@@ -7844,6 +7892,18 @@
         }
       },
       "comment": "Short menu-bar status while EqualEase switches output routing."
+    },
+    "System Default": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System Default"
+          }
+        }
+      },
+      "comment": "Language picker option that removes the in-app override and follows macOS language order."
     },
     "The pairing code is invalid or expired.": {
       "extractionState": "manual",

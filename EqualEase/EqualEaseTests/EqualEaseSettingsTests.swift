@@ -17,6 +17,10 @@ final class EqualEaseSettingsTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelPreampKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelInputVolumeKey)
         UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelRoutingKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.showsQuickPanelAppVolumeKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.languageOverrideIdentifierKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.ownsAppleLanguagesKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.appleLanguagesKey)
         super.tearDown()
     }
 
@@ -72,6 +76,55 @@ final class EqualEaseSettingsTests: XCTestCase {
 
         XCTAssertFalse(EqualEaseSettings.isPresetLocked)
         XCTAssertNil(EqualEaseSettings.lockedPresetID)
+    }
+
+    func testStoredLanguageOverrideLaunchNoOpWhenNoEqualEaseOverridePreservesAppleLanguages() {
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.languageOverrideIdentifierKey)
+        UserDefaults.standard.removeObject(forKey: EqualEaseSettings.ownsAppleLanguagesKey)
+        UserDefaults.standard.set(["fr"], forKey: EqualEaseSettings.appleLanguagesKey)
+
+        EqualEaseSettings.applyStoredLanguageOverrideForLaunch()
+
+        XCTAssertNil(EqualEaseSettings.languageOverrideIdentifier)
+        XCTAssertEqual(Self.standardDefaultsPersistentValue(forKey: EqualEaseSettings.appleLanguagesKey) as? [String], ["fr"])
+    }
+
+    func testExplicitSystemDefaultClearsEqualEaseOwnedAppleLanguages() throws {
+        let identifier = try XCTUnwrap(EqualEaseSettings.availableLanguageIdentifiers.first)
+        EqualEaseSettings.applyLanguageOverrideForNextLaunch(identifier)
+
+        EqualEaseSettings.applyLanguageOverrideForNextLaunch(nil)
+
+        XCTAssertNil(EqualEaseSettings.languageOverrideIdentifier)
+        XCTAssertNil(Self.standardDefaultsPersistentValue(forKey: EqualEaseSettings.ownsAppleLanguagesKey))
+        XCTAssertNil(Self.standardDefaultsPersistentValue(forKey: EqualEaseSettings.appleLanguagesKey))
+    }
+
+    func testLanguageOverridePersistsAndSetsAppleLanguagesForNextLaunch() throws {
+        let identifier = try XCTUnwrap(EqualEaseSettings.availableLanguageIdentifiers.first)
+
+        EqualEaseSettings.applyLanguageOverrideForNextLaunch(identifier)
+
+        XCTAssertEqual(EqualEaseSettings.languageOverrideIdentifier, identifier)
+        XCTAssertTrue(UserDefaults.standard.bool(forKey: EqualEaseSettings.ownsAppleLanguagesKey))
+        XCTAssertEqual(UserDefaults.standard.array(forKey: EqualEaseSettings.appleLanguagesKey) as? [String], [identifier])
+    }
+
+    func testUnsupportedLanguageOverrideFallsBackToSystemDefault() {
+        EqualEaseSettings.languageOverrideIdentifier = "zz"
+        UserDefaults.standard.set(true, forKey: EqualEaseSettings.ownsAppleLanguagesKey)
+        UserDefaults.standard.set(["zz"], forKey: EqualEaseSettings.appleLanguagesKey)
+
+        EqualEaseSettings.applyStoredLanguageOverrideForLaunch()
+
+        XCTAssertNil(EqualEaseSettings.languageOverrideIdentifier)
+        XCTAssertNil(Self.standardDefaultsPersistentValue(forKey: EqualEaseSettings.ownsAppleLanguagesKey))
+        XCTAssertNil(Self.standardDefaultsPersistentValue(forKey: EqualEaseSettings.appleLanguagesKey))
+    }
+
+    private static func standardDefaultsPersistentValue(forKey key: String) -> Any? {
+        guard let domainName = Bundle.main.bundleIdentifier else { return nil }
+        return UserDefaults.standard.persistentDomain(forName: domainName)?[key]
     }
 
     func testQuickPanelControlVisibilityDefaultsOnAndPersistsExplicitChoices() {

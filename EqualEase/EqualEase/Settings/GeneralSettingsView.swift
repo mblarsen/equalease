@@ -77,6 +77,7 @@ struct GeneralSettingsView: View {
     @AppStorage(EqualEaseSettings.showsQuickPanelInputVolumeKey) private var showsQuickPanelInputVolume = true
     @AppStorage(EqualEaseSettings.showsQuickPanelRoutingKey) private var showsQuickPanelRouting = true
     @AppStorage(EqualEaseSettings.showsQuickPanelAppVolumeKey) private var showsQuickPanelAppVolume = true
+    @AppStorage(EqualEaseSettings.languageOverrideIdentifierKey) private var languageOverrideIdentifier = ""
 
     var body: some View {
         Form {
@@ -108,6 +109,23 @@ struct GeneralSettingsView: View {
 
                 Text("EqualEase can launch quietly in the menu bar. Audio routing stays off until you turn it on, unless you explicitly enable automatic routing here. Audio processing happens locally on this Mac.")
                     .foregroundStyle(.secondary)
+            }
+
+            Section("Language") {
+                Picker("App Language", selection: languageSelection) {
+                    Text("System Default")
+                        .tag("")
+
+                    ForEach(Self.availableLanguageIdentifiers, id: \.self) { identifier in
+                        Text(Self.languageDisplayName(for: identifier))
+                            .tag(identifier)
+                    }
+                }
+                .accessibilityHint("Choose the language EqualEase should use after the next launch.")
+
+                Text("Choose System Default to follow your macOS language order. Language changes apply after you quit and reopen EqualEase.")
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Section("Quick Panel") {
@@ -261,6 +279,23 @@ struct GeneralSettingsView: View {
 
     private static let privacyPolicyURL = URL(string: "https://github.com/mblarsen/equalease/blob/main/docs/privacy.md")!
     private static let supportURL = URL(string: "https://github.com/mblarsen/equalease/issues")!
+    private static var availableLanguageIdentifiers: [String] {
+        EqualEaseSettings.availableLanguageIdentifiers
+    }
+
+    private var languageSelection: Binding<String> {
+        Binding(
+            get: { languageOverrideIdentifier },
+            set: { newValue in
+                languageOverrideIdentifier = newValue
+                EqualEaseSettings.applyLanguageOverrideForNextLaunch(newValue.isEmpty ? nil : newValue)
+            }
+        )
+    }
+
+    private static func languageDisplayName(for identifier: String) -> String {
+        EqualEaseSettings.localizedLanguageName(for: identifier)
+    }
 
     private var appVersionText: String {
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String

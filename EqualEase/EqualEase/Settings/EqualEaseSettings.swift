@@ -16,6 +16,9 @@ enum EqualEaseSettings {
     static let showsQuickPanelInputVolumeKey = "showsQuickPanelInputVolume"
     static let showsQuickPanelRoutingKey = "showsQuickPanelRouting"
     static let showsQuickPanelAppVolumeKey = "showsQuickPanelAppVolume"
+    static let languageOverrideIdentifierKey = "languageOverrideIdentifier"
+    static let ownsAppleLanguagesKey = "languageOverrideOwnsAppleLanguages"
+    static let appleLanguagesKey = "AppleLanguages"
 
     static var allowsExternalAutomationWrites: Bool {
         get {
@@ -75,6 +78,60 @@ enum EqualEaseSettings {
 
     static var isPresetLocked: Bool {
         lockedPresetID != nil
+    }
+
+    static var languageOverrideIdentifier: String? {
+        get {
+            guard let identifier = UserDefaults.standard.string(forKey: languageOverrideIdentifierKey),
+                  !identifier.isEmpty
+            else { return nil }
+            return identifier
+        }
+        set {
+            if let newValue, !newValue.isEmpty {
+                UserDefaults.standard.set(newValue, forKey: languageOverrideIdentifierKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: languageOverrideIdentifierKey)
+            }
+        }
+    }
+
+    static var availableLanguageIdentifiers: [String] {
+        let identifiers = Bundle.main.localizations
+            .filter { $0 != "Base" }
+        let preferred = identifiers.isEmpty ? ["en"] : identifiers
+        return Array(Set(preferred)).sorted { localizedLanguageName(for: $0) < localizedLanguageName(for: $1) }
+    }
+
+    static func localizedLanguageName(for identifier: String, displayLocale: Locale = .current) -> String {
+        displayLocale.localizedString(forIdentifier: identifier)
+            ?? Locale(identifier: identifier).localizedString(forIdentifier: identifier)
+            ?? identifier
+    }
+
+    static func applyStoredLanguageOverrideForLaunch() {
+        guard let identifier = languageOverrideIdentifier else { return }
+        applyLanguageOverrideForNextLaunch(identifier)
+    }
+
+    static func applyLanguageOverrideForNextLaunch(_ identifier: String?) {
+        guard let identifier, availableLanguageIdentifiers.contains(identifier) else {
+            clearLanguageOverrideForNextLaunch()
+            return
+        }
+
+        languageOverrideIdentifier = identifier
+        UserDefaults.standard.set(true, forKey: ownsAppleLanguagesKey)
+        UserDefaults.standard.set([identifier], forKey: appleLanguagesKey)
+    }
+
+    static func clearLanguageOverrideForNextLaunch() {
+        if UserDefaults.standard.bool(forKey: ownsAppleLanguagesKey) || languageOverrideIdentifier != nil {
+            UserDefaults.standard.removeObject(forKey: appleLanguagesKey)
+        }
+
+        languageOverrideIdentifier = nil
+        UserDefaults.standard.removeObject(forKey: ownsAppleLanguagesKey)
     }
 
     static var showsQuickPanelVolume: Bool {
