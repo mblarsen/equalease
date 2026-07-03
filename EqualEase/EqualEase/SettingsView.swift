@@ -63,8 +63,11 @@ struct SettingsView: View {
 
             Divider()
 
-            selectedTabContent
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            ScrollView {
+                selectedTabContent
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .frame(width: 760, height: 540)
         .padding(20)
