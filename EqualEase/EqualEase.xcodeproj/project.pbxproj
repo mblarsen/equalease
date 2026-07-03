@@ -155,6 +155,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				da,
 				Base,
 			);
 			mainGroup = 00CED55A2FA4CB2D003425BD;
