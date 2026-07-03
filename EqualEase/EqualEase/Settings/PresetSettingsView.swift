@@ -42,9 +42,9 @@ struct PresetSettingsView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .sheet(isPresented: $isShowingSaveAsSheet) {
             PresetNameSheet(
-                title: "Save Preset As",
-                message: "Choose a name for a custom copy of \"\(selectedPreset?.name ?? "this preset")\".",
-                actionTitle: "Save",
+                title: String(localized: "Save Preset As", comment: "Title for the sheet that saves the current preset as a new custom preset."),
+                message: saveAsSheetMessage,
+                actionTitle: String(localized: "Save", comment: "Button title for saving a preset name sheet."),
                 name: $saveAsDraft,
                 onCancel: { isShowingSaveAsSheet = false },
                 onSave: saveCurrentAsCustomPreset
@@ -53,9 +53,9 @@ struct PresetSettingsView: View {
         }
         .sheet(isPresented: $isShowingRenameSheet) {
             PresetNameSheet(
-                title: "Rename Preset",
-                message: "Choose a new name for \"\(selectedPreset?.name ?? "Preset")\".",
-                actionTitle: "Save",
+                title: String(localized: "Rename Preset", comment: "Title for the sheet that renames a custom preset."),
+                message: renameSheetMessage,
+                actionTitle: String(localized: "Save", comment: "Button title for saving a preset name sheet."),
                 name: $renameDraft,
                 onCancel: { isShowingRenameSheet = false },
                 onSave: renameSelectedCustomPreset
@@ -87,15 +87,15 @@ struct PresetSettingsView: View {
 
             Picker("Current preset", selection: selectedPresetBinding) {
                 Section("Speech") {
-                    presetMenuItems(for: presets(named: ["Voice Boost", "Podcast"]))
+                    presetMenuItems(for: presets(withIDs: ["built-in-voice-boost", "built-in-podcast"]))
                 }
 
                 Section("Music") {
-                    presetMenuItems(for: presets(named: ["Bass Boost", "Treble Boost", "Warm", "Loudness"]))
+                    presetMenuItems(for: presets(withIDs: ["built-in-bass-boost", "built-in-treble-boost", "built-in-warm", "built-in-loudness"]))
                 }
 
                 Section("Utility") {
-                    presetMenuItems(for: presets(named: ["Flat", "De-Mud", "Night Mode", "Small Speakers", "Reduce Rumble", "Muffled"]))
+                    presetMenuItems(for: presets(withIDs: ["built-in-flat", "built-in-de-mud", "built-in-night-mode", "built-in-small-speakers", "built-in-reduce-rumble", "built-in-muffled"]))
                 }
 
                 if !presetStore.customPresets.isEmpty {
@@ -120,9 +120,9 @@ struct PresetSettingsView: View {
         }
     }
 
-    private func presets(named names: [String]) -> [EQPreset] {
-        names.compactMap { name in
-            presetStore.builtInPresets.first { $0.name == name }
+    private func presets(withIDs ids: [String]) -> [EQPreset] {
+        ids.compactMap { id in
+            presetStore.builtInPresets.first { $0.id == id }
         }
     }
 
@@ -290,11 +290,23 @@ struct PresetSettingsView: View {
     }
 
     private var editorDescription: String {
-        guard let selectedPreset else { return "Choose a preset to edit EQ values." }
+        guard let selectedPreset else { return String(localized: "Choose a preset to edit EQ values.", comment: "Description under Presets settings when no preset is selected.") }
         if selectedPreset.source == .builtIn {
-            return "Built-ins are read-only templates. EQ and gain changes are live until you save them as a new preset."
+            return String(localized: "Built-ins are read-only templates. EQ and gain changes are live until you save them as a new preset.", comment: "Description under Presets settings when a built-in preset is selected.")
         }
-        return "Changes are live for listening. Save the custom preset when you want to keep them."
+        return String(localized: "Changes are live for listening. Save the custom preset when you want to keep them.", comment: "Description under Presets settings when a custom preset is selected.")
+    }
+
+    private var saveAsSheetMessage: String {
+        let presetName = selectedPreset?.name ?? String(localized: "this preset", comment: "Fallback preset name in the Save Preset As sheet.")
+        let format = String(localized: "Choose a name for a custom copy of \"%@\".", comment: "Message in the Save Preset As sheet. Placeholder is the source preset name.")
+        return String(format: format, presetName)
+    }
+
+    private var renameSheetMessage: String {
+        let presetName = selectedPreset?.name ?? String(localized: "Preset", comment: "Fallback preset name in the Rename Preset sheet.")
+        let format = String(localized: "Choose a new name for \"%@\".", comment: "Message in the Rename Preset sheet. Placeholder is the current custom preset name.")
+        return String(format: format, presetName)
     }
 
     private var hasUnsavedLiveChanges: Bool {

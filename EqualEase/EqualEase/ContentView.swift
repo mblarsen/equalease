@@ -219,7 +219,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
             VStack(alignment: .leading, spacing: 8) {
                 if model.showsVolumeControls {
                     levelSlider(
-                        title: "Volume",
+                        title: String(localized: "Volume", comment: "Label for the output volume slider."),
                         value: Binding(
                             get: { router.outputVolume },
                             set: { router.outputVolume = $0 }
@@ -227,7 +227,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                         range: 0...1,
                         percentage: Int(router.outputVolume * 100),
                         isEnabled: router.canSetOutputVolume,
-                        helpText: "Convenience control for your Mac’s output volume. Use this first for everyday loudness.",
+                        helpText: String(localized: "Convenience control for your Mac’s output volume. Use this first for everyday loudness.", comment: "Help text below the output Volume slider."),
                         hideAction: { model.hideVolumeControls() }
                     )
 
@@ -236,7 +236,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
 
                 if model.showsPreampControls {
                     levelSlider(
-                        title: "Preamp",
+                        title: String(localized: "Preamp", comment: "Label for the preamp processing level slider."),
                         value: Binding(
                             get: { router.outputGain },
                             set: { router.outputGain = $0 }
@@ -244,7 +244,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                         range: 0...2,
                         percentage: Int(router.outputGain * 100),
                         isEnabled: router.isRunning,
-                        helpText: "Changes EqualEase’s processing level while Active is on. Use Volume first; lower Preamp if boosted presets distort.",
+                        helpText: String(localized: "Changes EqualEase’s processing level while Active is on. Use Volume first; lower Preamp if boosted presets distort.", comment: "Help text below the Preamp slider."),
                         hideAction: { model.hidePreampControls() }
                     )
                 }
@@ -342,12 +342,12 @@ struct ContentView<Router: AudioRoutingBackend>: View {
 
     private var inputVolumeHelpText: String {
         if inputDeviceController.canSetInputVolume {
-            return "Convenience control for your Mac’s current microphone input level. It stays editable even while EqualEase is off."
+            return String(localized: "Convenience control for your Mac’s current microphone input level. It stays editable even while EqualEase is off.", comment: "Help text below the input volume slider when EqualEase can set the current microphone input level.")
         }
         if inputDeviceController.canReadInputVolume {
-            return "EqualEase can read this input’s volume, but this device does not expose volume control."
+            return String(localized: "EqualEase can read this input’s volume, but this device does not expose volume control.", comment: "Help text below the input volume slider when EqualEase can read but not set the current microphone input level.")
         }
-        return "This input does not expose volume control. Use System Settings or the device’s own controls if available."
+        return String(localized: "This input does not expose volume control. Use System Settings or the device’s own controls if available.", comment: "Help text below the input volume slider when the current microphone input does not expose volume control.")
     }
 
     private var outputDevicePicker: some View {
@@ -371,15 +371,15 @@ struct ContentView<Router: AudioRoutingBackend>: View {
     private var presetMenu: some View {
         Menu {
             Section("Speech") {
-                presetButtons(for: presets(named: ["Voice Boost", "Podcast"]))
+                presetButtons(for: presets(withIDs: ["built-in-voice-boost", "built-in-podcast"]))
             }
 
             Section("Music") {
-                presetButtons(for: presets(named: ["Bass Boost", "Treble Boost", "Warm", "Loudness"]))
+                presetButtons(for: presets(withIDs: ["built-in-bass-boost", "built-in-treble-boost", "built-in-warm", "built-in-loudness"]))
             }
 
             Section("Utility") {
-                presetButtons(for: presets(named: ["Flat", "De-Mud", "Night Mode", "Small Speakers", "Reduce Rumble", "Muffled"]))
+                presetButtons(for: presets(withIDs: ["built-in-flat", "built-in-de-mud", "built-in-night-mode", "built-in-small-speakers", "built-in-reduce-rumble", "built-in-muffled"]))
             }
 
             if !presetStore.customPresets.isEmpty {
@@ -420,9 +420,9 @@ struct ContentView<Router: AudioRoutingBackend>: View {
         }
     }
 
-    private func presets(named names: [String]) -> [EQPreset] {
-        names.compactMap { name in
-            presetStore.builtInPresets.first { $0.name == name }
+    private func presets(withIDs ids: [String]) -> [EQPreset] {
+        ids.compactMap { id in
+            presetStore.builtInPresets.first { $0.id == id }
         }
     }
 
@@ -457,7 +457,8 @@ struct ContentView<Router: AudioRoutingBackend>: View {
             Text(app.displayName)
                 .font(.caption2.weight(.medium))
                 .lineLimit(1)
-                .frame(width: 92, alignment: .leading)
+                .truncationMode(.tail)
+                .frame(width: 72, alignment: .leading)
 
             let mode = model.appVolumeStore.mode(for: app.bundleID)
             let isMuted = mode == .mute
@@ -482,8 +483,10 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 }) {
                     Text(isProcessing ? "Process" : "Bypass")
                         .font(.caption2.weight(.medium))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.85)
                         .foregroundColor(isProcessing ? .white : .secondary)
-                        .frame(width: 58)
+                        .frame(width: 76)
                         .padding(.vertical, 3)
                         .background(
                             isProcessing
@@ -502,8 +505,10 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 }) {
                     Text("Mute")
                         .font(.caption2.weight(.medium))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.85)
                         .foregroundColor(isMuted ? .white : .secondary)
-                        .frame(width: 44)
+                        .frame(width: 56)
                         .padding(.vertical, 3)
                         .background(
                             isMuted

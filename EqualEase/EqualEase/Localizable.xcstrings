@@ -720,6 +720,24 @@
             "state": "translated",
             "value": "App Language"
           }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appsprog"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-Sprache"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idioma de la app"
+          }
         }
       },
       "comment": "Label for the Settings picker that chooses the app language override."
@@ -1061,19 +1079,19 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Basboost"
+            "value": "Bass Boost"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bass-Boost"
+            "value": "Bass Boost"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Refuerzo de graves"
+            "value": "Bass Boost"
           }
         }
       },
@@ -1091,7 +1109,7 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bypass"
+            "value": "Omgå"
           }
         },
         "de": {
@@ -1103,7 +1121,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bypass"
+            "value": "Omitir"
           }
         }
       },
@@ -1234,6 +1252,24 @@
             "state": "translated",
             "value": "Choose System Default to follow your macOS language order. Language changes apply after you quit and reopen EqualEase."
           }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg Systemstandard for at følge din macOS-sprogrækkefølge. Sprogændringer træder i kraft, når du afslutter og åbner EqualEase igen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle Systemstandard, um deiner macOS-Sprachreihenfolge zu folgen. Sprachänderungen gelten, nachdem du EqualEase beendet und erneut geöffnet hast."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige Predeterminado del sistema para seguir el orden de idiomas de macOS. Los cambios de idioma se aplican después de cerrar y volver a abrir EqualEase."
+          }
         }
       },
       "comment": "Helper text explaining system default behavior and that language changes require relaunch."
@@ -1245,6 +1281,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose the language EqualEase should use after the next launch."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg det sprog, EqualEase skal bruge efter næste start."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle die Sprache, die EqualEase nach dem nächsten Start verwenden soll."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige el idioma que EqualEase debe usar después del próximo inicio."
           }
         }
       },
@@ -1938,19 +1992,19 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mindre mudder"
+            "value": "De-Mud"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Entmatschen"
+            "value": "De-Mud"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Menos opacidad"
+            "value": "De-Mud"
           }
         }
       },
@@ -2764,19 +2818,19 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Flad"
+            "value": "Flat"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Linear"
+            "value": "Flat"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plano"
+            "value": "Flat"
           }
         }
       },
@@ -3380,6 +3434,24 @@
             "state": "translated",
             "value": "Language"
           }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprog"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprache"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idioma"
+          }
         }
       },
       "comment": "Settings section title for choosing the app language override."
@@ -3673,7 +3745,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sonoridad"
+            "value": "Loudness"
           }
         }
       },
@@ -4192,19 +4264,19 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dæmpet"
+            "value": "Muffled"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gedämpft"
+            "value": "Muffled"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Atenuado"
+            "value": "Muffled"
           }
         }
       },
@@ -4251,7 +4323,7 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slå lyd fra"
+            "value": "Lydløs"
           }
         },
         "de": {
@@ -4370,19 +4442,19 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nattilstand"
+            "value": "Night Mode"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nachtmodus"
+            "value": "Night Mode"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Modo nocturno"
+            "value": "Night Mode"
           }
         }
       },
@@ -5699,13 +5771,13 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preamp / Gain"
+            "value": "Forforstærker / gain"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preamp / Gain"
+            "value": "Vorverstärkung / Gain"
           }
         },
         "es": {
@@ -6230,19 +6302,19 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reducer rumlen"
+            "value": "Reduce Rumble"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rumpeln reduzieren"
+            "value": "Reduce Rumble"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reducir retumbe"
+            "value": "Reduce Rumble"
           }
         }
       },
@@ -7376,19 +7448,19 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Små højttalere"
+            "value": "Small Speakers"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kleine Lautsprecher"
+            "value": "Small Speakers"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Altavoces pequeños"
+            "value": "Small Speakers"
           }
         }
       },
@@ -7901,6 +7973,24 @@
             "state": "translated",
             "value": "System Default"
           }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systemstandard"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systemstandard"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Predeterminado del sistema"
+          }
         }
       },
       "comment": "Language picker option that removes the in-app override and follows macOS language order."
@@ -8006,19 +8096,19 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Diskantboost"
+            "value": "Treble Boost"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Höhen-Boost"
+            "value": "Treble Boost"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Refuerzo de agudos"
+            "value": "Treble Boost"
           }
         }
       },
@@ -8333,19 +8423,19 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stemmeboost"
+            "value": "Voice Boost"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stimmen-Boost"
+            "value": "Voice Boost"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Refuerzo de voz"
+            "value": "Voice Boost"
           }
         }
       },
@@ -8392,7 +8482,7 @@
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Varm"
+            "value": "Warm"
           }
         },
         "de": {
@@ -8404,7 +8494,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cálido"
+            "value": "Warm"
           }
         }
       },
@@ -8731,6 +8821,786 @@
           }
         }
       }
+    },
+    "General": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generelt"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allgemein"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
+          }
+        }
+      },
+      "comment": "Settings tab title for general app settings."
+    },
+    "Diagnostics": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnostics"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnostik"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnose"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnóstico"
+          }
+        }
+      },
+      "comment": "Settings tab title for diagnostics settings."
+    },
+    "Volume": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volume"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lydstyrke"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lautstärke"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volumen"
+          }
+        }
+      },
+      "comment": "Label for the output volume slider."
+    },
+    "Convenience control for your Mac’s output volume. Use this first for everyday loudness.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convenience control for your Mac’s output volume. Use this first for everyday loudness."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekvem kontrol af din Macs udgangslydstyrke. Brug den først til daglig lydstyrke."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bequeme Steuerung der Ausgabelautstärke deines Mac. Verwende sie zuerst für die alltägliche Lautstärke."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Control práctico del volumen de salida del Mac. Úsalo primero para la sonoridad diaria."
+          }
+        }
+      },
+      "comment": "Help text below the output Volume slider."
+    },
+    "Changes EqualEase’s processing level while Active is on. Use Volume first; lower Preamp if boosted presets distort.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changes EqualEase’s processing level while Active is on. Use Volume first; lower Preamp if boosted presets distort."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ændrer EqualEases behandlingsniveau, mens Aktiv er slået til. Brug Lydstyrke først; sænk Preamp, hvis forstærkede forudindstillinger forvrænger."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ändert EqualEases Verarbeitungspegel, während „Aktiv“ eingeschaltet ist. Verwende zuerst „Lautstärke“; senke „Preamp“, wenn verstärkte Presets verzerren."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambia el nivel de procesamiento de EqualEase mientras Activo está encendido. Usa primero Volumen; baja Preamp si los preajustes reforzados distorsionan."
+          }
+        }
+      },
+      "comment": "Help text below the Preamp slider."
+    },
+    "Convenience control for your Mac’s current microphone input level. It stays editable even while EqualEase is off.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convenience control for your Mac’s current microphone input level. It stays editable even while EqualEase is off."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekvem kontrol af din Macs aktuelle mikrofonindgangsniveau. Den kan stadig redigeres, selv når EqualEase er slået fra."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bequeme Steuerung des aktuellen Mikrofoneingangspegels deines Mac. Sie bleibt auch bearbeitbar, wenn EqualEase ausgeschaltet ist."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Control práctico del nivel de entrada del micrófono actual del Mac. Sigue editable incluso cuando EqualEase está apagado."
+          }
+        }
+      },
+      "comment": "Help text below the input volume slider when EqualEase can set the current microphone input level."
+    },
+    "EqualEase can read this input’s volume, but this device does not expose volume control.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase can read this input’s volume, but this device does not expose volume control."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase kan læse denne indgangs lydstyrke, men enheden tilbyder ikke lydstyrkekontrol."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase kann die Lautstärke dieses Eingangs lesen, aber dieses Gerät stellt keine Lautstärkesteuerung bereit."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase puede leer el volumen de esta entrada, pero este dispositivo no expone control de volumen."
+          }
+        }
+      },
+      "comment": "Help text below the input volume slider when EqualEase can read but not set the current microphone input level."
+    },
+    "This input does not expose volume control. Use System Settings or the device’s own controls if available.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This input does not expose volume control. Use System Settings or the device’s own controls if available."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denne indgang tilbyder ikke lydstyrkekontrol. Brug Systemindstillinger eller enhedens egne kontroller, hvis de findes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Eingang stellt keine Lautstärkesteuerung bereit. Verwende die Systemeinstellungen oder, falls verfügbar, die Bedienelemente des Geräts."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta entrada no expone control de volumen. Usa Ajustes del Sistema o los controles del propio dispositivo si están disponibles."
+          }
+        }
+      },
+      "comment": "Help text below the input volume slider when the current microphone input does not expose volume control."
+    },
+    "Built-ins are read-only templates. EQ and gain changes are live until you save them as a new preset.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Built-ins are read-only templates. EQ and gain changes are live until you save them as a new preset."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indbyggede forudindstillinger er skrivebeskyttede skabeloner. EQ- og gain-ændringer er live, indtil du gemmer dem som en ny forudindstilling."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Integrierte Presets sind schreibgeschützte Vorlagen. EQ- und Gain-Änderungen sind live, bis du sie als neues Preset speicherst."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los preajustes integrados son plantillas de solo lectura. Los cambios de EQ y ganancia son en vivo hasta que los guardes como un preajuste nuevo."
+          }
+        }
+      },
+      "comment": "Description under Presets settings when a built-in preset is selected."
+    },
+    "Changes are live for listening. Save the custom preset when you want to keep them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changes are live for listening. Save the custom preset when you want to keep them."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ændringerne er live, mens du lytter. Gem den brugerdefinerede forudindstilling, når du vil beholde dem."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Änderungen sind beim Anhören live. Speichere das eigene Preset, wenn du sie behalten möchtest."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los cambios se aplican en vivo al escuchar. Guarda el preajuste personalizado cuando quieras conservarlos."
+          }
+        }
+      },
+      "comment": "Description under Presets settings when a custom preset is selected."
+    },
+    "Choose a preset to edit EQ values.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a preset to edit EQ values."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg en forudindstilling for at redigere EQ-værdier."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle ein Preset aus, um EQ-Werte zu bearbeiten."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un preajuste para editar valores de EQ."
+          }
+        }
+      },
+      "comment": "Description under Presets settings when no preset is selected."
+    },
+    "Website": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Website"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Websted"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Website"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sitio web"
+          }
+        }
+      },
+      "comment": "Subtitle for a website preset rule row."
+    },
+    "Application": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Application"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Program"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anwendung"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplicación"
+          }
+        }
+      },
+      "comment": "Subtitle for an application preset rule row."
+    },
+    "Active app": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active app"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv app"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktive App"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App activa"
+          }
+        }
+      },
+      "comment": "Subtitle for the current focused app row in preset rules."
+    },
+    "Active website": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active website"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktivt websted"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktive Website"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sitio web activo"
+          }
+        }
+      },
+      "comment": "Subtitle for the current focused website row in preset rules."
+    },
+    "Read the active page only when you choose it": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read the active page only when you choose it"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Læs kun den aktive side, når du vælger det"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lies die aktive Seite nur, wenn du es auswählst"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lee la página activa solo cuando lo elijas"
+          }
+        }
+      },
+      "comment": "Subtitle for the supported browser page row before EqualEase has read the current page."
+    },
+    "Use Preset": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use Preset"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brug forudindstilling"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset verwenden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar preajuste"
+          }
+        }
+      },
+      "comment": "Button title for assigning the selected preset to the current app or website."
+    },
+    "Update Preset": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update Preset"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opdater forudindstilling"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset aktualisieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualizar preajuste"
+          }
+        }
+      },
+      "comment": "Button title for updating the preset assigned to the current website."
+    },
+    "Current %@ page": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current %@ page"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuel %@-side"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuelle %@-Seite"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Página actual de %@"
+          }
+        }
+      },
+      "comment": "Title for the current browser page row. Placeholder is the browser name, such as Safari."
+    },
+    "Current web page": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current web page"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuel webside"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuelle Webseite"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Página web actual"
+          }
+        }
+      },
+      "comment": "Title for the current browser page row when the browser name is unknown."
+    },
+    "Save Preset As": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save Preset As"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gem forudindstilling som"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset speichern unter"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar preajuste como"
+          }
+        }
+      },
+      "comment": "Title for the sheet that saves the current preset as a new custom preset."
+    },
+    "Choose a name for a custom copy of \"%@\".": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a name for a custom copy of \"%@\"."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg et navn til en brugerdefineret kopi af \"%@\"."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle einen Namen für eine eigene Kopie von „%@“."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un nombre para una copia personalizada de “%@”."
+          }
+        }
+      },
+      "comment": "Message in the Save Preset As sheet. Placeholder is the source preset name."
+    },
+    "this preset": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "this preset"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "denne forudindstilling"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dieses Preset"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "este preajuste"
+          }
+        }
+      },
+      "comment": "Fallback preset name in the Save Preset As sheet."
+    },
+    "Rename Preset": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename Preset"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omdøb forudindstilling"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset umbenennen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renombrar preajuste"
+          }
+        }
+      },
+      "comment": "Title for the sheet that renames a custom preset."
+    },
+    "Choose a new name for \"%@\".": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a new name for \"%@\"."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg et nyt navn til \"%@\"."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle einen neuen Namen für „%@“."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un nombre nuevo para “%@”."
+          }
+        }
+      },
+      "comment": "Message in the Rename Preset sheet. Placeholder is the current custom preset name."
+    },
+    "EqualEase Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase Settings"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase-indstillinger"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase-Einstellungen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes de EqualEase"
+          }
+        }
+      },
+      "comment": "Title of the EqualEase settings window."
     }
   },
   "version": "1.0"

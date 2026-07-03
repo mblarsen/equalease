@@ -278,7 +278,7 @@ final class EqualEaseAppDelegate: NSObject, NSApplicationDelegate {
             backing: .buffered,
             defer: false
         )
-        window.title = "EqualEase Settings"
+        window.title = String(localized: "EqualEase Settings", comment: "Title of the EqualEase settings window.")
         window.isReleasedWhenClosed = false
         window.center()
         window.contentViewController = makeManagementContentController(selectedTab: selectedTab)

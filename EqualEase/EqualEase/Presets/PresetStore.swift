@@ -359,84 +359,84 @@ final class PresetStore: ObservableObject {
     private static let defaultBuiltInPresets: [EQPreset] = [
         EQPreset(
             id: "built-in-flat",
-            name: String(localized: "Flat", comment: "Built-in EQ preset name; neutral equalizer with no boosts or cuts."),
+            name: "Flat",
             source: .builtIn,
             bandGains: Array(repeating: 0, count: 10),
             outputGain: 1.0
         ),
         EQPreset(
             id: "built-in-voice-boost",
-            name: String(localized: "Voice Boost", comment: "Built-in EQ preset name for making speech clearer in calls or videos."),
+            name: "Voice Boost",
             source: .builtIn,
             bandGains: [-5, -4, -2, 0, 2, 3.5, 4, 2, -1, -3],
             outputGain: 0.9
         ),
         EQPreset(
             id: "built-in-podcast",
-            name: String(localized: "Podcast", comment: "Built-in EQ preset name for spoken-word podcast listening."),
+            name: "Podcast",
             source: .builtIn,
             bandGains: [-4, -3, -1, 1, 2, 2.5, 3, 1.5, -1, -3],
             outputGain: 0.9
         ),
         EQPreset(
             id: "built-in-de-mud",
-            name: String(localized: "De-Mud", comment: "Built-in EQ preset name; reduces muddy low-mid frequencies."),
+            name: "De-Mud",
             source: .builtIn,
             bandGains: [-2, -3, -5, -4, -2, 1, 2, 1, 0, -1],
             outputGain: 0.95
         ),
         EQPreset(
             id: "built-in-bass-boost",
-            name: String(localized: "Bass Boost", comment: "Built-in EQ preset name; emphasizes low frequencies."),
+            name: "Bass Boost",
             source: .builtIn,
             bandGains: [5, 4, 3, 1.5, 0, 0, -1, -1.5, -2, -2],
             outputGain: 0.85
         ),
         EQPreset(
             id: "built-in-treble-boost",
-            name: String(localized: "Treble Boost", comment: "Built-in EQ preset name; emphasizes high frequencies."),
+            name: "Treble Boost",
             source: .builtIn,
             bandGains: [-2, -2, -1, 0, 0, 1, 2.5, 4, 5, 5],
             outputGain: 0.85
         ),
         EQPreset(
             id: "built-in-loudness",
-            name: String(localized: "Loudness", comment: "Built-in EQ preset name; boosts perceived fullness at low listening levels."),
+            name: "Loudness",
             source: .builtIn,
             bandGains: [4, 3, 2, 0, -1, -1, 0, 2, 3, 3],
             outputGain: 0.85
         ),
         EQPreset(
             id: "built-in-night-mode",
-            name: String(localized: "Night Mode", comment: "Built-in EQ preset name for quieter listening with reduced extremes."),
+            name: "Night Mode",
             source: .builtIn,
             bandGains: [-5, -4, -3, -1, 1, 2, 1, -2, -5, -6],
             outputGain: 0.75
         ),
         EQPreset(
             id: "built-in-small-speakers",
-            name: String(localized: "Small Speakers", comment: "Built-in EQ preset name for laptop or compact speakers."),
+            name: "Small Speakers",
             source: .builtIn,
             bandGains: [-4, -2, 2, 3, 1, 0, 1, 2, 1, -1],
             outputGain: 0.9
         ),
         EQPreset(
             id: "built-in-reduce-rumble",
-            name: String(localized: "Reduce Rumble", comment: "Built-in EQ preset name; cuts very low frequencies and rumble."),
+            name: "Reduce Rumble",
             source: .builtIn,
             bandGains: [-12, -10, -7, -3, 0, 0, 0, 0, 0, 0],
             outputGain: 0.95
         ),
         EQPreset(
             id: "built-in-warm",
-            name: String(localized: "Warm", comment: "Built-in EQ preset name; warmer, less bright sound."),
+            name: "Warm",
             source: .builtIn,
             bandGains: [2, 2.5, 2, 1, 0, -0.5, -1, -1.5, -2, -2],
             outputGain: 0.95
         ),
         EQPreset(
             id: "built-in-muffled",
-            name: String(localized: "Muffled", comment: "Built-in EQ preset name; deliberately subdued/background sound for less prominent audio."),
+            name: "Muffled",
             source: .builtIn,
             bandGains: [0, 0, -1, -2, -4, -6, -8, -10, -12, -12],
             outputGain: 0.5

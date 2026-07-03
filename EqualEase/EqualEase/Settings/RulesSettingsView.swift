@@ -47,7 +47,7 @@ struct RulesSettingsView: View {
                     ruleRow(
                         icon: .website,
                         title: row.displayName,
-                        subtitle: "Website",
+                        subtitle: String(localized: "Website", comment: "Subtitle for a website preset rule row."),
                         presetID: row.presetID
                     ) {
                         rulesActions.clearWebsiteRule(siteKey: row.siteKey)
@@ -61,7 +61,7 @@ struct RulesSettingsView: View {
                     ruleRow(
                         icon: .app(row.bundleIdentifier),
                         title: row.displayName,
-                        subtitle: "Application",
+                        subtitle: String(localized: "Application", comment: "Subtitle for an application preset rule row."),
                         presetID: row.presetID
                     ) {
                         rulesActions.clearAppRule(bundleIdentifier: row.bundleIdentifier)
@@ -84,7 +84,8 @@ struct RulesSettingsView: View {
                 currentFocusRow(
                     icon: .app(activeApp.bundleIdentifier),
                     title: activeApp.displayName,
-                    subtitle: "Active app"
+                    subtitle: String(localized: "Active app", comment: "Subtitle for the current focused app row in preset rules."),
+                    buttonTitle: "Use Preset"
                 ) {
                     rulesActions.assignSelectedPreset(to: activeApp)
                 }
@@ -97,7 +98,7 @@ struct RulesSettingsView: View {
                 currentFocusRow(
                     icon: .website,
                     title: activePage.displayName,
-                    subtitle: "Active website",
+                    subtitle: String(localized: "Active website", comment: "Subtitle for the current focused website row in preset rules."),
                     buttonTitle: websiteRuleButtonTitle(for: activePage)
                 ) {
                     rulesActions.assignSelectedPreset(to: activePage)
@@ -106,7 +107,7 @@ struct RulesSettingsView: View {
                 currentFocusRow(
                     icon: .website,
                     title: currentBrowserPageTitle,
-                    subtitle: "Read the active page only when you choose it",
+                    subtitle: String(localized: "Read the active page only when you choose it", comment: "Subtitle for the supported browser page row before EqualEase has read the current page."),
                     buttonTitle: "Use Preset"
                 ) {
                     rulesActions.requestCurrentBrowserPageAndAssignSelectedPreset()
@@ -129,12 +130,13 @@ struct RulesSettingsView: View {
 
     private var currentBrowserPageTitle: String {
         if let browserDisplayName = browserPageObserver.supportedBrowserDisplayName {
-            return "Current \(browserDisplayName) page"
+            let format = String(localized: "Current %@ page", comment: "Title for the current browser page row. Placeholder is the browser name, such as Safari.")
+            return String(format: format, browserDisplayName)
         }
-        return "Current web page"
+        return String(localized: "Current web page", comment: "Title for the current browser page row when the browser name is unknown.")
     }
 
-    private func websiteRuleButtonTitle(for activePage: BrowserPageIdentity) -> String {
+    private func websiteRuleButtonTitle(for activePage: BrowserPageIdentity) -> LocalizedStringKey {
         presetStore.websitePresetIDs[activePage.siteKey] == nil ? "Use Preset" : "Update Preset"
     }
 
@@ -145,7 +147,7 @@ struct RulesSettingsView: View {
         )
     }
 
-    private func currentFocusRow(icon: RuleIcon, title: String, subtitle: String, buttonTitle: String = "Use Preset", action: @escaping () -> Void) -> some View {
+    private func currentFocusRow(icon: RuleIcon, title: String, subtitle: String, buttonTitle: LocalizedStringKey, action: @escaping () -> Void) -> some View {
         HStack(spacing: 12) {
             iconView(icon)
 

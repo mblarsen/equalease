@@ -54,10 +54,10 @@ struct SettingsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 8) {
-                settingsTabButton(.general, title: "General", systemImage: "gearshape")
-                settingsTabButton(.presets, title: "Presets", systemImage: "slider.horizontal.3")
-                settingsTabButton(.rules, title: "Rules", systemImage: "switch.2")
-                settingsTabButton(.diagnostics, title: "Diagnostics", systemImage: "stethoscope")
+                settingsTabButton(.general, title: String(localized: "General", comment: "Settings tab title for general app settings."), systemImage: "gearshape")
+                settingsTabButton(.presets, title: String(localized: "Presets", comment: "Settings tab title for preset settings."), systemImage: "slider.horizontal.3")
+                settingsTabButton(.rules, title: String(localized: "Rules", comment: "Settings tab title for preset rule settings."), systemImage: "switch.2")
+                settingsTabButton(.diagnostics, title: String(localized: "Diagnostics", comment: "Settings tab title for diagnostics settings."), systemImage: "stethoscope")
                 Spacer()
             }
 

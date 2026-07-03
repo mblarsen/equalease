@@ -25,6 +25,28 @@ final class PresetStoreManagementTests: XCTestCase {
         XCTAssertTrue(store.builtInPresets.contains(builtInPreset))
     }
 
+    func testBuiltInPresetNamesRemainEnglishProductNames() throws {
+        let store = PresetStore(persistenceURL: temporaryPresetURL())
+
+        XCTAssertEqual(
+            store.builtInPresets.map(\.name),
+            [
+                "Flat",
+                "Voice Boost",
+                "Podcast",
+                "De-Mud",
+                "Bass Boost",
+                "Treble Boost",
+                "Loudness",
+                "Night Mode",
+                "Small Speakers",
+                "Reduce Rumble",
+                "Warm",
+                "Muffled",
+            ]
+        )
+    }
+
     func testCustomPresetCanBeRenamedUpdatedDuplicatedAndDeleted() throws {
         let store = PresetStore(persistenceURL: temporaryPresetURL())
         let customPreset = store.saveCurrentPreset(
