@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "%.1f dB"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%.1f dB"
+          }
         }
       },
       "comment": "Decibel gain value. Keep the dB unit with the numeric value."
@@ -56,6 +62,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ copia"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ प्रतिलिपि"
           }
         }
       },
@@ -87,6 +99,12 @@
             "state": "translated",
             "value": "%@ decibelios"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ डेसिबेल"
+          }
         }
       },
       "comment": "VoiceOver value for decibel gain. Interpolation is a formatted gain value."
@@ -116,6 +134,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ para %2$@"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ — %2$@ का लागि"
           }
         }
       },
@@ -147,6 +171,12 @@
             "state": "translated",
             "value": "Banda de %@ hercios"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ हर्ज ब्यान्ड"
+          }
         }
       },
       "comment": "VoiceOver label for an EQ frequency band. Interpolation is the band frequency label."
@@ -176,6 +206,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ está al %2$lld%%, por debajo de tu umbral de volumen bajo del %3$lld%%."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$lld%% मा छ, तपाईंको %3$lld%% कम-भोल्युम सीमाभन्दा तल।"
           }
         }
       },
@@ -207,6 +243,12 @@
             "state": "translated",
             "value": "Volumen de %@"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ को भोल्युम"
+          }
         }
       },
       "comment": "Accessibility label for per-app volume. Interpolation is an app name."
@@ -237,6 +279,12 @@
             "state": "translated",
             "value": "%1$@ · PID %2$d · objeto de proceso %3$u"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · PID %2$d · प्रोसेस वस्तु %3$u"
+          }
         }
       }
     },
@@ -265,6 +313,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ · en pausa"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · पज गरिएको"
           }
         }
       },
@@ -296,6 +350,12 @@
             "state": "translated",
             "value": "%1$@, preamplificador al %2$lld%%"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$lld%% प्रिअ्याम्प"
+          }
         }
       },
       "comment": "Audio routing processing summary. First interpolation is EQ on/off text; second is preamp percentage."
@@ -325,6 +385,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@. Reiniciando la ruta de audio hacia %2$@…"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@। अडियो रूटिङ %2$@ मा पुनः सुरु गर्दै…"
           }
         }
       },
@@ -356,6 +422,12 @@
             "state": "translated",
             "value": "%lld por ciento"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld प्रतिशत"
+          }
         }
       }
     },
@@ -381,6 +453,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%%"
+          }
+        },
+        "ne": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld%%"
@@ -415,6 +493,12 @@
             "state": "translated",
             "value": "EQ de 10 bandas"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-ब्यान्ड EQ"
+          }
         }
       }
     },
@@ -443,6 +527,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gráfico del ecualizador de 10 bandas"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-ब्यान्ड इक्वलाइजर ग्राफ"
           }
         }
       }
@@ -473,6 +563,12 @@
             "state": "translated",
             "value": "Acerca de EqualEase"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase बारे"
+          }
         }
       }
     },
@@ -502,6 +598,12 @@
             "state": "translated",
             "value": "Activo"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सक्रिय"
+          }
         }
       }
     },
@@ -530,6 +632,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La app activa %1$@ (%2$@) recuerda %3$@."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सक्रिय एप %1$@ (%2$@) ले %3$@ सम्झेको छ।"
           }
         }
       },
@@ -561,6 +669,12 @@
             "state": "translated",
             "value": "El sitio web activo %1$@ (%2$@) recuerda %3$@."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सक्रिय वेबसाइट %1$@ (%2$@) ले %3$@ सम्झेको छ।"
+          }
         }
       },
       "comment": "Preset resolution explanation. Interpolations are website display name, website host/key, and preset name."
@@ -590,6 +704,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Activo: audio del sistema procesado hacia %1$@ (%2$@)."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सक्रिय: प्रोसेस गरिएको सिस्टम अडियो %1$@ मा रूट गर्दै (%2$@)।"
           }
         }
       },
@@ -621,6 +741,12 @@
             "state": "translated",
             "value": "Permitir notificaciones…"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सूचनाहरू अनुमति दिनुहोस्…"
+          }
         }
       }
     },
@@ -649,6 +775,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Permitir que la automatización cambie los ajustes de sonido"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अटोमेसनलाई ध्वनि सेटिङ परिवर्तन गर्न दिनुहोस्"
           }
         }
       }
@@ -679,6 +811,12 @@
             "state": "translated",
             "value": "Permitir control remoto desde el teléfono en la red local"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "स्थानीय नेटवर्कमा फोन रिमोट कन्ट्रोल अनुमति दिनुहोस्"
+          }
         }
       }
     },
@@ -707,6 +845,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Permitidas"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अनुमति दिइएको"
           }
         }
       },
@@ -738,6 +882,12 @@
             "state": "translated",
             "value": "Idioma de la app"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "एप भाषा"
+          }
         }
       },
       "comment": "Label for the Settings picker that chooses the app language override."
@@ -767,6 +917,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Silenciar"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "म्युट"
           }
         }
       },
@@ -798,6 +954,12 @@
             "state": "translated",
             "value": "Sin procesar"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बाइपास"
+          }
         }
       },
       "comment": "Per-app audio mode label: app audio bypasses EqualEase processing but still routes through EqualEase."
@@ -827,6 +989,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Procesar"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अन"
           }
         }
       },
@@ -858,6 +1026,12 @@
             "state": "translated",
             "value": "Aprueba EqualEase en Ajustes del Sistema > General > Ítems de inicio para terminar de activar la apertura al iniciar sesión."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "लगइनमा सुरु गर्ने सुविधा सक्षम पार्न System Settings > General > Login Items मा EqualEase लाई स्वीकृत गर्नुहोस्।"
+          }
         }
       }
     },
@@ -886,6 +1060,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apps de audio cambiadas"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अडियो एपहरू परिवर्तन भए"
           }
         }
       },
@@ -917,6 +1097,12 @@
             "state": "translated",
             "value": "Detenido"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रोकिएको"
+          }
         }
       },
       "comment": "Audio routing status when EqualEase is not routing system audio."
@@ -947,6 +1133,12 @@
             "state": "translated",
             "value": "El audio se queda en este Mac"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अडियो यही Mac मा रहन्छ"
+          }
         }
       }
     },
@@ -975,6 +1167,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La carga de autenticación debe incluir clientID y token."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रमाणीकरण पेलोडमा clientID र टोकन हुनै पर्छ।"
           }
         }
       },
@@ -1006,6 +1204,12 @@
             "state": "translated",
             "value": "Elevar automáticamente los micrófonos compatibles hasta un mínimo"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "समर्थित माइक्रोफोनहरूलाई न्यूनतममा स्वतः बढाउनुहोस्"
+          }
         }
       }
     },
@@ -1034,6 +1238,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Salidas disponibles"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "उपलब्ध आउटपुटहरू"
           }
         }
       }
@@ -1064,6 +1274,12 @@
             "state": "translated",
             "value": "Banda"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ब्यान्ड"
+          }
         }
       }
     },
@@ -1092,6 +1308,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bass Boost"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बेस बूस्ट"
           }
         }
       },
@@ -1123,6 +1345,12 @@
             "state": "translated",
             "value": "Omitir"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बाइपास"
+          }
         }
       },
       "comment": "Audio control label. Means pass audio through EqualEase without EQ processing; it does not turn EqualEase off."
@@ -1152,6 +1380,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Omitir procesamiento de EQ"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EQ प्रोसेसिङ बाइपास गर्नुहोस्"
           }
         }
       },
@@ -1183,6 +1417,12 @@
             "state": "translated",
             "value": "Bypass: pasar sin procesar."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बाइपास: प्रोसेस नगरी पास-थ्रु।"
+          }
         }
       }
     },
@@ -1211,6 +1451,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cancelar"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रद्द गर्नुहोस्"
           }
         }
       }
@@ -1241,6 +1487,12 @@
             "state": "translated",
             "value": "Cancelar enlace"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पेयरिङ रद्द गर्नुहोस्"
+          }
         }
       }
     },
@@ -1269,6 +1521,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elige Predeterminado del sistema para seguir el orden de idiomas de macOS. Los cambios de idioma se aplican después de cerrar y volver a abrir EqualEase."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आफ्नो macOS भाषा क्रम पछ्याउन सिस्टम डिफल्ट छान्नुहोस्। भाषा परिवर्तनहरू EqualEase बन्द गरेर फेरि खोलेपछि लागू हुन्छन्।"
           }
         }
       },
@@ -1300,6 +1558,12 @@
             "state": "translated",
             "value": "Elige el idioma que EqualEase debe usar después del próximo inicio."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अर्को लन्चपछि EqualEase ले प्रयोग गर्ने भाषा छान्नुहोस्।"
+          }
         }
       },
       "comment": "Accessibility hint for the Settings language picker."
@@ -1330,6 +1594,12 @@
             "state": "translated",
             "value": "Elige el preajuste que quieres escuchar y editar en este panel de trabajo."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यो कार्यक्षेत्रमा सुन्न र सम्पादन गर्न प्रिसेट छान्नुहोस्।"
+          }
         }
       }
     },
@@ -1359,6 +1629,12 @@
             "state": "translated",
             "value": "Elige a dónde se envía el audio procesado. Seguir la salida del sistema lo mantiene sincronizado con la salida actual de tu Mac."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रोसेस गरिएको अडियो कहाँ पठाउने छान्नुहोस्। सिस्टम आउटपुट पछ्याउँदा यो तपाईंको Mac को हालको आउटपुटसँग मिलेर रहन्छ।"
+          }
         }
       }
     },
@@ -1387,6 +1663,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Limpieza completada: taps obsoletos: %1$lld; dispositivos agregados: %2$lld."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld पुराना ट्याप र %2$lld एग्रिगेट डिभाइस सफा गरियो।"
           }
         }
       },
@@ -1418,6 +1700,12 @@
             "state": "translated",
             "value": "Limpiar estado de audio"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अडियो अवस्था सफा गर्नुहोस्"
+          }
         }
       }
     },
@@ -1447,6 +1735,12 @@
             "state": "translated",
             "value": "Borrar"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "खाली गर्नुहोस्"
+          }
         }
       }
     },
@@ -1475,6 +1769,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La carga del comando no incluye un valor numérico."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कमाण्ड पेलोडमा संख्यात्मक मान छैन।"
           }
         }
       },
@@ -1506,6 +1806,12 @@
             "state": "translated",
             "value": "La carga del comando debe incluir command/name/action."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कमाण्ड पेलोडमा command/name/action हुनै पर्छ।"
+          }
         }
       },
       "comment": "Remote-control protocol error for missing command name."
@@ -1536,6 +1842,12 @@
             "state": "translated",
             "value": "Taps de apps configurados"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कन्फिगर गरिएका एप ट्यापहरू"
+          }
         }
       }
     },
@@ -1564,6 +1876,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Conectado — autenticando…"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "जडान भयो — प्रमाणीकरण गर्दै…"
           }
         }
       },
@@ -1595,6 +1913,12 @@
             "state": "translated",
             "value": "Conectando…"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "जडान गर्दै…"
+          }
         }
       },
       "comment": "Phone web remote connection status before WebSocket connects."
@@ -1624,6 +1948,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Error de conexión"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "जडान त्रुटि"
           }
         }
       },
@@ -1655,6 +1985,12 @@
             "state": "translated",
             "value": "No se pudo limpiar el estado de audio: %@"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अडियो अवस्था सफा गर्न सकिएन: %@"
+          }
         }
       },
       "comment": "Audio cleanup failure status. Interpolation is the underlying system error."
@@ -1684,6 +2020,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se pudo iniciar la ruta de audio: %@"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अडियो रूटिङ सुरु गर्न सकिएन: %@"
           }
         }
       },
@@ -1715,6 +2057,12 @@
             "state": "translated",
             "value": "Crea un nuevo preajuste personalizado a partir de los ajustes actuales de EQ y ganancia en vivo."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हालको लाइभ EQ र गेन सेटिङबाट नयाँ कस्टम प्रिसेट बनाउनुहोस्।"
+          }
         }
       }
     },
@@ -1743,6 +2091,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Actual"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हालको"
           }
         }
       }
@@ -1773,6 +2127,12 @@
             "state": "translated",
             "value": "Foco actual"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हालको फोकस"
+          }
         }
       }
     },
@@ -1801,6 +2161,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Entrada actual"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हालको इनपुट"
           }
         }
       }
@@ -1831,6 +2197,12 @@
             "state": "translated",
             "value": "Dispositivo de entrada actual: %@"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हालको इनपुट डिभाइस: %@"
+          }
         }
       }
     },
@@ -1859,6 +2231,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preajuste actual"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हालको प्रिसेट"
           }
         }
       }
@@ -1889,6 +2267,12 @@
             "state": "translated",
             "value": "Estado actual"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हालको स्थिति"
+          }
         }
       }
     },
@@ -1917,6 +2301,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Personalizado"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कस्टम"
           }
         }
       }
@@ -1947,6 +2337,12 @@
             "state": "translated",
             "value": "Bypass de DSP"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DSP बाइपास"
+          }
         }
       }
     },
@@ -1975,6 +2371,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "DSP en bypass"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DSP बाइपास गरिएको"
           }
         }
       },
@@ -2006,6 +2408,12 @@
             "state": "translated",
             "value": "De-Mud"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मड घटाउने"
+          }
         }
       },
       "comment": "Built-in EQ preset name; reduces muddy low-mid frequencies."
@@ -2036,6 +2444,12 @@
             "state": "translated",
             "value": "El umbral predeterminado es 35% y el mínimo predeterminado de elevación es 50%. EqualEase solo observa el volumen de entrada de macOS y publica notificaciones locales en este Mac; no captura, enruta, procesa, refuerza, ecualiza, guarda ni sube audio del micrófono."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पूर्वनिर्धारित सीमा 35% हो र पूर्वनिर्धारित क्याप न्यूनतम 50% हो। EqualEase ले macOS इनपुट भोल्युम मात्र हेर्छ र यस Mac मा स्थानीय सूचनाहरू पोस्ट गर्छ; यसले माइक्रोफोन अडियो क्याप्चर, रूट, प्रोसेस, बुस्ट, EQ, सुरक्षित वा अपलोड गर्दैन।"
+          }
         }
       }
     },
@@ -2064,6 +2478,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eliminar"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मेटाउनुहोस्"
           }
         }
       }
@@ -2094,6 +2514,12 @@
             "state": "translated",
             "value": "¿Eliminar \"%@\"? Esta acción no se puede deshacer."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\"%@\" मेटाउने? यसलाई उल्ट्याउन सकिँदैन।"
+          }
         }
       }
     },
@@ -2123,6 +2549,12 @@
             "state": "translated",
             "value": "¿Eliminar preajuste?"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट मेटाउने?"
+          }
         }
       }
     },
@@ -2151,6 +2583,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Denegadas en macOS"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS मा अस्वीकृत"
           }
         }
       },
@@ -2182,6 +2620,12 @@
             "state": "translated",
             "value": "Solo control de diagnóstico: el bypass global sigue enviando el audio a través de EqualEase. El bypass por app se muestra abajo y mantiene esa app con tap para que pueda seguir la salida seleccionada de EqualEase."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "डायग्नोस्टिक कन्ट्रोल मात्र: ग्लोबल बाइपास हुँदा पनि अडियो EqualEase मार्फत रूट हुन्छ। प्रति-एप बाइपास तल देखाइएको छ र त्यो एप ट्याप गरिएको अवस्थामा राख्छ, ताकि त्यसले EqualEase को चयन गरिएको आउटपुट पछ्याउन सकोस्।"
+          }
         }
       }
     },
@@ -2210,6 +2654,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desconectado — reintentando…"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "जडान छुट्यो — पुनः प्रयास गर्दै…"
           }
         }
       },
@@ -2241,6 +2691,12 @@
             "state": "translated",
             "value": "Apps de audio detectadas"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "फेला परेका अडियो एपहरू"
+          }
         }
       }
     },
@@ -2269,6 +2725,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EQ desactivado"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EQ बन्द"
           }
         }
       },
@@ -2300,6 +2762,12 @@
             "state": "translated",
             "value": "EQ activado"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EQ अन"
+          }
         }
       },
       "comment": "Audio routing processing summary when equalizer filters are enabled."
@@ -2330,6 +2798,12 @@
             "state": "translated",
             "value": "Activar EQ de 10 bandas"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-ब्यान्ड EQ सक्षम गर्नुहोस्"
+          }
         }
       }
     },
@@ -2358,6 +2832,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Introduce el código de tu Mac para enlazar este control remoto."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यो रिमोट पेयर गर्न आफ्नो Mac मा देखिएको कोड प्रविष्ट गर्नुहोस्।"
           }
         }
       },
@@ -2389,6 +2869,12 @@
             "state": "translated",
             "value": "Introduce el código de seis dígitos que se muestra en tu Mac."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आफ्नो Mac मा देखिएको छ-अङ्कको कोड प्रविष्ट गर्नुहोस्।"
+          }
         }
       },
       "comment": "Phone web remote validation message for an incomplete pairing code."
@@ -2419,6 +2905,12 @@
             "state": "translated",
             "value": "Introduce este código en el control remoto del teléfono. Caduca en %@ y solo se usa una vez."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यो कोड फोन रिमोटमा प्रविष्ट गर्नुहोस्। यो %@ मा समाप्त हुन्छ र एक पटक मात्र प्रयोग हुन्छ।"
+          }
         }
       }
     },
@@ -2447,6 +2939,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Al sobre le falta un tipo compatible."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनभेलपमा समर्थित प्रकार छैन।"
           }
         }
       },
@@ -2478,6 +2976,12 @@
             "state": "translated",
             "value": "El sobre debe ser un objeto JSON."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनभेलप JSON वस्तु हुनै पर्छ।"
+          }
         }
       },
       "comment": "Remote-control protocol error for malformed WebSocket JSON."
@@ -2504,6 +3008,12 @@
           }
         },
         "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase"
+          }
+        },
+        "ne": {
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase"
@@ -2537,6 +3047,12 @@
             "state": "translated",
             "value": "Control remoto de EqualEase"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase रिमोट"
+          }
         }
       },
       "comment": "Browser title for the paired phone web remote."
@@ -2567,6 +3083,12 @@
             "state": "translated",
             "value": "EqualEase puede abrirse discretamente en la barra de menús. La ruta de audio permanece desactivada hasta que la actives, salvo que actives explícitamente la ruta automática aquí. El procesamiento de audio se realiza localmente en este Mac."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase मेनु बारमा चुपचाप सुरु हुन सक्छ। तपाईंले अन नगरेसम्म, वा यहाँ स्पष्ट रूपमा स्वचालित रूटिङ सक्षम नगरेसम्म, अडियो रूटिङ बन्द रहन्छ। अडियो प्रोसेसिङ यस Mac मै स्थानीय रूपमा हुन्छ।"
+          }
         }
       }
     },
@@ -2595,6 +3117,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase puede cambiar a este preajuste cuando %@ pase a ser la app activa y volver al preajuste predeterminado seleccionado cuando cambies a otra app."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ सक्रिय एप हुँदा EqualEase यो प्रिसेटमा स्विच हुन सक्छ, अनि तपाईं अर्कोमा जाँदा चयन गरिएको पूर्वनिर्धारित प्रिसेटमा फर्कन्छ।"
           }
         }
       },
@@ -2626,6 +3154,12 @@
             "state": "translated",
             "value": "EqualEase puede cambiar a este preajuste cuando %@ sea el sitio web activo en un navegador compatible y volver al preajuste de la app o al predeterminado cuando cambies a otro sitio."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "समर्थित ब्राउजरमा %@ सक्रिय वेबसाइट हुँदा EqualEase यो प्रिसेटमा स्विच हुन सक्छ, अनि तपाईं अर्कोमा जाँदा तपाईंको एप वा पूर्वनिर्धारित प्रिसेटमा फर्कन्छ।"
+          }
         }
       },
       "comment": "Smart-switching prompt body for website rules. Interpolation is a website display name or host."
@@ -2656,6 +3190,12 @@
             "state": "translated",
             "value": "EqualEase no pudo leer la página actual de %@. Comprueba el permiso de Automatización de macOS para EqualEase y vuelve a intentarlo."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase ले %@ को हालको पृष्ठ पढ्न सकेन। EqualEase का लागि macOS अटोमेसन अनुमति जाँचेर फेरि प्रयास गर्नुहोस्।"
+          }
         }
       }
     },
@@ -2684,6 +3224,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase procesa el audio localmente en este Mac. No graba, guarda, sube, vende ni comparte audio."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase ले अडियो यही Mac मा स्थानीय रूपमा प्रोसेस गर्छ। यसले अडियो रेकर्ड, सुरक्षित, अपलोड, बिक्री वा साझा गर्दैन।"
           }
         }
       }
@@ -2714,6 +3260,12 @@
             "state": "translated",
             "value": "EqualEase muestra el estado de entrada solo por comodidad. La selección de dispositivos de entrada, la ruta del micrófono y la EQ del micrófono quedan fuera del alcance intencionadamente."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase ले सुविधाका लागि मात्र इनपुट अवस्था देखाउँछ। इनपुट-डिभाइस चयन, माइक्रोफोन रूटिङ र माइक्रोफोन EQ जानाजान दायराबाहिर छन्।"
+          }
         }
       }
     },
@@ -2743,6 +3295,12 @@
             "state": "translated",
             "value": "Automatización externa"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बाह्य अटोमेसन"
+          }
         }
       }
     },
@@ -2771,6 +3329,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se pudo ajustar el volumen de entrada"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट भोल्युम सेट गर्न असफल"
           }
         }
       },
@@ -2802,6 +3366,12 @@
             "state": "translated",
             "value": "Error: %@"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "असफल: %@"
+          }
         }
       },
       "comment": "Local-network remote status when startup failed. Interpolation is the underlying error message."
@@ -2831,6 +3401,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Flat"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "फ्ल्याट"
           }
         }
       },
@@ -2862,6 +3438,12 @@
             "state": "translated",
             "value": "Seguir salida del sistema"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सिस्टम आउटपुट पछ्याउनुहोस्"
+          }
         }
       }
     },
@@ -2890,6 +3472,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ganancia"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "गेन"
           }
         }
       }
@@ -2920,6 +3508,12 @@
             "state": "translated",
             "value": "Ocultar"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "लुकाउनुहोस्"
+          }
         }
       }
     },
@@ -2948,6 +3542,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ocultar controles de %@"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ कन्ट्रोलहरू लुकाउनुहोस्"
           }
         }
       }
@@ -2978,6 +3578,12 @@
             "state": "translated",
             "value": "Ocultar controles de volumen de entrada"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट भोल्युम कन्ट्रोलहरू लुकाउनुहोस्"
+          }
         }
       }
     },
@@ -3006,6 +3612,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ocultar controles de ruta de audio"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रूटिङ कन्ट्रोलहरू लुकाउनुहोस्"
           }
         }
       }
@@ -3036,6 +3648,12 @@
             "state": "translated",
             "value": "Si el audio de desarrollo se queda en silencio, detén la ruta de audio y limpia los taps de Core Audio y dispositivos agregados propiedad de EqualEase."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "डेभलपमेन्ट अडियो मौन अवस्थामा अड्कियो भने, रूटिङ रोक्नुहोस् र EqualEase का Core Audio ट्याप र एग्रिगेट डिभाइसहरू सफा गर्नुहोस्।"
+          }
         }
       }
     },
@@ -3064,6 +3682,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ignora las reglas de preajustes de apps y sitios web, y mantiene el preajuste actual mientras cambias el foco."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तपाईं फोकस बदल्दा एप र वेबसाइट प्रिसेट नियमहरू बेवास्ता गरेर हालको प्रिसेट कायम राख्छ।"
           }
         }
       },
@@ -3095,6 +3719,12 @@
             "state": "translated",
             "value": "Entrada"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट"
+          }
         }
       }
     },
@@ -3123,6 +3753,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Volumen de entrada"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट भोल्युम"
           }
         }
       },
@@ -3154,6 +3790,12 @@
             "state": "translated",
             "value": "Volumen de entrada"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट भोल्युम"
+          }
         }
       }
     },
@@ -3182,6 +3824,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No disponible"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "उपलब्ध छैन"
           }
         }
       },
@@ -3213,6 +3861,12 @@
             "state": "translated",
             "value": "El volumen de entrada está bien."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट भोल्युम ठीक छ।"
+          }
         }
       },
       "comment": "Microphone protection status when the input volume is above the low-volume threshold."
@@ -3242,6 +3896,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "El volumen de entrada es bajo."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट भोल्युम कम छ।"
           }
         }
       },
@@ -3273,6 +3933,12 @@
             "state": "translated",
             "value": "El volumen de entrada es bajo; EqualEase no pudo ajustar el volumen de entrada de este dispositivo."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट भोल्युम कम छ; EqualEase ले यो डिभाइसको इनपुट भोल्युम सेट गर्न सकेन।"
+          }
         }
       },
       "comment": "Microphone protection status when an automatic cap attempt failed."
@@ -3302,6 +3968,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "El volumen de entrada es bajo; la elevación automática no está disponible para este dispositivo."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट भोल्युम कम छ; यो डिभाइसका लागि स्वचालित क्यापिङ उपलब्ध छैन।"
           }
         }
       },
@@ -3333,6 +4005,12 @@
             "state": "translated",
             "value": "El volumen de entrada es bajo; el intento de elevación está limitado temporalmente."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट भोल्युम कम छ; क्याप प्रयास दर-सीमित छ।"
+          }
         }
       },
       "comment": "Microphone protection status when EqualEase recently tried to raise input volume and is waiting before retrying."
@@ -3362,6 +4040,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No disponible"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "उपलब्ध छैन"
           }
         }
       },
@@ -3393,6 +4077,12 @@
             "state": "translated",
             "value": "El volumen de entrada era bajo y EqualEase lo elevó al %lld%%."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट भोल्युम कम थियो र EqualEase ले यसलाई %lld%% मा बढायो।"
+          }
         }
       },
       "comment": "Microphone protection status after automatically raising input volume. Interpolation is the configured minimum percentage."
@@ -3423,6 +4113,12 @@
             "state": "translated",
             "value": "Mantener EqualEase desactivado y mostrar los controles normales."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase बन्द राख्नुहोस् र सामान्य कन्ट्रोलहरू देखाउनुहोस्।"
+          }
         }
       }
     },
@@ -3451,6 +4147,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Idioma"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "भाषा"
           }
         }
       },
@@ -3482,6 +4184,12 @@
             "state": "translated",
             "value": "Último intento de elevación"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पछिल्लो क्याप प्रयास"
+          }
         }
       }
     },
@@ -3510,6 +4218,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Última notificación"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पछिल्लो सूचना"
           }
         }
       }
@@ -3540,6 +4254,12 @@
             "state": "translated",
             "value": "Abrir EqualEase al iniciar sesión"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तपाईं लगइन गर्दा EqualEase सुरु गर्नुहोस्"
+          }
         }
       }
     },
@@ -3568,6 +4288,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desactivado"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बन्द"
           }
         }
       },
@@ -3599,6 +4325,12 @@
             "state": "translated",
             "value": "Activado"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अन"
+          }
         }
       },
       "comment": "Launch-at-login status when EqualEase will launch automatically."
@@ -3628,6 +4360,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desconocido"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अज्ञात"
           }
         }
       },
@@ -3659,6 +4397,12 @@
             "state": "translated",
             "value": "Control remoto de red local"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "स्थानीय नेटवर्क रिमोट"
+          }
         }
       }
     },
@@ -3687,6 +4431,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Detenido"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रोकिएको"
           }
         }
       },
@@ -3718,6 +4468,12 @@
             "state": "translated",
             "value": "Inicio de sesión"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "लगइन"
+          }
         }
       }
     },
@@ -3746,6 +4502,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Loudness"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "लाउडनेस"
           }
         }
       },
@@ -3777,6 +4539,12 @@
             "state": "translated",
             "value": "Bajo"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कम"
+          }
         }
       }
     },
@@ -3806,6 +4574,12 @@
             "state": "translated",
             "value": "Protección contra volumen bajo del micrófono"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कम माइक्रोफोन भोल्युम सुरक्षा"
+          }
         }
       }
     },
@@ -3834,6 +4608,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La detección de volumen bajo no está disponible para este dispositivo de entrada."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यो इनपुट डिभाइसका लागि कम-भोल्युम पत्ता लगाउने सुविधा उपलब्ध छैन।"
           }
         }
       },
@@ -3865,6 +4645,12 @@
             "state": "translated",
             "value": "Umbral de volumen bajo"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कम-भोल्युम सीमा"
+          }
         }
       }
     },
@@ -3893,6 +4679,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gestionar"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "व्यवस्थापन गर्नुहोस्"
           }
         }
       }
@@ -3923,6 +4715,12 @@
             "state": "translated",
             "value": "Gestionar EqualEase…"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase व्यवस्थापन…"
+          }
         }
       }
     },
@@ -3952,6 +4750,12 @@
             "state": "translated",
             "value": "Gestionar preajustes"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेटहरू व्यवस्थापन गर्नुहोस्"
+          }
         }
       }
     },
@@ -3980,6 +4784,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reinicio manual solicitado"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "म्यानुअल पुनः सुरु अनुरोध गरियो"
           }
         }
       },
@@ -4011,6 +4821,12 @@
             "state": "translated",
             "value": "Activo"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सक्रिय"
+          }
         }
       },
       "comment": "Short menu-bar status when EqualEase audio routing is running."
@@ -4040,6 +4856,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Error"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "असफल"
           }
         }
       },
@@ -4071,6 +4893,12 @@
             "state": "translated",
             "value": "Desactivado"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बन्द"
+          }
         }
       },
       "comment": "Short menu-bar status when EqualEase audio routing is inactive."
@@ -4100,6 +4928,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Iniciando…"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सुरु हुँदै…"
           }
         }
       },
@@ -4131,6 +4965,12 @@
             "state": "translated",
             "value": "Mensaje"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सन्देश"
+          }
         }
       }
     },
@@ -4159,6 +4999,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "El volumen de entrada del micrófono es bajo"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "माइक्रोफोन इनपुट भोल्युम कम छ"
           }
         }
       },
@@ -4190,6 +5036,12 @@
             "state": "translated",
             "value": "Elevación mínima"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "न्यूनतम क्याप"
+          }
         }
       }
     },
@@ -4218,6 +5070,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Supervisando el volumen de entrada actual."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हालको इनपुट भोल्युम निगरानी गर्दै।"
           }
         }
       },
@@ -4249,6 +5107,12 @@
             "state": "translated",
             "value": "Más"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "थप"
+          }
         }
       }
     },
@@ -4277,6 +5141,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Muffled"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मद्धिम"
           }
         }
       },
@@ -4308,6 +5178,12 @@
             "state": "translated",
             "value": "Música"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "संगीत"
+          }
         }
       }
     },
@@ -4336,6 +5212,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Silenciar"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "म्युट"
           }
         }
       },
@@ -4367,6 +5249,12 @@
             "state": "translated",
             "value": "Silenciado: silencia esta app."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "म्युट: यो एप मौन बनाउनुहोस्।"
+          }
         }
       }
     },
@@ -4395,6 +5283,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Necesita aprobación"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "स्वीकृति चाहिन्छ"
           }
         }
       },
@@ -4426,6 +5320,12 @@
             "state": "translated",
             "value": "Nunca"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कहिल्यै होइन"
+          }
         }
       },
       "comment": "Status value meaning an event has not happened yet."
@@ -4455,6 +5355,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Night Mode"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "नाइट मोड"
           }
         }
       },
@@ -4486,6 +5392,12 @@
             "state": "translated",
             "value": "No se ha detectado ninguna app activa."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कुनै सक्रिय एप भेटिएन।"
+          }
         }
       }
     },
@@ -4514,6 +5426,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aún no se han detectado apps que emitan audio."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अहिलेसम्म अडियो निकाल्ने कुनै एप भेटिएको छैन।"
           }
         }
       }
@@ -4544,6 +5462,12 @@
             "state": "translated",
             "value": "No se han detectado apps que emitan audio."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अडियो निकाल्ने कुनै एप भेटिएन।"
+          }
         }
       }
     },
@@ -4572,6 +5496,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sin dispositivo de entrada"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इनपुट डिभाइस छैन"
           }
         }
       },
@@ -4603,6 +5533,12 @@
             "state": "translated",
             "value": "Aún no hay controles remotos enlazados."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अहिलेसम्म कुनै रिमोट पेयर गरिएको छैन।"
+          }
         }
       }
     },
@@ -4631,6 +5567,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sin preajuste"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट छैन"
           }
         }
       },
@@ -4662,6 +5604,12 @@
             "state": "translated",
             "value": "Aún no hay reglas de preajustes."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अहिलेसम्म कुनै प्रिसेट नियम छैन।"
+          }
         }
       }
     },
@@ -4690,6 +5638,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No se encontraron objetos de audio obsoletos de EqualEase."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पुराना EqualEase अडियो वस्तुहरू फेला परेनन्।"
           }
         }
       },
@@ -4721,6 +5675,12 @@
             "state": "translated",
             "value": "Ahora no"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अहिले होइन"
+          }
         }
       }
     },
@@ -4749,6 +5709,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No solicitada"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अनुरोध गरिएको छैन"
           }
         }
       },
@@ -4780,6 +5746,12 @@
             "state": "translated",
             "value": "Permiso de notificaciones"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सूचना अनुमति"
+          }
         }
       }
     },
@@ -4808,6 +5780,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No disponible"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "उपलब्ध छैन"
           }
         }
       },
@@ -4839,6 +5817,12 @@
             "state": "translated",
             "value": "Notificaciones"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सूचनाहरू"
+          }
         }
       }
     },
@@ -4867,6 +5851,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Avisarme cuando el volumen de entrada del micrófono sea bajo"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "माइक्रोफोन इनपुट भोल्युम कम हुँदा मलाई सूचना दिनुहोस्"
           }
         }
       }
@@ -4897,6 +5887,12 @@
             "state": "translated",
             "value": "OK"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ठीक छ"
+          }
         }
       }
     },
@@ -4926,6 +5922,12 @@
             "state": "translated",
             "value": "Abrir ajustes de Preajustes"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट सेटिङ खोल्नुहोस्"
+          }
         }
       }
     },
@@ -4954,6 +5956,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Salida cambiada"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आउटपुट परिवर्तन भयो"
           }
         }
       },
@@ -4985,6 +5993,12 @@
             "state": "translated",
             "value": "Dispositivo de salida"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आउटपुट डिभाइस"
+          }
         }
       },
       "comment": "Accessibility label for the selected real macOS output device; device names are runtime values."
@@ -5014,6 +6028,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La observación de cambios del dispositivo de salida no está disponible; se actualiza cuando se abre el menú o se inicia la ruta de audio."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आउटपुट डिभाइस परिवर्तन अवलोकन उपलब्ध छैन; मेनु खुल्दा वा रूटिङ सुरु हुँदा रिफ्रेश हुन्छ।"
           }
         }
       },
@@ -5045,6 +6065,12 @@
             "state": "translated",
             "value": "Enlazar nuevo control remoto…"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "नयाँ रिमोट पेयर…"
+          }
         }
       }
     },
@@ -5073,6 +6099,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enlazar control remoto"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रिमोट पेयर गर्नुहोस्"
           }
         }
       },
@@ -5104,6 +6136,12 @@
             "state": "translated",
             "value": "Enlaza o autentica antes de usar el control remoto."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रिमोट कन्ट्रोल प्रयोग गर्नु अघि पेयर वा प्रमाणीकरण गर्नुहोस्।"
+          }
         }
       },
       "comment": "Remote-control message shown before the phone has paired or authenticated."
@@ -5133,6 +6171,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "La carga de enlace debe incluir un código de enlace."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पेयर पेलोडमा पेयरिङ कोड हुनै पर्छ।"
           }
         }
       },
@@ -5164,6 +6208,12 @@
             "state": "translated",
             "value": "Enlazar control remoto"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रिमोट पेयर गर्नुहोस्"
+          }
         }
       },
       "comment": "Accessibility label for the phone web remote pairing section."
@@ -5193,6 +6243,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enlaza este control remoto antes de cambiar EqualEase."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase परिवर्तन गर्नु अघि यो रिमोट पेयर गर्नुहोस्।"
           }
         }
       },
@@ -5224,6 +6280,12 @@
             "state": "translated",
             "value": "Enlazado %@"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ पेयर भयो"
+          }
         }
       }
     },
@@ -5252,6 +6314,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "El acceso enlazado protege el control remoto en tu red local de confianza. El tráfico se queda en la red local, pero no tiene cifrado de nivel internet."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पेयर गरिएको पहुँचले तपाईंको विश्वासिलो स्थानीय नेटवर्कमा रिमोट कन्ट्रोल सुरक्षित गर्छ। ट्राफिक स्थानीय रहन्छ तर इन्टरनेट-स्तरको इन्क्रिप्टेड हुँदैन।"
           }
         }
       },
@@ -5283,6 +6351,12 @@
             "state": "translated",
             "value": "Enlazado como"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यस रूपमा पेयर गरिएको"
+          }
         }
       },
       "comment": "Phone web remote status prefix before the paired client name."
@@ -5312,6 +6386,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "El enlace no está activo. Inicia el enlace desde los ajustes de EqualEase."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पेयरिङ सक्रिय छैन। EqualEase सेटिङहरूबाट पेयरिङ सुरु गर्नुहोस्।"
           }
         }
       },
@@ -5343,6 +6423,12 @@
             "state": "translated",
             "value": "El enlace no está activo. Inicia el enlace desde Ajustes > General > Control remoto de red local."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पेयरिङ सक्रिय छैन। सेटिङहरू > General > Local Network Remote बाट पेयरिङ सुरु गर्नुहोस्।"
+          }
         }
       },
       "comment": "Local-network remote pairing error when no temporary pairing session exists."
@@ -5372,6 +6458,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "El enlace o la autenticación falló."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पेयरिङ वा प्रमाणीकरण असफल भयो।"
           }
         }
       },
@@ -5403,6 +6495,12 @@
             "state": "translated",
             "value": "Se requiere enlace"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पेयरिङ आवश्यक"
+          }
         }
       },
       "comment": "Phone web remote status when the client must pair again."
@@ -5433,6 +6531,12 @@
             "state": "translated",
             "value": "Pausar cambio de preajuste por app"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "एप प्रिसेट स्विचिङ पज गर्नुहोस्"
+          }
         }
       }
     },
@@ -5461,6 +6565,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Audio por app"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रति-एप अडियो"
           }
         }
       }
@@ -5491,6 +6601,12 @@
             "state": "translated",
             "value": "El audio por app aparece cuando EqualEase está activo y las apps están emitiendo sonido."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase Active अन हुँदा र एपहरूले ध्वनि निकाल्दा प्रति-एप अडियो देखिन्छ।"
+          }
         }
       }
     },
@@ -5519,6 +6635,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Silencio por app: con tap pero silenciada"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रति-एप म्युट: ट्याप गरिएको तर मौन गरिएको"
           }
         }
       }
@@ -5549,6 +6671,12 @@
             "state": "translated",
             "value": "App sin procesar: paso directo literal, sin volumen, sin EQ"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रति-एप बन्द: जस्ताको तस्तै पास-थ्रु, भोल्युम छैन, EQ छैन"
+          }
         }
       }
     },
@@ -5577,6 +6705,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "El volumen por app solo atenúa: 100% es el volumen normal. Usa Preamplificador para el refuerzo global."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रति-एप भोल्युम घटाउने मात्र हो: 100% सामान्य भोल्युम हो। ग्लोबल बुस्टका लागि प्रिअ्याम्प प्रयोग गर्नुहोस्।"
           }
         }
       }
@@ -5607,6 +6741,12 @@
             "state": "translated",
             "value": "El volumen por app usa un tap por cada app que emite audio y un tap de respaldo para todo lo demás. Las apps sin procesar siguen con tap, pero pasan literalmente; las apps silenciadas siguen con tap, pero quedan silenciadas."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रति-एप भोल्युमले प्रत्येक अडियो निकाल्ने एपका लागि एउटा ट्याप र बाँकी सबैका लागि फल्ब्याक ट्याप प्रयोग गर्छ। बन्द एपहरू ट्याप गरिएको अवस्थामा रहन्छन् तर जस्ताको तस्तै पास हुन्छन्; म्युट गरिएका एपहरू ट्याप गरिएका हुन्छन् तर मौन गरिन्छन्।"
+          }
         }
       }
     },
@@ -5635,6 +6775,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Control remoto del teléfono"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "फोन रिमोट"
           }
         }
       },
@@ -5666,6 +6812,12 @@
             "state": "translated",
             "value": "Podcast"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पडकास्ट"
+          }
         }
       },
       "comment": "Built-in EQ preset name for spoken-word podcast listening."
@@ -5695,6 +6847,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Publicado a las %@"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ मा पोस्ट गरियो"
           }
         }
       },
@@ -5726,6 +6884,12 @@
             "state": "translated",
             "value": "Preamplificador"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिअ्याम्प"
+          }
         }
       },
       "comment": "Audio gain control label for EqualEase global output gain before playback."
@@ -5756,6 +6920,12 @@
             "state": "translated",
             "value": "Preamplificador %lld por ciento"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिअ्याम्प %lld प्रतिशत"
+          }
         }
       }
     },
@@ -5785,6 +6955,12 @@
             "state": "translated",
             "value": "Preamplificador / Ganancia"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिअ्याम्प / गेन"
+          }
         }
       }
     },
@@ -5813,6 +6989,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preajuste"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट"
           }
         }
       },
@@ -5844,6 +7026,12 @@
             "state": "translated",
             "value": "Reglas de preajustes"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट नियमहरू"
+          }
         }
       }
     },
@@ -5872,6 +7060,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "El comando de preajuste debe incluir presetID o presetName."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट कमाण्डमा presetID वा presetName हुनै पर्छ।"
           }
         }
       },
@@ -5903,6 +7097,12 @@
             "state": "translated",
             "value": "Nombre del preajuste"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट नाम"
+          }
         }
       }
     },
@@ -5931,6 +7131,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Las reglas de preajustes están en pausa. EqualEase permanece en %@ hasta que se reanude el cambio de preajustes."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट नियमहरू पज छन्। प्रिसेट स्विचिङ फेरि सुरु नभएसम्म EqualEase %@ मा रहन्छ।"
           }
         }
       },
@@ -5962,6 +7168,12 @@
             "state": "translated",
             "value": "Las reglas de preajustes están en pausa; %@ permanece activo mientras cambias de app o sitio web."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट नियमहरू पज छन्; तपाईं एप वा वेबसाइट बदल्दा %@ सक्रिय रहन्छ।"
+          }
         }
       },
       "comment": "Help text for locked preset mode. Interpolation is a preset name; keep 'preset rules' as the app/website switching feature."
@@ -5991,6 +7203,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preajustes"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेटहरू"
           }
         }
       },
@@ -6022,6 +7240,12 @@
             "state": "translated",
             "value": "Política de privacidad"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "गोपनीयता नीति"
+          }
         }
       }
     },
@@ -6050,6 +7274,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Procesar"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रोसेस"
           }
         }
       },
@@ -6081,6 +7311,12 @@
             "state": "translated",
             "value": "Procesar: volumen de la app y después EQ global."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रोसेस: एप भोल्युम, त्यसपछि ग्लोबल EQ।"
+          }
         }
       }
     },
@@ -6110,6 +7346,12 @@
             "state": "translated",
             "value": "La protección sigue funcionando aunque EqualEase esté desactivado, porque observa la propiedad de volumen de entrada de macOS, no la ruta de audio del sistema."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase Active बन्द हुँदा पनि सुरक्षा चलिरहन्छ, किनकि यसले सिस्टम-अडियो रूटिङ पाथ होइन macOS को इनपुट-भोल्युम प्रोपर्टी अवलोकन गर्छ।"
+          }
         }
       }
     },
@@ -6138,6 +7380,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Error de protocolo"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रोटोकल त्रुटि"
           }
         }
       },
@@ -6169,6 +7417,12 @@
             "state": "translated",
             "value": "Panel rápido"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "द्रुत प्यानल"
+          }
         }
       }
     },
@@ -6198,6 +7452,12 @@
             "state": "translated",
             "value": "Cerrar EqualEase"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase बन्द गर्नुहोस्"
+          }
         }
       }
     },
@@ -6226,6 +7486,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elevado al %lld%%"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%% मा बढाइयो"
           }
         }
       },
@@ -6257,6 +7523,12 @@
             "state": "translated",
             "value": "Solo lectura"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पढ्न-मात्र"
+          }
         }
       },
       "comment": "Input volume capability: EqualEase can read but not change this microphone volume."
@@ -6287,6 +7559,12 @@
             "state": "translated",
             "value": "Recuperación"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रिकभरी"
+          }
         }
       }
     },
@@ -6315,6 +7593,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reduce Rumble"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रम्बल घटाउनुहोस्"
           }
         }
       },
@@ -6346,6 +7630,12 @@
             "state": "translated",
             "value": "Recordar"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सम्झनुहोस्"
+          }
         }
       }
     },
@@ -6374,6 +7664,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "¿Recordar %1$@ para %2$@?"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ लाई %2$@ का लागि सम्झने?"
           }
         }
       },
@@ -6405,6 +7701,12 @@
             "state": "translated",
             "value": "Desconocido"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अज्ञात"
+          }
         }
       },
       "comment": "Fallback preset name when the local-network remote state has no active preset."
@@ -6434,6 +7736,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preamplificador"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिअ्याम्प"
           }
         }
       },
@@ -6465,6 +7773,12 @@
             "state": "translated",
             "value": "Preajustes"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेटहरू"
+          }
         }
       },
       "comment": "Phone web remote preset button section accessibility label."
@@ -6494,6 +7808,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Volumen"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "भोल्युम"
           }
         }
       },
@@ -6525,6 +7845,12 @@
             "state": "translated",
             "value": "No se reconocieron las credenciales del control remoto. Enlaza este dispositivo de nuevo desde los ajustes de EqualEase."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रिमोट क्रेडेन्सियलहरू पहिचान भएनन्। EqualEase सेटिङहरूबाट यो डिभाइस फेरि पेयर गर्नुहोस्।"
+          }
         }
       },
       "comment": "Remote-control authentication error when stored phone credentials are invalid or revoked."
@@ -6554,6 +7880,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nombre del control remoto"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रिमोट नाम"
           }
         }
       },
@@ -6585,6 +7917,12 @@
             "state": "translated",
             "value": "Activo"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सक्रिय"
+          }
         }
       },
       "comment": "Phone web remote routing status when EqualEase is active."
@@ -6614,6 +7952,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desactivado"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बन्द"
           }
         }
       },
@@ -6645,6 +7989,12 @@
             "state": "translated",
             "value": "Renombrar"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "नाम फेर्नुहोस्"
+          }
         }
       }
     },
@@ -6673,6 +8023,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restablecer enlaces"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पेयरिङहरू रिसेट गर्नुहोस्"
           }
         }
       }
@@ -6703,6 +8059,12 @@
             "state": "translated",
             "value": "Reiniciar"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पुनः सुरु गर्नुहोस्"
+          }
         }
       }
     },
@@ -6731,6 +8093,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restaura la EQ y la ganancia en vivo a los valores guardados del preajuste seleccionado."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "लाइभ EQ र गेनलाई चयन गरिएको प्रिसेटका सुरक्षित मानहरूमा फर्काउनुहोस्।"
           }
         }
       }
@@ -6761,6 +8129,12 @@
             "state": "translated",
             "value": "Revertir"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "फर्काउनुहोस्"
+          }
         }
       }
     },
@@ -6789,6 +8163,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Revocar"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रद्द गर्नुहोस्"
           }
         }
       }
@@ -6819,6 +8199,12 @@
             "state": "translated",
             "value": "Envía el audio del sistema localmente a través de este Mac para que EqualEase pueda aplicar EQ antes de la reproducción."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase ले प्लेब्याकअघि EQ लागू गर्न सकोस् भनेर सिस्टम अडियोलाई यस Mac मार्फत स्थानीय रूपमा रूट गर्नुहोस्।"
+          }
         }
       }
     },
@@ -6847,6 +8233,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ruta de audio"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रूटिङ"
           }
         }
       },
@@ -6878,6 +8270,12 @@
             "state": "translated",
             "value": "Estado de la ruta de audio"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रूटिङ स्थिति"
+          }
         }
       }
     },
@@ -6906,6 +8304,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reglas"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "नियमहरू"
           }
         }
       }
@@ -6936,6 +8340,12 @@
             "state": "translated",
             "value": "Las reglas cambian EqualEase temporalmente según aquello en lo que tengas el foco. Las reglas de sitios web se aplican cuando ese sitio web es la pestaña activa en un navegador compatible. Cuando no coincide ninguna regla, EqualEase vuelve al preajuste predeterminado seleccionado."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "नियमहरूले तपाईंको फोकसका आधारमा EqualEase लाई अस्थायी रूपमा स्विच गर्छन्। समर्थित ब्राउजरमा वेबसाइट सक्रिय ट्याब हुँदा वेबसाइट नियम लागू हुन्छ। कुनै नियम नमिल्दा EqualEase चयन गरिएको पूर्वनिर्धारित प्रिसेटमा फर्कन्छ।"
+          }
         }
       }
     },
@@ -6964,6 +8374,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "En ejecución en %@"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ मा चलिरहेको"
           }
         }
       },
@@ -6995,6 +8411,12 @@
             "state": "translated",
             "value": "En ejecución en el puerto %u"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पोर्ट %u मा चलिरहेको"
+          }
         }
       },
       "comment": "Local-network remote status when running but no LAN URL is known. Interpolation is the TCP port."
@@ -7025,6 +8447,12 @@
             "state": "translated",
             "value": "Guardar"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सुरक्षित गर्नुहोस्"
+          }
         }
       }
     },
@@ -7053,6 +8481,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Guardar como…"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यस रूपमा सुरक्षित…"
           }
         }
       }
@@ -7083,6 +8517,12 @@
             "state": "translated",
             "value": "Guarda la EQ y la ganancia en vivo en este preajuste personalizado."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "लाइभ EQ र गेनलाई यो कस्टम प्रिसेटमा सुरक्षित गर्नुहोस्।"
+          }
         }
       }
     },
@@ -7111,6 +8551,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Guardado con los preajustes"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेटहरूसँग सुरक्षित गरिएको"
           }
         }
       }
@@ -7141,6 +8587,12 @@
             "state": "translated",
             "value": "Guardado con el preajuste. Bájalo si las bandas reforzadas distorsionan."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेटसँग सुरक्षित हुन्छ। बुस्ट गरिएका ब्यान्ड डिस्टोर्ट भए यसलाई घटाउनुहोस्।"
+          }
         }
       }
     },
@@ -7169,6 +8621,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Banda seleccionada"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "चयन गरिएको ब्यान्ड"
           }
         }
       }
@@ -7199,6 +8657,12 @@
             "state": "translated",
             "value": "Salida seleccionada"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "चयन गरिएको आउटपुट"
+          }
         }
       }
     },
@@ -7227,6 +8691,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ajustable"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेट गर्न मिल्ने"
           }
         }
       },
@@ -7258,6 +8728,12 @@
             "state": "translated",
             "value": "Ajustes"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सेटिङहरू"
+          }
         }
       }
     },
@@ -7286,6 +8762,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mostrar volumen de apps en el panel rápido"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "द्रुत प्यानलमा एप भोल्युम देखाउनुहोस्"
           }
         }
       }
@@ -7316,6 +8798,12 @@
             "state": "translated",
             "value": "Mostrar volumen de entrada en el panel rápido"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "द्रुत प्यानलमा इनपुट भोल्युम देखाउनुहोस्"
+          }
         }
       }
     },
@@ -7344,6 +8832,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mostrar preamplificador en el panel rápido"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "द्रुत प्यानलमा प्रिअ्याम्प देखाउनुहोस्"
           }
         }
       }
@@ -7374,6 +8868,12 @@
             "state": "translated",
             "value": "Mostrar controles de ruta de audio en el panel rápido"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "द्रुत प्यानलमा रूटिङ कन्ट्रोलहरू देखाउनुहोस्"
+          }
         }
       }
     },
@@ -7403,6 +8903,12 @@
             "state": "translated",
             "value": "Mostrar volumen en el panel rápido"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "द्रुत प्यानलमा भोल्युम देखाउनुहोस्"
+          }
         }
       }
     },
@@ -7431,6 +8937,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Omitido: el volumen de entrada es de solo lectura o no está disponible"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "छोडियो: इनपुट भोल्युम पढ्न-मात्र छ वा उपलब्ध छैन"
           }
         }
       },
@@ -7462,6 +8974,12 @@
             "state": "translated",
             "value": "Small Speakers"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "साना स्पिकरहरू"
+          }
         }
       },
       "comment": "Built-in EQ preset name for laptop or compact speakers."
@@ -7492,6 +9010,12 @@
             "state": "translated",
             "value": "Voz"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बोली"
+          }
         }
       }
     },
@@ -7520,6 +9044,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Iniciar ruta de audio"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रूटिङ सुरु गर्नुहोस्"
           }
         }
       }
@@ -7550,6 +9080,12 @@
             "state": "translated",
             "value": "Iniciar ruta de audio automáticamente tras abrir"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "लन्च पछि अडियो रूटिङ स्वतः सुरु गर्नुहोस्"
+          }
         }
       }
     },
@@ -7579,6 +9115,12 @@
             "state": "translated",
             "value": "Iniciar ruta de audio automáticamente en próximos inicios"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "भविष्यका लन्चहरूमा अडियो रूटिङ स्वतः सुरु गर्नुहोस्"
+          }
         }
       }
     },
@@ -7607,6 +9149,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inicia el enlace en Ajustes de EqualEase > General > Control remoto de red local y luego introduce el código de seis dígitos que se muestra en tu Mac."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase सेटिङहरू > General > Local Network Remote मा पेयरिङ सुरु गर्नुहोस्, त्यसपछि आफ्नो Mac मा देखिएको छ-अङ्कको कोड प्रविष्ट गर्नुहोस्।"
           }
         }
       },
@@ -7638,6 +9186,12 @@
             "state": "translated",
             "value": "Iniciando ruta de audio…"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अडियो रूटिङ सुरु गर्दै…"
+          }
         }
       },
       "comment": "Audio routing status while EqualEase starts capturing and rendering system audio."
@@ -7667,6 +9221,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Iniciando control remoto de red local…"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "स्थानीय-नेटवर्क रिमोट कन्ट्रोल सुरु गर्दै…"
           }
         }
       },
@@ -7698,6 +9258,12 @@
             "state": "translated",
             "value": "Inicia la ruta de audio local del sistema y puede mostrar el aviso de permiso de captura de audio de macOS."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "स्थानीय सिस्टम अडियो रूटिङ सुरु गर्छ र macOS अडियो क्याप्चर अनुमति संवाद देखाउन सक्छ।"
+          }
         }
       }
     },
@@ -7726,6 +9292,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Estado"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अवस्था"
           }
         }
       }
@@ -7756,6 +9328,12 @@
             "state": "translated",
             "value": "Estado"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "स्थिति"
+          }
         }
       }
     },
@@ -7785,6 +9363,12 @@
             "state": "translated",
             "value": "Detener ruta de audio"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रूटिङ रोक्नुहोस्"
+          }
         }
       }
     },
@@ -7813,6 +9397,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Deteniendo ruta de audio…"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अडियो रूटिङ रोक्दै…"
           }
         }
       },
@@ -7844,6 +9434,12 @@
             "state": "translated",
             "value": "Deteniendo…"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रोक्दै…"
+          }
         }
       },
       "comment": "Short menu-bar status while audio routing is stopping."
@@ -7874,6 +9470,12 @@
             "state": "translated",
             "value": "Soporte y privacidad"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सहायता र गोपनीयता"
+          }
         }
       }
     },
@@ -7902,6 +9504,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Soporte / Contacto"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सहायता / सम्पर्क"
           }
         }
       }
@@ -7932,6 +9540,12 @@
             "state": "translated",
             "value": "Desliza hacia arriba o hacia abajo con VoiceOver para ajustar en pasos de medio decibelio."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आधा-डेसिबेल चरणमा मिलाउन VoiceOver सँग माथि वा तल स्वाइप गर्नुहोस्।"
+          }
         }
       }
     },
@@ -7960,6 +9574,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cambiando…"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "स्विच गर्दै…"
           }
         }
       },
@@ -7991,6 +9611,12 @@
             "state": "translated",
             "value": "Predeterminado del sistema"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सिस्टम डिफल्ट"
+          }
         }
       },
       "comment": "Language picker option that removes the in-app override and follows macOS language order."
@@ -8020,6 +9646,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "El código de enlace no es válido o ha caducado."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पेयरिङ कोड अमान्य छ वा म्याद सकिएको छ।"
           }
         }
       },
@@ -8051,6 +9683,12 @@
             "state": "translated",
             "value": "Umbral"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सीमा"
+          }
         }
       }
     },
@@ -8079,6 +9717,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Demasiados intentos de enlace. Espera unos minutos antes de volver a intentarlo."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "धेरै पेयरिङ प्रयास भए। फेरि प्रयास गर्नु अघि केही मिनेट पर्खनुहोस्।"
           }
         }
       },
@@ -8110,6 +9754,12 @@
             "state": "translated",
             "value": "Treble Boost"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ट्रेबल बूस्ट"
+          }
         }
       },
       "comment": "Built-in EQ preset name; emphasizes high frequencies."
@@ -8140,6 +9790,12 @@
             "state": "translated",
             "value": "Activar EqualEase"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase अन गर्नुहोस्"
+          }
         }
       }
     },
@@ -8168,6 +9824,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "No disponible en esta compilación"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यो बिल्डमा उपलब्ध छैन"
           }
         }
       },
@@ -8199,6 +9861,12 @@
             "state": "translated",
             "value": "No disponible: %@"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "उपलब्ध छैन: %@"
+          }
         }
       },
       "comment": "Microphone protection notification summary when notifications cannot be posted. Interpolation is a notification permission status."
@@ -8228,6 +9896,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dispositivo de salida desconocido"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अज्ञात आउटपुट डिभाइस"
           }
         }
       },
@@ -8259,6 +9933,12 @@
             "state": "translated",
             "value": "Preajuste desconocido: %@"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अज्ञात प्रिसेट: %@"
+          }
         }
       },
       "comment": "Local-network remote command error. Interpolation is the requested preset name or ID."
@@ -8288,6 +9968,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tipo de mensaje no compatible: %@"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "असमर्थित सन्देश प्रकार: %@"
           }
         }
       },
@@ -8319,6 +10005,12 @@
             "state": "translated",
             "value": "Comando remoto no compatible: %@"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "असमर्थित रिमोट कमाण्ड: %@"
+          }
         }
       },
       "comment": "Remote-control protocol error. Interpolation is the unsupported command name."
@@ -8348,6 +10040,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Usando el preajuste predeterminado seleccionado %@."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "चयन गरिएको पूर्वनिर्धारित प्रिसेट %@ प्रयोग गर्दै।"
           }
         }
       },
@@ -8379,6 +10077,12 @@
             "state": "translated",
             "value": "Utilidad"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "उपयोगिता"
+          }
         }
       }
     },
@@ -8408,6 +10112,12 @@
             "state": "translated",
             "value": "Versión"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "संस्करण"
+          }
         }
       }
     },
@@ -8436,6 +10146,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voice Boost"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आवाज बूस्ट"
           }
         }
       },
@@ -8467,6 +10183,12 @@
             "state": "translated",
             "value": "Control de volumen"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "भोल्युम कन्ट्रोल"
+          }
         }
       }
     },
@@ -8495,6 +10217,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Warm"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "न्यानो"
           }
         }
       },
@@ -8526,6 +10254,12 @@
             "state": "translated",
             "value": "Los mensajes WebSocket deben ser JSON UTF-8."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WebSocket सन्देशहरू UTF-8 JSON हुनै पर्छ।"
+          }
         }
       },
       "comment": "Remote-control protocol error for non-JSON WebSocket text."
@@ -8556,6 +10290,12 @@
             "state": "translated",
             "value": "Cuando Activo está desactivado, EqualEase detiene la ruta de audio en lugar de solo omitir el procesamiento."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active बन्द हुँदा, EqualEase ले केवल प्रोसेसिङ बाइपास गर्नुको सट्टा अडियो रूटिङ रोक्छ।"
+          }
         }
       }
     },
@@ -8584,6 +10324,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cuando está activado, EqualEase puede restaurar la ruta de audio después de abrir la app."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सक्षम हुँदा, तपाईंले एप लन्च गरेपछि EqualEase ले अडियो रूटिङ पुनःस्थापना गर्न सक्छ।"
           }
         }
       }
@@ -8614,6 +10360,12 @@
             "state": "translated",
             "value": "Cuando está activado, EqualEase requiere un control remoto enlazado antes de enviar estado detallado o aceptar comandos de control. Mantén esto para redes locales de confianza: el tráfico solo va por la misma LAN y no tiene cifrado de nivel internet. Los códigos de enlace y tokens nunca se exponen mediante /health, /info, registros ni Ajustes después del enlace inicial."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सक्षम हुँदा, विस्तृत अवस्था पठाउनु वा कन्ट्रोल कमाण्ड स्वीकार्नु अघि EqualEase लाई पेयर गरिएको रिमोट चाहिन्छ। यसलाई विश्वासिलो स्थानीय नेटवर्कका लागि मात्र राख्नुहोस्: ट्राफिक एउटै LAN मा मात्र रहन्छ र इन्टरनेट-स्तरको इन्क्रिप्टेड हुँदैन। प्रारम्भिक पेयरिङपछि पेयरिङ कोड र टोकनहरू /health, /info, लगहरू वा सेटिङहरूमार्फत कहिल्यै देखिँदैनन्।"
+          }
         }
       }
     },
@@ -8642,6 +10394,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cuando estas opciones están desactivadas, el panel rápido oculta la sección correspondiente y se reduce para ajustarse. Diagnóstico sigue mostrando la ruta de audio, el estado de entrada y el estado de audio de apps detectadas."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यी बन्द हुँदा, द्रुत प्यानलले मिल्दो खण्ड लुकाउँछ र मिल्ने गरी सानो हुन्छ। डायग्नोस्टिक्सले अझै पनि रूटिङ, इनपुट अवस्था र फेला परेको एप अडियो अवस्था देखाउँछ।"
           }
         }
       }
@@ -8672,6 +10430,12 @@
             "state": "translated",
             "value": "Cuando esto está desactivado, los enlaces equalease:// y AppleScript aún pueden leer el estado de EqualEase y seleccionar preajustes integrados, pero no pueden cambiar Activo, Volumen, Preamplificador, Bypass, si el cambio de preajuste por app está en pausa, ni los preajustes personalizados."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यो बन्द हुँदा, equalease:// लिंक र AppleScript ले अझै EqualEase को अवस्था पढ्न र बिल्ट-इन प्रिसेटहरू चयन गर्न सक्छन्, तर सक्रिय, भोल्युम, प्रिअ्याम्प, बाइपास, एप प्रिसेट स्विचिङ पज छ कि छैन, वा कस्टम प्रिसेटहरू परिवर्तन गर्न सक्दैनन्।"
+          }
         }
       }
     },
@@ -8701,6 +10465,12 @@
             "state": "translated",
             "value": "Puedes desactivar EqualEase en cualquier momento"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तपाईं EqualEase जुनसुकै बेला बन्द गर्न सक्नुहुन्छ"
+          }
         }
       }
     },
@@ -8729,6 +10499,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "compilación %@"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बिल्ड %@"
           }
         }
       },
@@ -8760,6 +10536,12 @@
             "state": "translated",
             "value": "compilación de desarrollo"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "डेभलपमेन्ट बिल्ड"
+          }
         }
       },
       "comment": "Version label when no app version/build metadata is available."
@@ -8790,6 +10572,12 @@
             "state": "translated",
             "value": "macOS pide permiso de captura cuando se inicia la ruta de audio"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रूटिङ सुरु हुँदा macOS ले क्याप्चर अनुमति माग्छ"
+          }
         }
       }
     },
@@ -8819,6 +10607,12 @@
             "state": "translated",
             "value": "macOS no puede registrar esta compilación como ítem de inicio de sesión. Copia EqualEase a Aplicaciones o usa una compilación empaquetada y vuelve a abrir Ajustes."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS ले यो बिल्डलाई लगइन आइटमका रूपमा दर्ता गर्न सक्दैन। EqualEase लाई Applications मा प्रतिलिपि गर्नुहोस् वा प्याकेज गरिएको बिल्ड प्रयोग गर्नुहोस्, त्यसपछि सेटिङहरू फेरि खोल्नुहोस्।"
+          }
         }
       }
     },
@@ -8847,6 +10641,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "General"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सामान्य"
           }
         }
       },
@@ -8878,6 +10678,12 @@
             "state": "translated",
             "value": "Diagnóstico"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "डायग्नोस्टिक्स"
+          }
         }
       },
       "comment": "Settings tab title for diagnostics settings."
@@ -8907,6 +10713,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Volumen"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "भोल्युम"
           }
         }
       },
@@ -8938,6 +10750,12 @@
             "state": "translated",
             "value": "Control práctico del volumen de salida del Mac. Úsalo primero para la sonoridad diaria."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तपाईंको Mac को आउटपुट भोल्युमका लागि सुविधाजनक कन्ट्रोल। दैनिक ध्वनि-स्तरका लागि पहिले यसैलाई प्रयोग गर्नुहोस्।"
+          }
         }
       },
       "comment": "Help text below the output Volume slider."
@@ -8967,6 +10785,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cambia el nivel de procesamiento de EqualEase mientras Activo está encendido. Usa primero Volumen; baja Preamp si los preajustes reforzados distorsionan."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active अन हुँदा EqualEase को प्रोसेसिङ स्तर परिवर्तन गर्छ। पहिले भोल्युम प्रयोग गर्नुहोस्; बुस्ट गरिएका प्रिसेटहरू डिस्टोर्ट भए प्रिअ्याम्प घटाउनुहोस्।"
           }
         }
       },
@@ -8998,6 +10822,12 @@
             "state": "translated",
             "value": "Control práctico del nivel de entrada del micrófono actual del Mac. Sigue editable incluso cuando EqualEase está apagado."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तपाईंको Mac को हालको माइक्रोफोन इनपुट स्तरका लागि सुविधाजनक कन्ट्रोल। EqualEase बन्द हुँदा पनि यो सम्पादनयोग्य रहन्छ।"
+          }
         }
       },
       "comment": "Help text below the input volume slider when EqualEase can set the current microphone input level."
@@ -9027,6 +10857,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase puede leer el volumen de esta entrada, pero este dispositivo no expone control de volumen."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase ले यो इनपुटको भोल्युम पढ्न सक्छ, तर यो डिभाइसले भोल्युम कन्ट्रोल उपलब्ध गराउँदैन।"
           }
         }
       },
@@ -9058,6 +10894,12 @@
             "state": "translated",
             "value": "Esta entrada no expone control de volumen. Usa Ajustes del Sistema o los controles del propio dispositivo si están disponibles."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यो इनपुटले भोल्युम कन्ट्रोल उपलब्ध गराउँदैन। उपलब्ध भए सिस्टम सेटिङहरू वा डिभाइसका आफ्नै कन्ट्रोलहरू प्रयोग गर्नुहोस्।"
+          }
         }
       },
       "comment": "Help text below the input volume slider when the current microphone input does not expose volume control."
@@ -9087,6 +10929,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Los preajustes integrados son plantillas de solo lectura. Los cambios de EQ y ganancia son en vivo hasta que los guardes como un preajuste nuevo."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बिल्ट-इनहरू पढ्न-मात्र टेम्प्लेट हुन्। EQ र गेन परिवर्तनहरू तपाईंले तिनलाई नयाँ प्रिसेटका रूपमा सुरक्षित नगरेसम्म लाइभ रहन्छन्।"
           }
         }
       },
@@ -9118,6 +10966,12 @@
             "state": "translated",
             "value": "Los cambios se aplican en vivo al escuchar. Guarda el preajuste personalizado cuando quieras conservarlos."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सुन्नका लागि परिवर्तनहरू तुरुन्त लागू हुन्छन्। राख्न चाहनुहुँदा कस्टम प्रिसेट सुरक्षित गर्नुहोस्।"
+          }
         }
       },
       "comment": "Description under Presets settings when a custom preset is selected."
@@ -9147,6 +11001,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elige un preajuste para editar valores de EQ."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EQ मानहरू सम्पादन गर्न प्रिसेट छान्नुहोस्।"
           }
         }
       },
@@ -9178,6 +11038,12 @@
             "state": "translated",
             "value": "Sitio web"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "वेबसाइट"
+          }
         }
       },
       "comment": "Subtitle for a website preset rule row."
@@ -9207,6 +11073,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aplicación"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "एप्लिकेसन"
           }
         }
       },
@@ -9238,6 +11110,12 @@
             "state": "translated",
             "value": "App activa"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सक्रिय एप"
+          }
         }
       },
       "comment": "Subtitle for the current focused app row in preset rules."
@@ -9267,6 +11145,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sitio web activo"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "सक्रिय वेबसाइट"
           }
         }
       },
@@ -9298,6 +11182,12 @@
             "state": "translated",
             "value": "Lee la página activa solo cuando lo elijas"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "तपाईंले छान्दा मात्र सक्रिय पृष्ठ पढ्नुहोस्"
+          }
         }
       },
       "comment": "Subtitle for the supported browser page row before EqualEase has read the current page."
@@ -9327,6 +11217,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Usar preajuste"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट प्रयोग गर्नुहोस्"
           }
         }
       },
@@ -9358,6 +11254,12 @@
             "state": "translated",
             "value": "Actualizar preajuste"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट अद्यावधिक गर्नुहोस्"
+          }
         }
       },
       "comment": "Button title for updating the preset assigned to the current website."
@@ -9387,6 +11289,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Página actual de %@"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ को हालको पृष्ठ"
           }
         }
       },
@@ -9418,6 +11326,12 @@
             "state": "translated",
             "value": "Página web actual"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "हालको वेब पृष्ठ"
+          }
         }
       },
       "comment": "Title for the current browser page row when the browser name is unknown."
@@ -9447,6 +11361,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Guardar preajuste como"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेट यस रूपमा सुरक्षित गर्नुहोस्"
           }
         }
       },
@@ -9478,6 +11398,12 @@
             "state": "translated",
             "value": "Elige un nombre para una copia personalizada de “%@”."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\"%@\" को कस्टम प्रतिलिपिका लागि नाम छान्नुहोस्।"
+          }
         }
       },
       "comment": "Message in the Save Preset As sheet. Placeholder is the source preset name."
@@ -9507,6 +11433,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "este preajuste"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "यो प्रिसेट"
           }
         }
       },
@@ -9538,6 +11470,12 @@
             "state": "translated",
             "value": "Renombrar preajuste"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रिसेटको नाम फेर्नुहोस्"
+          }
         }
       },
       "comment": "Title for the sheet that renames a custom preset."
@@ -9568,6 +11506,12 @@
             "state": "translated",
             "value": "Elige un nombre nuevo para “%@”."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\"%@\" का लागि नयाँ नाम छान्नुहोस्।"
+          }
         }
       },
       "comment": "Message in the Rename Preset sheet. Placeholder is the current custom preset name."
@@ -9597,6 +11541,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ajustes de EqualEase"
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase सेटिङहरू"
           }
         }
       },

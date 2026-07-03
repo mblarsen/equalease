@@ -27,6 +27,12 @@
             "state": "translated",
             "value": "EqualEase"
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase"
+          }
         }
       },
       "comment": "Bundle name"
@@ -56,6 +62,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase lee el sitio web activo en navegadores compatibles solo al aplicar o crear reglas de preajustes para sitios web."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase ले वेबसाइट प्रिसेट नियम लागू वा सिर्जना गर्दा मात्र समर्थित ब्राउजरमा सक्रिय वेबसाइट पढ्छ।"
           }
         }
       },
@@ -88,6 +100,12 @@
             "state": "translated",
             "value": "EqualEase necesita capturar el audio del sistema para poder aplicar el procesamiento del ecualizador antes de reproducirlo en el dispositivo de salida seleccionado."
           }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase लाई तपाईंले चयन गरेको आउटपुट डिभाइसमा अडियो बजाउनु अघि इक्वलाइजर प्रोसेसिङ लागू गर्न सिस्टम अडियो क्याप्चर गर्न आवश्यक छ।"
+          }
         }
       }
     },
@@ -116,6 +134,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase usa la red local para que tu teléfono controle Volumen, Preamplificador y preajustes mientras permanece en tu Wi-Fi de confianza."
+          }
+        },
+        "ne": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase ले तपाईंको फोनलाई विश्वासिलो Wi‑Fi मै रहँदै भोल्युम, प्रिअ्याम्प र प्रिसेटहरू नियन्त्रण गर्न दिन स्थानीय नेटवर्क प्रयोग गर्छ।"
           }
         }
       },
