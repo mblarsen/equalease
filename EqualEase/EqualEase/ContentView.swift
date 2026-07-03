@@ -458,7 +458,8 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 .font(.caption2.weight(.medium))
                 .lineLimit(1)
                 .truncationMode(.tail)
-                .frame(width: 72, alignment: .leading)
+                .frame(minWidth: 70, maxWidth: .infinity, alignment: .leading)
+                .layoutPriority(1)
 
             let mode = model.appVolumeStore.mode(for: app.bundleID)
             let isMuted = mode == .mute
@@ -472,6 +473,7 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 ),
                 in: 0...1
             )
+            .frame(minWidth: 90, idealWidth: 114, maxWidth: 114)
             .tint(Color(red: 0.94, green: 0.39, blue: 0.11))
             .disabled(isMuted || !isProcessing)
             .help("Per-app volume is attenuation only: 100% is normal volume. Use Preamp for global boost.")
@@ -482,12 +484,12 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                     model.toggleAppProcessBypass(for: app.bundleID)
                 }) {
                     Text(isProcessing ? "Process" : "Bypass")
-                        .font(.caption2.weight(.medium))
+                        .font(.system(size: 10, weight: .regular))
                         .lineLimit(1)
                         .minimumScaleFactor(0.85)
                         .foregroundColor(isProcessing ? .white : .secondary)
-                        .frame(width: 76)
-                        .padding(.vertical, 3)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
                         .background(
                             isProcessing
                                 ? Color(red: 0.94, green: 0.39, blue: 0.11)
@@ -504,12 +506,12 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                     model.toggleAppMute(for: app.bundleID)
                 }) {
                     Text("Mute")
-                        .font(.caption2.weight(.medium))
+                        .font(.system(size: 10, weight: .regular))
                         .lineLimit(1)
                         .minimumScaleFactor(0.85)
                         .foregroundColor(isMuted ? .white : .secondary)
-                        .frame(width: 56)
-                        .padding(.vertical, 3)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
                         .background(
                             isMuted
                                 ? Color(red: 0.94, green: 0.39, blue: 0.11)
@@ -519,6 +521,8 @@ struct ContentView<Router: AudioRoutingBackend>: View {
                 }
                 .buttonStyle(.plain)
             }
+            .fixedSize(horizontal: true, vertical: false)
+            .layoutPriority(2)
             .help(isMuted
                 ? "Muted: silence this app."
                 : isProcessing
