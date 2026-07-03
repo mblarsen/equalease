@@ -15,6 +15,12 @@
             "state": "translated",
             "value": "EqualEase"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase"
+          }
         }
       },
       "comment": "Bundle name"
@@ -32,6 +38,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase læser kun det aktive websted i understøttede browsere, når appen anvender eller opretter regler for webstedsforudindstillinger."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase liest die aktive Website in unterstützten Browsern nur, wenn Website-Preset-Regeln angewendet oder erstellt werden."
           }
         }
       },
@@ -52,6 +64,12 @@
             "state": "translated",
             "value": "EqualEase skal optage systemlyd, så appen kan anvende equalizerbehandling, før lyden afspilles på din valgte outputenhed."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase muss Systemaudio erfassen, um Equalizer-Verarbeitung anzuwenden, bevor Audio auf deinem ausgewählten Ausgabegerät wiedergegeben wird."
+          }
         }
       }
     },
@@ -68,6 +86,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase bruger det lokale netværk til at lade din telefon styre Lydstyrke, Preamp og forudindstillinger, mens den bliver på dit betroede Wi‑Fi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase nutzt das lokale Netzwerk, damit dein Telefon Lautstärke, Preamp und Presets steuern kann, während alles in deinem vertrauenswürdigen WLAN bleibt."
           }
         }
       },

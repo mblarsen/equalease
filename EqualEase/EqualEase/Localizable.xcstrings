@@ -15,6 +15,12 @@
             "state": "translated",
             "value": "%.1f dB"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%.1f dB"
+          }
         }
       },
       "comment": "Decibel gain value. Keep the dB unit with the numeric value."
@@ -32,6 +38,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ Kopi"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Kopie"
           }
         }
       },
@@ -51,6 +63,12 @@
             "state": "translated",
             "value": "%@ decibel"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Dezibel"
+          }
         }
       },
       "comment": "VoiceOver value for decibel gain. Interpolation is a formatted gain value."
@@ -68,6 +86,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ for %2$@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ für %2$@"
           }
         }
       },
@@ -87,6 +111,12 @@
             "state": "translated",
             "value": "%@ hertz-bånd"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@-Hertz-Band"
+          }
         }
       },
       "comment": "VoiceOver label for an EQ frequency band. Interpolation is the band frequency label."
@@ -104,6 +134,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ er på %2$lld%%, under din grænseværdi på %3$lld%% for lav lydstyrke."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ liegt bei %2$lld%% und damit unter deinem Schwellenwert für niedrige Lautstärke von %3$lld%%."
           }
         }
       },
@@ -123,6 +159,12 @@
             "state": "translated",
             "value": "%@-lydstyrke"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lautstärke von %@"
+          }
         }
       },
       "comment": "Accessibility label for per-app volume. Interpolation is an app name."
@@ -141,6 +183,12 @@
             "state": "translated",
             "value": "%1$@ · PID %2$d · procesobjekt %3$u"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · PID %2$d · Prozessobjekt %3$u"
+          }
         }
       }
     },
@@ -157,6 +205,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ · sat på pause"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · pausiert"
           }
         }
       },
@@ -176,6 +230,12 @@
             "state": "translated",
             "value": "%1$@, %2$lld%% preamp"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$lld%% Preamp"
+          }
         }
       },
       "comment": "Audio routing processing summary. First interpolation is EQ on/off text; second is preamp percentage."
@@ -193,6 +253,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@. Genstarter lydrouting til %2$@…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@. Audio-Routing zu %2$@ wird neu gestartet…"
           }
         }
       },
@@ -212,6 +278,12 @@
             "state": "translated",
             "value": "%lld procent"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Prozent"
+          }
         }
       }
     },
@@ -225,6 +297,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld%%"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld%%"
@@ -247,6 +325,12 @@
             "state": "translated",
             "value": "10-bånds-EQ"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-Band-EQ"
+          }
         }
       }
     },
@@ -263,6 +347,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "10-bånds-equalizergraf"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-Band-Equalizer-Grafik"
           }
         }
       }
@@ -281,6 +371,12 @@
             "state": "translated",
             "value": "Om EqualEase"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Über EqualEase"
+          }
         }
       }
     },
@@ -294,6 +390,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Aktiv"
@@ -315,6 +417,12 @@
             "state": "translated",
             "value": "Aktiv app %1$@ (%2$@) husker %3$@."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktive App %1$@ (%2$@) merkt sich %3$@."
+          }
         }
       },
       "comment": "Preset resolution explanation. Interpolations are app name, bundle identifier, and preset name."
@@ -332,6 +440,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aktivt websted %1$@ (%2$@) husker %3$@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktive Website %1$@ (%2$@) merkt sich %3$@."
           }
         }
       },
@@ -351,6 +465,12 @@
             "state": "translated",
             "value": "Aktiv: router behandlet systemlyd til %1$@ (%2$@)."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv: Verarbeitetes Systemaudio wird per Routing an %1$@ geleitet (%2$@)."
+          }
         }
       },
       "comment": "Audio routing status. Interpolations are output device name and a processing summary including EQ/bypass/preamp."
@@ -369,6 +489,12 @@
             "state": "translated",
             "value": "Tillad notifikationer…"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungen erlauben…"
+          }
         }
       }
     },
@@ -385,6 +511,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tillad automatisering at ændre lydindstillinger"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatisierung zum Ändern der Toneinstellungen erlauben"
           }
         }
       }
@@ -403,6 +535,12 @@
             "state": "translated",
             "value": "Tillad telefonfjernbetjening på det lokale netværk"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Telefon-Fernsteuerung im lokalen Netzwerk erlauben"
+          }
         }
       }
     },
@@ -419,6 +557,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tilladt"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erlaubt"
           }
         }
       },
@@ -438,6 +582,12 @@
             "state": "translated",
             "value": "Slå lyd fra"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stumm"
+          }
         }
       },
       "comment": "Per-app audio mode label: app audio is silenced."
@@ -455,6 +605,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fra"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus"
           }
         }
       },
@@ -474,6 +630,12 @@
             "state": "translated",
             "value": "Til"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein"
+          }
         }
       },
       "comment": "Per-app audio mode label: app audio is processed normally."
@@ -492,6 +654,12 @@
             "state": "translated",
             "value": "Godkend EqualEase i Systemindstillinger > Generelt > Loginemner for at færdiggøre aktivering af start ved login."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genehmige EqualEase in Systemeinstellungen > Allgemein > Anmeldeobjekte, um das Starten bei der Anmeldung vollständig zu aktivieren."
+          }
         }
       }
     },
@@ -508,6 +676,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lydapps ændret"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio-Apps geändert"
           }
         }
       },
@@ -527,6 +701,12 @@
             "state": "translated",
             "value": "Stoppet"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestoppt"
+          }
         }
       },
       "comment": "Audio routing status when EqualEase is not routing system audio."
@@ -545,6 +725,12 @@
             "state": "translated",
             "value": "Lyden bliver på denne Mac"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio bleibt auf diesem Mac"
+          }
         }
       }
     },
@@ -561,6 +747,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Godkendelsesdata skal indeholde clientID og token."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Auth-Nutzlast muss clientID und Token enthalten."
           }
         }
       },
@@ -580,6 +772,12 @@
             "state": "translated",
             "value": "Hæv automatisk understøttede mikrofoner til et minimum"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unterstützte Mikrofone automatisch auf ein Minimum anheben"
+          }
         }
       }
     },
@@ -596,6 +794,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tilgængelige output"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verfügbare Ausgaben"
           }
         }
       }
@@ -614,6 +818,12 @@
             "state": "translated",
             "value": "Bånd"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Band"
+          }
         }
       }
     },
@@ -631,6 +841,12 @@
             "state": "translated",
             "value": "Basboost"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bass-Boost"
+          }
         }
       },
       "comment": "Built-in EQ preset name; emphasizes low frequencies."
@@ -645,6 +861,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bypass"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Bypass"
@@ -667,6 +889,12 @@
             "state": "translated",
             "value": "Bypass EQ-behandling"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EQ-Verarbeitung umgehen"
+          }
         }
       },
       "comment": "Diagnostics toggle. Global bypass still routes audio through EqualEase but skips EQ processing."
@@ -685,6 +913,12 @@
             "state": "translated",
             "value": "Bypass: send igennem ubehandlet."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bypass: unverarbeitet durchleiten."
+          }
         }
       }
     },
@@ -701,6 +935,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Annuller"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abbrechen"
           }
         }
       }
@@ -719,6 +959,12 @@
             "state": "translated",
             "value": "Annuller parring"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopplung abbrechen"
+          }
         }
       }
     },
@@ -735,6 +981,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vælg den forudindstilling, du vil høre og redigere i dette arbejdsområde."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle das Preset, das du in diesem Arbeitsbereich hören und bearbeiten möchtest."
           }
         }
       }
@@ -753,6 +1005,12 @@
             "state": "translated",
             "value": "Vælg, hvor behandlet lyd sendes hen. Følg systemoutput holder det matchet med din Macs aktuelle output."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle, wohin verarbeitetes Audio gesendet wird. „Systemausgabe folgen“ hält es an die aktuelle Ausgabe deines Mac angepasst."
+          }
         }
       }
     },
@@ -769,6 +1027,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ryddede op i %1$lld forældede tap(s) og %2$lld aggregerede enhed(er)."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereinigt: veraltete Tap-Objekte: %1$lld; Aggregatgeräte: %2$lld."
           }
         }
       },
@@ -788,6 +1052,12 @@
             "state": "translated",
             "value": "Ryd op i lydtilstand"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audiozustand bereinigen"
+          }
         }
       }
     },
@@ -805,6 +1075,12 @@
             "state": "translated",
             "value": "Ryd"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leeren"
+          }
         }
       }
     },
@@ -821,6 +1097,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kommandodata mangler en numerisk værdi."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Befehls-Nutzlast fehlt ein Zahlenwert."
           }
         }
       },
@@ -840,6 +1122,12 @@
             "state": "translated",
             "value": "Kommandodata skal indeholde command/name/action."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Befehls-Nutzlast muss command/name/action enthalten."
+          }
         }
       },
       "comment": "Remote-control protocol error for missing command name."
@@ -858,6 +1146,12 @@
             "state": "translated",
             "value": "Konfigurerede app-taps"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konfigurierte App-Taps"
+          }
         }
       }
     },
@@ -874,6 +1168,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Forbundet — godkender…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbunden — Authentifizierung läuft…"
           }
         }
       },
@@ -893,6 +1193,12 @@
             "state": "translated",
             "value": "Forbinder…"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbindung wird hergestellt…"
+          }
         }
       },
       "comment": "Phone web remote connection status before WebSocket connects."
@@ -910,6 +1216,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Forbindelsesfejl"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbindungsfehler"
           }
         }
       },
@@ -929,6 +1241,12 @@
             "state": "translated",
             "value": "Kunne ikke rydde op i lydtilstand: %@"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audiozustand konnte nicht bereinigt werden: %@"
+          }
         }
       },
       "comment": "Audio cleanup failure status. Interpolation is the underlying system error."
@@ -946,6 +1264,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kunne ikke starte lydrouting: %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio-Routing konnte nicht gestartet werden: %@"
           }
         }
       },
@@ -965,6 +1289,12 @@
             "state": "translated",
             "value": "Opret en ny brugerdefineret forudindstilling ud fra de aktuelle live-EQ- og gain-indstillinger."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erstelle ein neues eigenes Preset aus den aktuellen Live-EQ- und Gain-Einstellungen."
+          }
         }
       }
     },
@@ -981,6 +1311,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aktuel"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuell"
           }
         }
       }
@@ -999,6 +1335,12 @@
             "state": "translated",
             "value": "Aktuelt fokus"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktueller Fokus"
+          }
         }
       }
     },
@@ -1015,6 +1357,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aktuelt input"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktueller Eingang"
           }
         }
       }
@@ -1033,6 +1381,12 @@
             "state": "translated",
             "value": "Aktuel inputenhed: %@"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuelles Eingabegerät: %@"
+          }
         }
       }
     },
@@ -1049,6 +1403,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aktuel forudindstilling"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuelles Preset"
           }
         }
       }
@@ -1067,6 +1427,12 @@
             "state": "translated",
             "value": "Aktuel status"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktueller Status"
+          }
         }
       }
     },
@@ -1083,6 +1449,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Brugerdefineret"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigene"
           }
         }
       }
@@ -1101,6 +1473,12 @@
             "state": "translated",
             "value": "DSP-bypass"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DSP-Bypass"
+          }
         }
       }
     },
@@ -1117,6 +1495,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "DSP bypasset"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DSP umgangen"
           }
         }
       },
@@ -1136,6 +1520,12 @@
             "state": "translated",
             "value": "Mindre mudder"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entmatschen"
+          }
         }
       },
       "comment": "Built-in EQ preset name; reduces muddy low-mid frequencies."
@@ -1154,6 +1544,12 @@
             "state": "translated",
             "value": "Standardgrænsen er 35%, og standardminimum for hævning er 50%. EqualEase overvåger kun macOS-inputlydstyrke og sender lokale notifikationer på denne Mac; appen optager, router, behandler, booster, EQ-behandler, gemmer eller uploader ikke mikrofonlyd."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Standardschwellenwert ist 35% und das Standardminimum für die Begrenzung ist 50%. EqualEase beobachtet nur die macOS-Eingangslautstärke und sendet lokale Mitteilungen auf diesem Mac; es erfasst, routet, verarbeitet, verstärkt oder speichert kein Mikrofon-Audio, wendet keinen EQ darauf an und lädt es nicht hoch."
+          }
         }
       }
     },
@@ -1170,6 +1566,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Slet"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Löschen"
           }
         }
       }
@@ -1188,6 +1590,12 @@
             "state": "translated",
             "value": "Slet \"%@\"? Dette kan ikke fortrydes."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "„%@“ löschen? Dies kann nicht rückgängig gemacht werden."
+          }
         }
       }
     },
@@ -1205,6 +1613,12 @@
             "state": "translated",
             "value": "Slet forudindstilling?"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset löschen?"
+          }
         }
       }
     },
@@ -1221,6 +1635,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Afvist i macOS"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In macOS verweigert"
           }
         }
       },
@@ -1240,6 +1660,12 @@
             "state": "translated",
             "value": "Kun diagnostisk kontrol: global bypass sender stadig lyd gennem EqualEase. Bypass pr. app vises nedenfor og holder appen tappet, så den stadig kan følge EqualEases valgte output."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur Diagnose-Steuerung: Der globale Bypass routet Audio weiterhin durch EqualEase. Der App-Bypass wird unten angezeigt und bindet diese App weiter als Tap ein, damit sie weiter der ausgewählten Ausgabe von EqualEase folgen kann."
+          }
         }
       }
     },
@@ -1256,6 +1682,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Afbrudt — prøver igen…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Getrennt — erneuter Versuch…"
           }
         }
       },
@@ -1275,6 +1707,12 @@
             "state": "translated",
             "value": "Fundne lydapps"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkannte Audio-Apps"
+          }
         }
       }
     },
@@ -1291,6 +1729,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EQ fra"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EQ aus"
           }
         }
       },
@@ -1310,6 +1754,12 @@
             "state": "translated",
             "value": "EQ til"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EQ ein"
+          }
         }
       },
       "comment": "Audio routing processing summary when equalizer filters are enabled."
@@ -1328,6 +1778,12 @@
             "state": "translated",
             "value": "Aktivér 10-bånds-EQ"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-Band-EQ aktivieren"
+          }
         }
       }
     },
@@ -1344,6 +1800,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Indtast koden fra din Mac for at parre denne fjernbetjening."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gib den Code von deinem Mac ein, um diese Fernsteuerung zu koppeln."
           }
         }
       },
@@ -1363,6 +1825,12 @@
             "state": "translated",
             "value": "Indtast den sekscifrede kode, der vises på din Mac."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gib den sechsstelligen Code ein, der auf deinem Mac angezeigt wird."
+          }
         }
       },
       "comment": "Phone web remote validation message for an incomplete pairing code."
@@ -1381,6 +1849,12 @@
             "state": "translated",
             "value": "Indtast denne kode på telefonfjernbetjeningen. Den udløber kl. %@ og bruges kun én gang."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gib diesen Code auf der Telefon-Fernsteuerung ein. Er läuft um %@ ab und wird nur einmal verwendet."
+          }
         }
       }
     },
@@ -1397,6 +1871,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Konvolutten mangler en understøttet type."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dem Umschlag fehlt ein unterstützter Typ."
           }
         }
       },
@@ -1416,6 +1896,12 @@
             "state": "translated",
             "value": "Konvolutten skal være et JSON-objekt."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Umschlag muss ein JSON-Objekt sein."
+          }
         }
       },
       "comment": "Remote-control protocol error for malformed WebSocket JSON."
@@ -1430,6 +1916,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase"
@@ -1451,6 +1943,12 @@
             "state": "translated",
             "value": "EqualEase-fjernbetjening"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase-Fernsteuerung"
+          }
         }
       },
       "comment": "Browser title for the paired phone web remote."
@@ -1469,6 +1967,12 @@
             "state": "translated",
             "value": "EqualEase kan starte diskret i menulinjen. Lydrouting forbliver slået fra, indtil du slår den til, medmindre du udtrykkeligt aktiverer automatisk routing her. Lydbehandling sker lokalt på denne Mac."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase kann unauffällig in der Menüleiste starten. Audio-Routing bleibt aus, bis du es einschaltest, es sei denn, du aktivierst hier ausdrücklich automatisches Routing. Die Audioverarbeitung erfolgt lokal auf diesem Mac."
+          }
         }
       }
     },
@@ -1485,6 +1989,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase kan skifte til denne forudindstilling, når %@ bliver den aktive app, og derefter vende tilbage til din valgte standardforudindstilling, når du skifter væk."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase kann zu diesem Preset wechseln, sobald %@ die aktive App wird, und danach zu deinem ausgewählten Standardpreset zurückkehren, wenn du wegwechselst."
           }
         }
       },
@@ -1504,6 +2014,12 @@
             "state": "translated",
             "value": "EqualEase kan skifte til denne forudindstilling, når %@ er det aktive websted i en understøttet browser, og derefter falde tilbage til din app- eller standardforudindstilling, når du skifter væk."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase kann zu diesem Preset wechseln, sobald %@ die aktive Website in einem unterstützten Browser ist, und danach auf dein App- oder Standardpreset zurückfallen, wenn du wegwechselst."
+          }
         }
       },
       "comment": "Smart-switching prompt body for website rules. Interpolation is a website display name or host."
@@ -1522,6 +2038,12 @@
             "state": "translated",
             "value": "EqualEase kunne ikke læse den aktuelle side i %@. Kontrollér macOS-automatiseringstilladelsen for EqualEase, og prøv igen."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase konnte die aktuelle Seite von %@ nicht lesen. Prüfe die macOS-Automatisierungsberechtigung für EqualEase und versuche es erneut."
+          }
         }
       }
     },
@@ -1538,6 +2060,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "EqualEase behandler lyd lokalt på denne Mac. Appen optager, gemmer, uploader, sælger eller deler ikke lyd."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase verarbeitet Audio lokal auf diesem Mac. Es nimmt Audio nicht auf, speichert es nicht, lädt es nicht hoch, verkauft es nicht und teilt es nicht."
           }
         }
       }
@@ -1556,6 +2084,12 @@
             "state": "translated",
             "value": "EqualEase viser inputtilstand kun som en hjælp. Valg af inputenhed, mikrofonrouting og mikrofon-EQ er bevidst uden for scope."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase zeigt den Eingangsstatus nur der Übersicht halber an. Eingabegeräte-Auswahl, Mikrofon-Routing und Mikrofon-EQ sind bewusst nicht Teil des Funktionsumfangs."
+          }
         }
       }
     },
@@ -1573,6 +2107,12 @@
             "state": "translated",
             "value": "Ekstern automatisering"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Externe Automatisierung"
+          }
         }
       }
     },
@@ -1589,6 +2129,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kunne ikke indstille inputlydstyrke"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingangslautstärke konnte nicht gesetzt werden"
           }
         }
       },
@@ -1608,6 +2154,12 @@
             "state": "translated",
             "value": "Mislykkedes: %@"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fehlgeschlagen: %@"
+          }
         }
       },
       "comment": "Local-network remote status when startup failed. Interpolation is the underlying error message."
@@ -1625,6 +2177,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Flad"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linear"
           }
         }
       },
@@ -1644,6 +2202,12 @@
             "state": "translated",
             "value": "Følg systemoutput"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systemausgabe folgen"
+          }
         }
       }
     },
@@ -1657,6 +2221,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gain"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Gain"
@@ -1678,6 +2248,12 @@
             "state": "translated",
             "value": "Skjul"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausblenden"
+          }
         }
       }
     },
@@ -1694,6 +2270,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skjul %@-kontroller"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@-Steuerungen ausblenden"
           }
         }
       }
@@ -1712,6 +2294,12 @@
             "state": "translated",
             "value": "Skjul kontroller til inputlydstyrke"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steuerungen für Eingangslautstärke ausblenden"
+          }
         }
       }
     },
@@ -1728,6 +2316,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skjul routingkontroller"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routing-Steuerungen ausblenden"
           }
         }
       }
@@ -1746,6 +2340,12 @@
             "state": "translated",
             "value": "Hvis udviklingslyd sætter sig fast i stilhed, så stop routing og ryd op i Core Audio-taps og aggregerede enheder, som EqualEase ejer."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn Entwicklungs-Audio stumm hängen bleibt, stoppe das Routing und bereinige die Core-Audio-Taps und Aggregatgeräte, die EqualEase gehören."
+          }
         }
       }
     },
@@ -1762,6 +2362,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ignorerer regler for app- og webstedsforudindstillinger og beholder den aktuelle forudindstilling, mens du skifter fokus."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignoriert App- und Website-Preset-Regeln und behält das aktuelle Preset bei, während du den Fokus wechselst."
           }
         }
       },
@@ -1781,6 +2387,12 @@
             "state": "translated",
             "value": "Input"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingang"
+          }
         }
       }
     },
@@ -1797,6 +2409,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inputlydstyrke"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingangslautstärke"
           }
         }
       },
@@ -1816,6 +2434,12 @@
             "state": "translated",
             "value": "Inputlydstyrke"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingangslautstärke"
+          }
         }
       }
     },
@@ -1832,6 +2456,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ikke tilgængelig"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht verfügbar"
           }
         }
       },
@@ -1851,6 +2481,12 @@
             "state": "translated",
             "value": "Inputlydstyrken er OK."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingangslautstärke ist OK."
+          }
         }
       },
       "comment": "Microphone protection status when the input volume is above the low-volume threshold."
@@ -1868,6 +2504,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inputlydstyrken er lav."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingangslautstärke ist niedrig."
           }
         }
       },
@@ -1887,6 +2529,12 @@
             "state": "translated",
             "value": "Inputlydstyrken er lav; EqualEase kunne ikke indstille denne enheds inputlydstyrke."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingangslautstärke ist niedrig; EqualEase konnte die Eingangslautstärke dieses Geräts nicht setzen."
+          }
         }
       },
       "comment": "Microphone protection status when an automatic cap attempt failed."
@@ -1904,6 +2552,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inputlydstyrken er lav; automatisk hævning er ikke tilgængelig for denne enhed."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingangslautstärke ist niedrig; automatische Begrenzung ist für dieses Gerät nicht verfügbar."
           }
         }
       },
@@ -1923,6 +2577,12 @@
             "state": "translated",
             "value": "Inputlydstyrken er lav; forsøg på at hæve er hastighedsbegrænset."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingangslautstärke ist niedrig; der Begrenzungsversuch ist vorübergehend gesperrt."
+          }
         }
       },
       "comment": "Microphone protection status when EqualEase recently tried to raise input volume and is waiting before retrying."
@@ -1940,6 +2600,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ikke tilgængelig"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht verfügbar"
           }
         }
       },
@@ -1959,6 +2625,12 @@
             "state": "translated",
             "value": "Inputlydstyrken var lav, og EqualEase hævede den til %lld%%."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Eingangslautstärke war niedrig und EqualEase hat sie auf %lld%% angehoben."
+          }
         }
       },
       "comment": "Microphone protection status after automatically raising input volume. Interpolation is the configured minimum percentage."
@@ -1977,6 +2649,12 @@
             "state": "translated",
             "value": "Hold EqualEase slået fra, og vis de normale kontroller."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase ausgeschaltet lassen und die normalen Steuerungen anzeigen."
+          }
         }
       }
     },
@@ -1993,6 +2671,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seneste hæveforsøg"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzter Begrenzungsversuch"
           }
         }
       }
@@ -2011,6 +2695,12 @@
             "state": "translated",
             "value": "Seneste notifikation"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzte Mitteilung"
+          }
         }
       }
     },
@@ -2028,6 +2718,12 @@
             "state": "translated",
             "value": "Start EqualEase, når du logger ind"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase bei der Anmeldung starten"
+          }
         }
       }
     },
@@ -2044,6 +2740,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fra"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus"
           }
         }
       },
@@ -2063,6 +2765,12 @@
             "state": "translated",
             "value": "Til"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein"
+          }
         }
       },
       "comment": "Launch-at-login status when EqualEase will launch automatically."
@@ -2080,6 +2788,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ukendt"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unbekannt"
           }
         }
       },
@@ -2099,6 +2813,12 @@
             "state": "translated",
             "value": "Fjernbetjening på lokalt netværk"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fernsteuerung im lokalen Netzwerk"
+          }
         }
       }
     },
@@ -2115,6 +2835,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stoppet"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestoppt"
           }
         }
       },
@@ -2134,6 +2860,12 @@
             "state": "translated",
             "value": "Login"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anmeldung"
+          }
         }
       }
     },
@@ -2147,6 +2879,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loudness"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Loudness"
@@ -2169,6 +2907,12 @@
             "state": "translated",
             "value": "Lav"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niedrig"
+          }
         }
       }
     },
@@ -2186,6 +2930,12 @@
             "state": "translated",
             "value": "Beskyttelse mod lav mikrofonlydstyrke"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schutz bei niedriger Mikrofonlautstärke"
+          }
         }
       }
     },
@@ -2202,6 +2952,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Registrering af lav lydstyrke er ikke tilgængelig for denne inputenhed."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkennung niedriger Lautstärke ist für dieses Eingabegerät nicht verfügbar."
           }
         }
       },
@@ -2221,6 +2977,12 @@
             "state": "translated",
             "value": "Grænse for lav lydstyrke"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schwellenwert für niedrige Lautstärke"
+          }
         }
       }
     },
@@ -2237,6 +2999,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Administrer"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verwalten"
           }
         }
       }
@@ -2255,6 +3023,12 @@
             "state": "translated",
             "value": "Administrer EqualEase…"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase verwalten…"
+          }
         }
       }
     },
@@ -2271,6 +3045,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Administrer forudindstillinger"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presets verwalten"
           }
         }
       }
@@ -2289,6 +3069,12 @@
             "state": "translated",
             "value": "Manuel genstart anmodet"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manueller Neustart angefordert"
+          }
         }
       },
       "comment": "Audio routing restart reason after the user clicks Restart in Diagnostics."
@@ -2303,6 +3089,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Aktiv"
@@ -2325,6 +3117,12 @@
             "state": "translated",
             "value": "Mislykkedes"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fehlgeschlagen"
+          }
         }
       },
       "comment": "Short menu-bar status when audio routing failed."
@@ -2342,6 +3140,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fra"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus"
           }
         }
       },
@@ -2361,6 +3165,12 @@
             "state": "translated",
             "value": "Starter…"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Startet…"
+          }
         }
       },
       "comment": "Short menu-bar status while audio routing is starting."
@@ -2379,6 +3189,12 @@
             "state": "translated",
             "value": "Besked"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachricht"
+          }
         }
       }
     },
@@ -2395,6 +3211,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mikrofonens inputlydstyrke er lav"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mikrofon-Eingangslautstärke ist niedrig"
           }
         }
       },
@@ -2414,6 +3236,12 @@
             "state": "translated",
             "value": "Minimumshævning"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mindestbegrenzung"
+          }
         }
       }
     },
@@ -2430,6 +3258,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Overvåger aktuel inputlydstyrke."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuelle Eingangslautstärke wird überwacht."
           }
         }
       },
@@ -2449,6 +3283,12 @@
             "state": "translated",
             "value": "Mere"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mehr"
+          }
         }
       }
     },
@@ -2466,6 +3306,12 @@
             "state": "translated",
             "value": "Dæmpet"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedämpft"
+          }
         }
       },
       "comment": "Built-in EQ preset name; deliberately subdued/background sound for less prominent audio."
@@ -2480,6 +3326,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Musik"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Musik"
@@ -2501,6 +3353,12 @@
             "state": "translated",
             "value": "Slå lyd fra"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stumm"
+          }
         }
       },
       "comment": "Per-app audio button label. Means silence this app stream."
@@ -2519,6 +3377,12 @@
             "state": "translated",
             "value": "Slå lyd fra: slå lyden fra for denne app."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stummgeschaltet: Diese App wird stummgeschaltet."
+          }
         }
       }
     },
@@ -2535,6 +3399,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kræver godkendelse"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genehmigung erforderlich"
           }
         }
       },
@@ -2554,6 +3424,12 @@
             "state": "translated",
             "value": "Aldrig"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie"
+          }
         }
       },
       "comment": "Status value meaning an event has not happened yet."
@@ -2571,6 +3447,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nattilstand"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachtmodus"
           }
         }
       },
@@ -2590,6 +3472,12 @@
             "state": "translated",
             "value": "Ingen aktiv app registreret."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine aktive App erkannt."
+          }
         }
       }
     },
@@ -2606,6 +3494,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ingen lydafspillende apps registreret endnu."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine Apps mit Audiowiedergabe erkannt."
           }
         }
       }
@@ -2624,6 +3518,12 @@
             "state": "translated",
             "value": "Ingen lydafspillende apps registreret."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Apps mit Audiowiedergabe erkannt."
+          }
         }
       }
     },
@@ -2640,6 +3540,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ingen inputenhed"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Eingabegerät"
           }
         }
       },
@@ -2659,6 +3565,12 @@
             "state": "translated",
             "value": "Ingen parrede fjernbetjeninger endnu."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine gekoppelten Fernsteuerungen."
+          }
         }
       }
     },
@@ -2675,6 +3587,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ingen forudindstilling"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Preset"
           }
         }
       },
@@ -2694,6 +3612,12 @@
             "state": "translated",
             "value": "Ingen regler for forudindstillinger endnu."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine Preset-Regeln."
+          }
         }
       }
     },
@@ -2710,6 +3634,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ingen forældede EqualEase-lydobjekter fundet."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine veralteten EqualEase-Audioobjekte gefunden."
           }
         }
       },
@@ -2729,6 +3659,12 @@
             "state": "translated",
             "value": "Ikke nu"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht jetzt"
+          }
         }
       }
     },
@@ -2745,6 +3681,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ikke anmodet"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht angefordert"
           }
         }
       },
@@ -2764,6 +3706,12 @@
             "state": "translated",
             "value": "Notifikationstilladelse"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungsberechtigung"
+          }
         }
       }
     },
@@ -2780,6 +3728,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ikke tilgængelig"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht verfügbar"
           }
         }
       },
@@ -2799,6 +3753,12 @@
             "state": "translated",
             "value": "Notifikationer"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungen"
+          }
         }
       }
     },
@@ -2816,6 +3776,12 @@
             "state": "translated",
             "value": "Giv mig besked, når mikrofonens inputlydstyrke er lav"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mich benachrichtigen, wenn die Mikrofon-Eingangslautstärke niedrig ist"
+          }
         }
       }
     },
@@ -2829,6 +3795,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "OK"
@@ -2850,6 +3822,12 @@
             "state": "translated",
             "value": "Åbn indstillinger for forudindstillinger"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset-Einstellungen öffnen"
+          }
         }
       }
     },
@@ -2866,6 +3844,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Output ændret"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgabe geändert"
           }
         }
       },
@@ -2885,6 +3869,12 @@
             "state": "translated",
             "value": "Outputenhed"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgabegerät"
+          }
         }
       },
       "comment": "Accessibility label for the selected real macOS output device; device names are runtime values."
@@ -2902,6 +3892,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Observation af ændring i outputenhed er ikke tilgængelig; der opdateres, når menuen åbnes, eller routing starter."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beobachtung von Ausgabegeräte-Änderungen nicht verfügbar; Aktualisierung erfolgt beim Öffnen des Menüs oder beim Starten des Routings."
           }
         }
       },
@@ -2921,6 +3917,12 @@
             "state": "translated",
             "value": "Par ny fjernbetjening…"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neue Fernsteuerung koppeln…"
+          }
         }
       }
     },
@@ -2937,6 +3939,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Par fjernbetjening"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fernsteuerung koppeln"
           }
         }
       },
@@ -2956,6 +3964,12 @@
             "state": "translated",
             "value": "Par eller godkend, før du bruger fjernbetjening."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vor Verwendung der Fernsteuerung koppeln oder authentifizieren."
+          }
         }
       },
       "comment": "Remote-control message shown before the phone has paired or authenticated."
@@ -2973,6 +3987,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Parringsdata skal indeholde en parringskode."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Kopplungs-Nutzlast muss einen Kopplungscode enthalten."
           }
         }
       },
@@ -2992,6 +4012,12 @@
             "state": "translated",
             "value": "Par fjernbetjening"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fernsteuerung koppeln"
+          }
         }
       },
       "comment": "Accessibility label for the phone web remote pairing section."
@@ -3009,6 +4035,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Par denne fjernbetjening, før du ændrer EqualEase."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopple diese Fernsteuerung, bevor du EqualEase änderst."
           }
         }
       },
@@ -3028,6 +4060,12 @@
             "state": "translated",
             "value": "Parret %@"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ gekoppelt"
+          }
         }
       }
     },
@@ -3044,6 +4082,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Parret adgang beskytter fjernbetjening på dit betroede lokale netværk. Trafikken forbliver lokal, men er ikke krypteret på internetniveau."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gekoppelter Zugriff schützt die Fernsteuerung in deinem vertrauenswürdigen lokalen Netzwerk. Der Datenverkehr bleibt lokal, ist aber nicht auf Internetniveau verschlüsselt."
           }
         }
       },
@@ -3063,6 +4107,12 @@
             "state": "translated",
             "value": "Parret som"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gekoppelt als"
+          }
         }
       },
       "comment": "Phone web remote status prefix before the paired client name."
@@ -3080,6 +4130,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Parring er ikke aktiv. Start parring fra EqualEase-indstillinger."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopplung ist nicht aktiv. Starte die Kopplung in den EqualEase-Einstellungen."
           }
         }
       },
@@ -3099,6 +4155,12 @@
             "state": "translated",
             "value": "Parring er ikke aktiv. Start parring fra Indstillinger > Generelt > Fjernbetjening på lokalt netværk."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopplung ist nicht aktiv. Starte die Kopplung unter Einstellungen > Allgemein > Fernsteuerung im lokalen Netzwerk."
+          }
         }
       },
       "comment": "Local-network remote pairing error when no temporary pairing session exists."
@@ -3116,6 +4178,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Parring eller godkendelse mislykkedes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopplung oder Authentifizierung fehlgeschlagen."
           }
         }
       },
@@ -3135,6 +4203,12 @@
             "state": "translated",
             "value": "Parring kræves"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopplung erforderlich"
+          }
         }
       },
       "comment": "Phone web remote status when the client must pair again."
@@ -3153,6 +4227,12 @@
             "state": "translated",
             "value": "Sæt skift af app-forudindstillinger på pause"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-Preset-Wechsel pausieren"
+          }
         }
       }
     },
@@ -3169,6 +4249,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lyd pr. app"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio pro App"
           }
         }
       }
@@ -3187,6 +4273,12 @@
             "state": "translated",
             "value": "Lyd pr. app vises, når EqualEase Aktiv er slået til, og apps udsender lyd."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio pro App wird angezeigt, wenn EqualEase Aktiv eingeschaltet ist und Apps Ton ausgeben."
+          }
         }
       }
     },
@@ -3203,6 +4295,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lyd fra pr. app: tappet, men med lyden slået fra"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App stumm: als Tap eingebunden, aber stummgeschaltet"
           }
         }
       }
@@ -3221,6 +4319,12 @@
             "state": "translated",
             "value": "Fra pr. app: uændret pass-through, ingen lydstyrke, ingen EQ"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App aus: unverändert durchgeleitet, keine Lautstärke, kein EQ"
+          }
         }
       }
     },
@@ -3237,6 +4341,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lydstyrke pr. app dæmper kun: 100% er normal lydstyrke. Brug Preamp til global boost."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lautstärke pro App ist nur Absenkung: 100% ist normale Lautstärke. Verwende Preamp für globale Verstärkung."
           }
         }
       }
@@ -3255,6 +4365,12 @@
             "state": "translated",
             "value": "Lydstyrke pr. app bruger ét tap pr. lydafspillende app plus et fallback-tap til alt andet. Apps i Fra-tilstand forbliver tappet, men sendes uændret igennem; apps med lyden slået fra er tappet, men med lyden slået fra."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lautstärke pro App nutzt einen Tap je App mit Audiowiedergabe plus einen Fallback-Tap für alles andere. Ausgeschaltete Apps bleiben als Tap eingebunden, werden aber unverändert durchgeleitet; stummgeschaltete Apps sind als Tap eingebunden, aber stumm."
+          }
         }
       }
     },
@@ -3272,6 +4388,12 @@
             "state": "translated",
             "value": "Telefonfjernbetjening"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Telefon-Fernsteuerung"
+          }
         }
       },
       "comment": "Default display name for a newly paired local-network remote client."
@@ -3286,6 +4408,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Podcast"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Podcast"
@@ -3308,6 +4436,12 @@
             "state": "translated",
             "value": "Sendt kl. %@"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesendet um %@"
+          }
         }
       },
       "comment": "Microphone protection notification summary. Interpolation is a localized time."
@@ -3322,6 +4456,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preamp"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Preamp"
@@ -3344,6 +4484,12 @@
             "state": "translated",
             "value": "Preamp %lld procent"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preamp %lld Prozent"
+          }
         }
       }
     },
@@ -3357,6 +4503,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preamp / Gain"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Preamp / Gain"
@@ -3378,6 +4530,12 @@
             "state": "translated",
             "value": "Forudindstilling"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset"
+          }
         }
       },
       "comment": "Saved EQ curve and preamp level."
@@ -3396,6 +4554,12 @@
             "state": "translated",
             "value": "Regler for forudindstillinger"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset-Regeln"
+          }
         }
       }
     },
@@ -3412,6 +4576,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Forudindstillingskommandoen skal indeholde presetID eller presetName."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Preset-Befehl muss presetID oder presetName enthalten."
           }
         }
       },
@@ -3431,6 +4601,12 @@
             "state": "translated",
             "value": "Navn på forudindstilling"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset-Name"
+          }
         }
       }
     },
@@ -3447,6 +4623,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Regler for forudindstillinger er sat på pause. EqualEase forbliver på %@, indtil skift af forudindstillinger genoptages."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset-Regeln sind pausiert. EqualEase bleibt bei %@, bis der Preset-Wechsel fortgesetzt wird."
           }
         }
       },
@@ -3466,6 +4648,12 @@
             "state": "translated",
             "value": "Regler for forudindstillinger er sat på pause; %@ forbliver aktiv, mens du skifter apps eller websteder."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset-Regeln sind pausiert; %@ bleibt aktiv, während du zwischen Apps oder Websites wechselst."
+          }
         }
       },
       "comment": "Help text for locked preset mode. Interpolation is a preset name; keep 'preset rules' as the app/website switching feature."
@@ -3483,6 +4671,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Forudindstillinger"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presets"
           }
         }
       },
@@ -3502,6 +4696,12 @@
             "state": "translated",
             "value": "Privatlivspolitik"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datenschutzerklärung"
+          }
         }
       }
     },
@@ -3518,6 +4718,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Behandl"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verarbeiten"
           }
         }
       },
@@ -3537,6 +4743,12 @@
             "state": "translated",
             "value": "Behandl: app-lydstyrke og derefter global EQ."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verarbeiten: App-Lautstärke, dann globaler EQ."
+          }
         }
       }
     },
@@ -3554,6 +4766,12 @@
             "state": "translated",
             "value": "Beskyttelsen fortsætter, selv når EqualEase Aktiv er slået fra, fordi den overvåger macOS-egenskaben for inputlydstyrke, ikke routingstien for systemlyd."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Schutz läuft weiter, auch wenn EqualEase Aktiv ausgeschaltet ist, weil er die macOS-Eigenschaft für Eingangslautstärke beobachtet, nicht den Systemaudio-Routing-Pfad."
+          }
         }
       }
     },
@@ -3570,6 +4788,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Protokolfejl"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokollfehler"
           }
         }
       },
@@ -3589,6 +4813,12 @@
             "state": "translated",
             "value": "Hurtigpanel"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schnellbereich"
+          }
         }
       }
     },
@@ -3606,6 +4836,12 @@
             "state": "translated",
             "value": "Afslut EqualEase"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase beenden"
+          }
         }
       }
     },
@@ -3622,6 +4858,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hævet til %lld%%"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf %lld%% angehoben"
           }
         }
       },
@@ -3641,6 +4883,12 @@
             "state": "translated",
             "value": "Skrivebeskyttet"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreibgeschützt"
+          }
         }
       },
       "comment": "Input volume capability: EqualEase can read but not change this microphone volume."
@@ -3659,6 +4907,12 @@
             "state": "translated",
             "value": "Gendannelse"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederherstellung"
+          }
         }
       }
     },
@@ -3675,6 +4929,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reducer rumlen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rumpeln reduzieren"
           }
         }
       },
@@ -3694,6 +4954,12 @@
             "state": "translated",
             "value": "Husk"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merken"
+          }
         }
       }
     },
@@ -3710,6 +4976,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Husk %1$@ for %2$@?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ für %2$@ merken?"
           }
         }
       },
@@ -3729,6 +5001,12 @@
             "state": "translated",
             "value": "Ukendt"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unbekannt"
+          }
         }
       },
       "comment": "Fallback preset name when the local-network remote state has no active preset."
@@ -3743,6 +5021,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preamp"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Preamp"
@@ -3765,6 +5049,12 @@
             "state": "translated",
             "value": "Forudindstillinger"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presets"
+          }
         }
       },
       "comment": "Phone web remote preset button section accessibility label."
@@ -3782,6 +5072,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lydstyrke"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lautstärke"
           }
         }
       },
@@ -3801,6 +5097,12 @@
             "state": "translated",
             "value": "Fjernbetjeningens legitimationsoplysninger blev ikke genkendt. Par denne enhed igen fra EqualEase-indstillinger."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Zugangsdaten der Fernsteuerung wurden nicht erkannt. Kopple dieses Gerät erneut in den EqualEase-Einstellungen."
+          }
         }
       },
       "comment": "Remote-control authentication error when stored phone credentials are invalid or revoked."
@@ -3819,6 +5121,12 @@
             "state": "translated",
             "value": "Navn på fjernbetjening"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name der Fernsteuerung"
+          }
         }
       },
       "comment": "Placeholder for naming a paired phone remote."
@@ -3833,6 +5141,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Aktiv"
@@ -3855,6 +5169,12 @@
             "state": "translated",
             "value": "Fra"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus"
+          }
         }
       },
       "comment": "Phone web remote routing status when EqualEase is off."
@@ -3873,6 +5193,12 @@
             "state": "translated",
             "value": "Omdøb"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umbenennen"
+          }
         }
       }
     },
@@ -3889,6 +5215,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nulstil parringer"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopplungen zurücksetzen"
           }
         }
       }
@@ -3907,6 +5239,12 @@
             "state": "translated",
             "value": "Genstart"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neustart"
+          }
         }
       }
     },
@@ -3923,6 +5261,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gendan live-EQ og gain til den valgte forudindstillings gemte værdier."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live-EQ und Gain auf die im ausgewählten Preset gespeicherten Werte zurücksetzen."
           }
         }
       }
@@ -3941,6 +5285,12 @@
             "state": "translated",
             "value": "Gendan"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurücksetzen"
+          }
         }
       }
     },
@@ -3957,6 +5307,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tilbagekald"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widerrufen"
           }
         }
       }
@@ -3975,6 +5331,12 @@
             "state": "translated",
             "value": "Send systemlyd lokalt gennem denne Mac, så EqualEase kan anvende EQ før afspilning."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leite Systemaudio lokal durch diesen Mac, damit EqualEase vor der Wiedergabe EQ anwenden kann."
+          }
         }
       }
     },
@@ -3991,6 +5353,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lydrouting"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routing"
           }
         }
       },
@@ -4010,6 +5378,12 @@
             "state": "translated",
             "value": "Routingstatus"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routing-Status"
+          }
         }
       }
     },
@@ -4026,6 +5400,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Regler"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regeln"
           }
         }
       }
@@ -4044,6 +5424,12 @@
             "state": "translated",
             "value": "Regler skifter midlertidigt EqualEase ud fra det, du fokuserer på. Webstedsregler gælder, når webstedet er den aktive fane i en understøttet browser. Når ingen regel matcher, vender EqualEase tilbage til den valgte standardforudindstilling."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regeln schalten EqualEase vorübergehend je nach deinem Fokus um. Website-Regeln gelten, wenn diese Website der aktive Tab in einem unterstützten Browser ist. Wenn keine Regel passt, kehrt EqualEase zum ausgewählten Standardpreset zurück."
+          }
         }
       }
     },
@@ -4060,6 +5446,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kører på %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Läuft unter %@"
           }
         }
       },
@@ -4079,6 +5471,12 @@
             "state": "translated",
             "value": "Kører på port %u"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Läuft auf Port %u"
+          }
         }
       },
       "comment": "Local-network remote status when running but no LAN URL is known. Interpolation is the TCP port."
@@ -4097,6 +5495,12 @@
             "state": "translated",
             "value": "Gem"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sichern"
+          }
         }
       }
     },
@@ -4113,6 +5517,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gem som…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sichern unter…"
           }
         }
       }
@@ -4131,6 +5541,12 @@
             "state": "translated",
             "value": "Gem live-EQ og gain i denne brugerdefinerede forudindstilling."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live-EQ und Gain in diesem eigenen Preset sichern."
+          }
         }
       }
     },
@@ -4147,6 +5563,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gemt med forudindstillinger"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit Presets gesichert"
           }
         }
       }
@@ -4165,6 +5587,12 @@
             "state": "translated",
             "value": "Gemmes med forudindstillingen. Sænk den, hvis boostede bånd forvrænger."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit dem Preset gesichert. Senke ihn ab, wenn angehobene Bänder verzerren."
+          }
         }
       }
     },
@@ -4181,6 +5609,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Valgt bånd"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgewähltes Band"
           }
         }
       }
@@ -4199,6 +5633,12 @@
             "state": "translated",
             "value": "Valgt output"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgewählte Ausgabe"
+          }
         }
       }
     },
@@ -4215,6 +5655,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kan indstilles"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellbar"
           }
         }
       },
@@ -4234,6 +5680,12 @@
             "state": "translated",
             "value": "Indstillinger"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen"
+          }
         }
       }
     },
@@ -4250,6 +5702,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vis app-lydstyrke i hurtigpanelet"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-Lautstärke im Schnellbereich anzeigen"
           }
         }
       }
@@ -4268,6 +5726,12 @@
             "state": "translated",
             "value": "Vis inputlydstyrke i hurtigpanelet"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingangslautstärke im Schnellbereich anzeigen"
+          }
         }
       }
     },
@@ -4284,6 +5748,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vis preamp i hurtigpanelet"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preamp im Schnellbereich anzeigen"
           }
         }
       }
@@ -4302,6 +5772,12 @@
             "state": "translated",
             "value": "Vis routingkontroller i hurtigpanelet"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routing-Steuerungen im Schnellbereich anzeigen"
+          }
         }
       }
     },
@@ -4319,6 +5795,12 @@
             "state": "translated",
             "value": "Vis lydstyrke i hurtigpanelet"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lautstärke im Schnellbereich anzeigen"
+          }
         }
       }
     },
@@ -4335,6 +5817,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sprunget over: inputlydstyrke er skrivebeskyttet eller utilgængelig"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übersprungen: Eingangslautstärke ist schreibgeschützt oder nicht verfügbar"
           }
         }
       },
@@ -4354,6 +5842,12 @@
             "state": "translated",
             "value": "Små højttalere"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kleine Lautsprecher"
+          }
         }
       },
       "comment": "Built-in EQ preset name for laptop or compact speakers."
@@ -4372,6 +5866,12 @@
             "state": "translated",
             "value": "Tale"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprache"
+          }
         }
       }
     },
@@ -4388,6 +5888,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start lydrouting"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routing starten"
           }
         }
       }
@@ -4406,6 +5912,12 @@
             "state": "translated",
             "value": "Start lydrouting automatisk efter start"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio-Routing nach dem Start automatisch starten"
+          }
         }
       }
     },
@@ -4423,6 +5935,12 @@
             "state": "translated",
             "value": "Start lydrouting automatisk ved fremtidige starter"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio-Routing bei zukünftigen Starts automatisch starten"
+          }
         }
       }
     },
@@ -4439,6 +5957,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start parring i EqualEase-indstillinger > Generelt > Fjernbetjening på lokalt netværk, og indtast derefter den sekscifrede kode, der vises på din Mac."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starte die Kopplung in den EqualEase-Einstellungen > Allgemein > Fernsteuerung im lokalen Netzwerk und gib dann den sechsstelligen Code ein, der auf deinem Mac angezeigt wird."
           }
         }
       },
@@ -4458,6 +5982,12 @@
             "state": "translated",
             "value": "Starter lydrouting…"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio-Routing wird gestartet…"
+          }
         }
       },
       "comment": "Audio routing status while EqualEase starts capturing and rendering system audio."
@@ -4475,6 +6005,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Starter fjernbetjening på lokalt netværk…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fernsteuerung im lokalen Netzwerk wird gestartet…"
           }
         }
       },
@@ -4494,6 +6030,12 @@
             "state": "translated",
             "value": "Starter lokal routing af systemlyd og kan vise macOS-tilladelsesprompten for lydoptagelse."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Startet lokales Systemaudio-Routing und zeigt möglicherweise die macOS-Abfrage für Audioerfassung an."
+          }
         }
       }
     },
@@ -4511,6 +6053,12 @@
             "state": "translated",
             "value": "Tilstand"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zustand"
+          }
         }
       }
     },
@@ -4524,6 +6072,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Status"
@@ -4545,6 +6099,12 @@
             "state": "translated",
             "value": "Stop lydrouting"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Routing stoppen"
+          }
         }
       }
     },
@@ -4561,6 +6121,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stopper lydrouting…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio-Routing wird gestoppt…"
           }
         }
       },
@@ -4580,6 +6146,12 @@
             "state": "translated",
             "value": "Stopper…"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wird gestoppt…"
+          }
         }
       },
       "comment": "Short menu-bar status while audio routing is stopping."
@@ -4598,6 +6170,12 @@
             "state": "translated",
             "value": "Support og privatliv"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support & Datenschutz"
+          }
         }
       }
     },
@@ -4611,6 +6189,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support / Kontakt"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Support / Kontakt"
@@ -4632,6 +6216,12 @@
             "state": "translated",
             "value": "Stryg op eller ned med VoiceOver for at justere i trin på en halv decibel."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streiche mit VoiceOver nach oben oder unten, um in Halb-Dezibel-Schritten anzupassen."
+          }
         }
       }
     },
@@ -4648,6 +6238,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skifter…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wechsel läuft…"
           }
         }
       },
@@ -4667,6 +6263,12 @@
             "state": "translated",
             "value": "Parringskoden er ugyldig eller udløbet."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Kopplungscode ist ungültig oder abgelaufen."
+          }
         }
       },
       "comment": "Local-network remote pairing error for a wrong or expired six-digit code."
@@ -4685,6 +6287,12 @@
             "state": "translated",
             "value": "Grænseværdi"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schwellenwert"
+          }
         }
       }
     },
@@ -4701,6 +6309,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "For mange parringsforsøg. Vent et par minutter, før du prøver igen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu viele Kopplungsversuche. Warte ein paar Minuten, bevor du es erneut versuchst."
           }
         }
       },
@@ -4720,6 +6334,12 @@
             "state": "translated",
             "value": "Diskantboost"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höhen-Boost"
+          }
         }
       },
       "comment": "Built-in EQ preset name; emphasizes high frequencies."
@@ -4738,6 +6358,12 @@
             "state": "translated",
             "value": "Slå EqualEase til"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EqualEase einschalten"
+          }
         }
       }
     },
@@ -4754,6 +6380,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ikke tilgængelig i dette build"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In diesem Build nicht verfügbar"
           }
         }
       },
@@ -4773,6 +6405,12 @@
             "state": "translated",
             "value": "Ikke tilgængelig: %@"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht verfügbar: %@"
+          }
         }
       },
       "comment": "Microphone protection notification summary when notifications cannot be posted. Interpolation is a notification permission status."
@@ -4790,6 +6428,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ukendt outputenhed"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unbekanntes Ausgabegerät"
           }
         }
       },
@@ -4809,6 +6453,12 @@
             "state": "translated",
             "value": "Ukendt forudindstilling: %@"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unbekanntes Preset: %@"
+          }
         }
       },
       "comment": "Local-network remote command error. Interpolation is the requested preset name or ID."
@@ -4826,6 +6476,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ikke-understøttet beskedtype: %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht unterstützter Nachrichtentyp: %@"
           }
         }
       },
@@ -4845,6 +6501,12 @@
             "state": "translated",
             "value": "Ikke-understøttet fjernkommando: %@"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht unterstützter Fernsteuerungsbefehl: %@"
+          }
         }
       },
       "comment": "Remote-control protocol error. Interpolation is the unsupported command name."
@@ -4862,6 +6524,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bruger den valgte standardforudindstilling %@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgewähltes Standardpreset %@ wird verwendet."
           }
         }
       },
@@ -4881,6 +6549,12 @@
             "state": "translated",
             "value": "Værktøj"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dienstprogramm"
+          }
         }
       }
     },
@@ -4894,6 +6568,12 @@
           }
         },
         "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
+          }
+        },
+        "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Version"
@@ -4915,6 +6595,12 @@
             "state": "translated",
             "value": "Stemmeboost"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stimmen-Boost"
+          }
         }
       },
       "comment": "Built-in EQ preset name for making speech clearer in calls or videos."
@@ -4933,6 +6619,12 @@
             "state": "translated",
             "value": "Lydstyrkekontrol"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lautstärkesteuerung"
+          }
         }
       }
     },
@@ -4949,6 +6641,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Varm"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm"
           }
         }
       },
@@ -4968,6 +6666,12 @@
             "state": "translated",
             "value": "WebSocket-beskeder skal være UTF-8 JSON."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WebSocket-Nachrichten müssen UTF-8-JSON sein."
+          }
         }
       },
       "comment": "Remote-control protocol error for non-JSON WebSocket text."
@@ -4986,6 +6690,12 @@
             "state": "translated",
             "value": "Når Aktiv er slået fra, stopper EqualEase lydrouting i stedet for kun at bypasse behandling."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn Aktiv ausgeschaltet ist, stoppt EqualEase das Audio-Routing, statt nur die Verarbeitung zu umgehen."
+          }
         }
       }
     },
@@ -5002,6 +6712,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Når dette er aktiveret, kan EqualEase gendanne lydrouting, efter du starter appen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn aktiviert, kann EqualEase das Audio-Routing nach dem App-Start wiederherstellen."
           }
         }
       }
@@ -5020,6 +6736,12 @@
             "state": "translated",
             "value": "Når dette er aktiveret, kræver EqualEase en parret fjernbetjening, før appen sender detaljeret tilstand eller accepterer kontrolkommandoer. Behold dette for betroede lokale netværk: trafikken er kun på samme LAN og ikke krypteret på internetniveau. Parringskoder og tokens eksponeres aldrig gennem /health, /info, logge eller Indstillinger efter første parring."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn aktiviert, verlangt EqualEase eine gekoppelte Fernsteuerung, bevor es detaillierten Status sendet oder Steuerbefehle annimmt. Behalte dies für vertrauenswürdige lokale Netzwerke bei: Der Datenverkehr bleibt im selben LAN und ist nicht auf Internetniveau verschlüsselt. Kopplungscodes und Token werden nach der ersten Kopplung niemals über /health, /info, Protokolle oder Einstellungen offengelegt."
+          }
         }
       }
     },
@@ -5036,6 +6758,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Når disse er slået fra, skjuler hurtigpanelet den tilsvarende sektion og krymper, så det passer. Diagnostik viser stadig routing, inputtilstand og funden app-lydtilstand."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn diese Optionen aus sind, blendet der Schnellbereich den passenden Abschnitt aus und verkleinert sich entsprechend. Diagnose zeigt weiterhin Routing, Eingangsstatus und erkannte App-Audiozustände."
           }
         }
       }
@@ -5054,6 +6782,12 @@
             "state": "translated",
             "value": "Når dette er slået fra, kan equalease://-links og AppleScript stadig læse EqualEase-tilstand og vælge indbyggede forudindstillinger, men de kan ikke ændre Aktiv, Lydstyrke, Preamp, Bypass, om skift af app-forudindstillinger er sat på pause, eller brugerdefinerede forudindstillinger."
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn dies aus ist, können equalease://-Links und AppleScript weiterhin den EqualEase-Status lesen und integrierte Presets auswählen, aber sie können Aktiv, Lautstärke, Preamp, Bypass, die Pause des App-Preset-Wechsels oder eigene Presets nicht ändern."
+          }
         }
       }
     },
@@ -5071,6 +6805,12 @@
             "state": "translated",
             "value": "Du kan altid slå EqualEase fra"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kannst EqualEase jederzeit ausschalten"
+          }
         }
       }
     },
@@ -5087,6 +6827,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "build %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build %@"
           }
         }
       },
@@ -5106,6 +6852,12 @@
             "state": "translated",
             "value": "udviklingsbuild"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entwicklungs-Build"
+          }
         }
       },
       "comment": "Version label when no app version/build metadata is available."
@@ -5124,6 +6876,12 @@
             "state": "translated",
             "value": "macOS beder om optagelsestilladelse, når routing starter"
           }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS fragt beim Starten des Routings nach Erfassungsberechtigung"
+          }
         }
       }
     },
@@ -5140,6 +6898,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "macOS kan ikke registrere dette build som et loginemne. Kopiér EqualEase til Programmer, eller brug et pakket build, og åbn derefter Indstillinger igen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS kann diesen Build nicht als Anmeldeobjekt registrieren. Kopiere EqualEase in „Programme“ oder verwende einen paketierten Build und öffne dann die Einstellungen erneut."
           }
         }
       }
