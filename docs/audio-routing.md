@@ -122,4 +122,5 @@ Audio routing must fail safely. EqualEase cleans up EqualEase-owned Core Audio t
 - Users must grant required macOS permissions.
 - Output device behaviour can vary by hardware and macOS version, so routing changes are handled conservatively and recoverably.
 - Per-app volume is attenuation-only (0–100%). Global Preamp remains the boost control.
+- Audio without a Core Audio app identity remains in the unity fallback and cannot be adjusted independently. The [issue #21 spike](spikes/issue-21-unidentified-audio-volume.md) explains why an unidentified-only control is not currently safe to ship.
 - Per-app EQ presets (different EQ curves per app) are not yet supported — that would require separate biquad filter state per app in the real-time audio path.
